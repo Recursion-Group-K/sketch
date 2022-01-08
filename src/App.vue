@@ -1,7 +1,5 @@
 <template>
   <div id="app">
-    <h1>Sketch App</h1>
-    <HelloWorld />
   </div>
 </template>
 
