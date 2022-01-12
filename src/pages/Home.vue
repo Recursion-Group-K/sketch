@@ -1,6 +1,9 @@
 <template>
     <div>
         {{ message }}
+        <p>
+            <router-link to="/signup">SignUp</router-link>
+        </p>
     </div>
 </template>
 
