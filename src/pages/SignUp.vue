@@ -47,7 +47,12 @@
                             <hr />
                             <div class="field">
                                 <!-- router-linkは/loginに後で変更する -->
-                                <p>Already have an account? <router-link to="/"><span class="signup-link">Login</span></router-link></p>
+                                <p>
+                                    Already have an account?
+                                    <router-link to="/"
+                                        ><span class="signup-link">Login</span></router-link
+                                    >
+                                </p>
                             </div>
                         </form>
                     </div>
@@ -61,7 +66,7 @@
 
 <script>
 export default {
-    name: 'Login',
+    name: 'SignUp',
     data() {
         return {};
     },
@@ -74,9 +79,9 @@ export default {
     font-family: 'Lobster', cursive;
 }
 .box {
-  box-shadow: 2px 2px 2px 2px hsl(171, 89%, 35%);
+    box-shadow: 2px 2px 2px 2px hsl(171, 89%, 35%);
 }
 .signup-link {
-  color: rgb(6,69,173);
+    color: rgb(6, 69, 173);
 }
 </style>
