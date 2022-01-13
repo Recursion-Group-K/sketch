@@ -19,7 +19,7 @@
                                 <div class="control has-icons-left">
                                     <input
                                         type="email"
-                                        placeholder="e.g. bobsmith@gmail.com"
+                                        placeholder="e.g. recursionist@gmail.com"
                                         class="input"
                                         required
                                     />
