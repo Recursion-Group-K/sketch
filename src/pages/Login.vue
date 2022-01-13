@@ -3,7 +3,8 @@
         <div class="hero-body">
             <div class="container">
                 <div class="columns is-vcentered">
-                    <div class="column is-6">
+                    <div class="column is-6 vertical-align">
+                        <img src="../assets/images/logo.svg" class="logo" />
                         <h1 class="page-title title is-1">Etch A Sketch</h1>
                         <p class="subtitle">Unlock your imagination</p>
                     </div>
@@ -47,7 +48,12 @@
                             <hr />
                             <div class="field">
                                 <!-- router-linkは/signupに後で変更する -->
-                                <p>Not Registered? <router-link to="/"><span class="signup-link">Sign Up</span></router-link></p>
+                                <p>
+                                    Not Registered?
+                                    <router-link to="/"
+                                        ><span class="signup-link">Sign Up</span></router-link
+                                    >
+                                </p>
                             </div>
                         </form>
                     </div>
@@ -74,9 +80,15 @@ export default {
     font-family: 'Lobster', cursive;
 }
 .box {
-  box-shadow: 2px 2px 2px 2px hsl(171, 89%, 35%);
+    box-shadow: 2px 2px 2px 2px hsl(171, 89%, 35%);
 }
 .signup-link {
-  color: rgb(6,69,173);
+    color: rgb(6, 69, 173);
+}
+.logo {
+    height: 200px;
+}
+.vertical-align {
+    margin-bottom: auto;
 }
 </style>
