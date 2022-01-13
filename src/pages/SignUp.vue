@@ -3,7 +3,8 @@
         <div class="hero-body">
             <div class="container">
                 <div class="columns is-vcentered">
-                    <div class="column is-6">
+                    <div class="column is-6 vertical-align">
+                        <img src="../assets/images/logo.svg" class="logo" />
                         <h1 class="page-title title is-1">Welcome to Etch A Sketch</h1>
                         <p class="subtitle">Unlock your imagination</p>
                     </div>
@@ -18,7 +19,7 @@
                                 <div class="control has-icons-left">
                                     <input
                                         type="email"
-                                        placeholder="e.g. bobsmith@gmail.com"
+                                        placeholder="e.g. recursionist@gmail.com"
                                         class="input"
                                         required
                                     />
@@ -83,5 +84,11 @@ export default {
 }
 .signup-link {
     color: rgb(6, 69, 173);
+}
+.logo {
+    height: 200px;
+}
+.vertical-align {
+    margin-bottom: auto;
 }
 </style>
