@@ -5,13 +5,13 @@
                 <div class="columns is-vcentered">
                     <div class="column is-6 vertical-align">
                         <img src="../assets/images/logo.svg" class="logo" />
-                        <h1 class="page-title title is-1">Etch A Sketch</h1>
+                        <h1 class="page-title title is-1">Welcome to Etch A Sketch</h1>
                         <p class="subtitle">Unlock your imagination</p>
                     </div>
                     <div class="column is-5-tablet is-4-desktop is-4-widescreen">
                         <form action="" class="box">
                             <div class="title">
-                                <h1 class="has-text-black has-text-weight-bold">Login</h1>
+                                <h1 class="has-text-black has-text-weight-bold">Sign Up</h1>
                             </div>
                             <hr />
                             <div class="field">
@@ -43,15 +43,15 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <button class="button is-success">Login</button>
+                                <button class="button is-success">Sign Up</button>
                             </div>
                             <hr />
                             <div class="field">
-                                <!-- router-linkは/signupに後で変更する -->
+                                <!-- router-linkは/loginに後で変更する -->
                                 <p>
-                                    Not Registered?
+                                    Already have an account?
                                     <router-link to="/"
-                                        ><span class="signup-link">Sign Up</span></router-link
+                                        ><span class="signup-link">Login</span></router-link
                                     >
                                 </p>
                             </div>
@@ -67,7 +67,7 @@
 
 <script>
 export default {
-    name: 'Home',
+    name: 'SignUp',
     data() {
         return {};
     },
