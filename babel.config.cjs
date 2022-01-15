@@ -1,3 +1,14 @@
 module.exports = {
-    preset: '@vue/cli-plugin-unit-jest'
-}
+    presets: [
+        [
+            '@babel/preset-env',
+            {
+                targets: {
+                    node: 'current'
+                }
+            }
+        ]
+    ],
+};
+
+
