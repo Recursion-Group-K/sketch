@@ -1,8 +1,8 @@
 export default class User {
-    constructor(params) {
-        this.id = params.id;
-        this.name = params.name;
-        this.email = params.email;
-        this.password = params.password;
+    constructor ({ id, name, email, password }) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
 }
