@@ -9,15 +9,15 @@ export default class DrawingWapper {
     async getById(id) { // return Drawing
         try {
             const response = await axios.get(`${this.url}/${id}`);
-            const { id: drawingId, title, imgUrl, isPublic, data, created_at, updated_at, userId } = response;
+            const { id: drawingId, title, imgUrl, isPublic, data, createdAt, updatedAt, userId } = response;
             const params = {
                 id: drawingId,
                 title: title,
                 imgUrl: imgUrl,
                 isPublic: isPublic,
                 data: data,
-                created_at: created_at,
-                updated_at: updated_at,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
                 userId: userId,
             };
             return new Drawing(params);
