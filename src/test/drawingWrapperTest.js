@@ -1,5 +1,6 @@
-import DrawingWapper from "../api/drawingWrapper";
+import DrawingWapper from '../api/drawingWrapper';
 
-const drawing = await new DrawingWapper().getDrawingById(1);
+const drawing = await new DrawingWapper().getById(1);
 
+console.log('Hello World!');
 console.log(drawing);
