@@ -1,6 +1,9 @@
 <template>
     <div>
         {{ message }}
+        <div>
+            <router-link to="/drawing">Drawing</router-link>
+        </div>
     </div>
 </template>
 
