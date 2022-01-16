@@ -1,12 +1,12 @@
 export default class Drawing {
-    constructor(params) {
-        this.id = params.id; // string
-        this.title = params.title; //string
-        this.imgUrl = params.imgUrl; // string
-        this.isPublic = params.isPublic; // boolean
-        this.data = params.data; // json
-        this.created_at = params.created_at; // datetime
-        this.updated_at = params.updated_at; // datetime
-        this.userId = params.userId; // integer
+    constructor({ id, title, imgUrl, isPublic, data, created_at, updated_at, userId }) {
+        this.id = id; // string
+        this.title = title; //string
+        this.imgUrl = imgUrl; // string
+        this.isPublic = isPublic; // boolean
+        this.data = data; // json
+        this.created_at = created_at; // datetime
+        this.updated_at = updated_at; // datetime
+        this.userId = userId; // integer
     }
 }
