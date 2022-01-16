@@ -13,6 +13,7 @@
     "axios": "^0.24.0",
     "bulma": "^0.9.3",
     "core-js": "^3.6.5",
+    "package-lock.json": "^1.0.0",
     "vue": "^2.6.11",
     "vue-axios": "^3.4.0",
     "vue-router": "^3.5.3",
