@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Header></Header>
+        <Header/>
         <div class="hero is-primary is-fullheight-with-navbar">
             <div class="py-5">
                 <canvas class="canvas-size"></canvas>

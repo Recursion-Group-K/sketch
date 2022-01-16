@@ -14,7 +14,24 @@
                 <div class="level-right">
                     <div class="level-item is-hidden-mobile">save</div>
                     <div class="level-item is-hidden-mobile">share</div>
-                    <div class="level-item is-hidden-tablet">others</div>
+                    <div class="level-item is-hidden-tablet">
+                        <div class="dropdown is-right" 
+                            v-bind:class="{'is-active':isActive}" 
+                            v-on:click="isActive=!isActive" 
+                        >
+                            <div class="dropdown-trigger">
+                                <button class="button is-link">
+                                    <span>others</span>
+                                </button>
+                            </div>
+                            <div class="dropdown-menu">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-item">save</div>
+                                    <div class="dropdown-item">share</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="level-item">back</div>
                 </div>
             </nav>
@@ -28,7 +45,9 @@
 export default {
     name: 'Header',
     data() {
-        return {};
+        return {
+            isActive:false,
+        };
     },
 };
 </script>
