@@ -5,17 +5,17 @@ export default class UserWrapper {
     url = 'https://jsonplaceholder.typicode.com';
     constructor() {}
 
-    async getById(userId) {
+    async getById(id) {
         try {
-            const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`);
-            const { id, name, email, username } = response.data;
-            const param = {
-                id: id,
+            const response = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
+            const { id: userId, name, email, username: password } = response.data;
+            const params = {
+                id: userId,
                 name: name,
                 email: email,
-                password: username,
+                password: password,
             };
-            return new User(param);
+            return new User(params);
         } catch (error) {
             console.log(error);
         }
