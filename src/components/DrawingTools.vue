@@ -1,5 +1,5 @@
 <style>
-.header-drowing{
+.drawing-tools{
     height: 4.5rem;
 }
 </style>
@@ -7,7 +7,7 @@
 <template>
     <div class="hero is-link is-tablet">
         <div class="column py-0">
-            <nav class="level is-mobile is-primary header-drowing">
+            <nav class="level is-mobile is-primary drawing-tools">
                 <div class="level-left">
                     <div class="level-item is-hidden-mobile has-text-weight-bold pr-5">
                         title of work
@@ -47,7 +47,7 @@
 
 <script>
 export default {
-    name: 'Header',
+    name: 'DrawingTools',
     data() {
         return {
             isActive:false,

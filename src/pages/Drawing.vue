@@ -23,7 +23,7 @@
 
 <template>
     <div>
-        <Header/>
+        <DrawingTools/>
         <div class="has-background-primary drowing-container d-flex is-flex-direction-column">
             <div class="py-0 canvas-container has-background-grey">
                 <canvas class="has-background-white"></canvas>
@@ -44,10 +44,10 @@
 </template>
 
 <script>
-import Header from '../components/Header.vue';
+import DrawingTools from '../components/DrawingTools.vue';
 
 export default {
-    components: { Header },
+    components: { DrawingTools },
     name: 'Drawing',
     data() {
         return {};
