@@ -1,5 +1,5 @@
 <style>
-.drawing-tools{
+.drawing-tools {
     height: 4rem;
 }
 </style>
@@ -10,33 +10,70 @@
             <div class="level-item is-hidden-mobile has-text-weight-bold is-size-4 pr-5">
                 title of work
             </div>
-            <button class="button is-link level-item is-flex-direction-column-reverse px-1"><span class=" is-size-7">color</span><font-awesome-icon class="is-size-4 my-1" icon="palette" /></button>
-            <button class="button is-link level-item is-flex-direction-column-reverse px-1"><span class=" is-size-7">pixel</span><font-awesome-icon class="is-size-4 my-1" icon="circle" /></button>
-            <button class="button is-link level-item is-flex-direction-column-reverse px-1"><span class=" is-size-7">redo</span><font-awesome-icon class="is-size-4 my-1" icon="redo" /></button>
-            <button class="button is-link level-item is-flex-direction-column-reverse px-1"><span class=" is-size-7">undo</span><font-awesome-icon class="is-size-4 my-1" icon="undo" /></button>
+            <button class="button is-link level-item is-flex-direction-column-reverse px-1">
+                <span class="is-size-7">color</span
+                ><font-awesome-icon class="is-size-4 my-1" icon="palette" />
+            </button>
+            <button class="button is-link level-item is-flex-direction-column-reverse px-1">
+                <span class="is-size-7">pixel</span
+                ><font-awesome-icon class="is-size-4 my-1" icon="circle" />
+            </button>
+            <button class="button is-link level-item is-flex-direction-column-reverse px-1">
+                <span class="is-size-7">redo</span
+                ><font-awesome-icon class="is-size-4 my-1" icon="redo" />
+            </button>
+            <button class="button is-link level-item is-flex-direction-column-reverse px-1">
+                <span class="is-size-7">undo</span
+                ><font-awesome-icon class="is-size-4 my-1" icon="undo" />
+            </button>
         </div>
         <div class="level-right">
-            <button class="button is-link level-item is-hidden-mobile is-flex-direction-column-reverse px-1"><span class=" is-size-7">save</span><font-awesome-icon class="is-size-4 my-1" icon="save" /></button>
-            <button class="button is-link level-item is-hidden-mobile is-flex-direction-column-reverse px-1"><span class=" is-size-7">share</span><font-awesome-icon class="is-size-4 my-1" icon="share-square" /></button>
+            <button
+                class="button is-link level-item is-hidden-mobile is-flex-direction-column-reverse px-1"
+            >
+                <span class="is-size-7">save</span
+                ><font-awesome-icon class="is-size-4 my-1" icon="save" />
+            </button>
+            <button
+                class="button is-link level-item is-hidden-mobile is-flex-direction-column-reverse px-1"
+            >
+                <span class="is-size-7">share</span
+                ><font-awesome-icon class="is-size-4 my-1" icon="share-square" />
+            </button>
             <button class="button is-link level-item is-hidden-tablet p-0">
-                <div class="dropdown is-right" 
-                    v-bind:class="{'is-active':isActive}" 
-                    v-on:click="isActive=!isActive" 
+                <div
+                    class="dropdown is-right"
+                    v-bind:class="{ 'is-active': isActive }"
+                    v-on:click="isActive = !isActive"
                 >
                     <div class="dropdown-trigger">
                         <button class="button is-link p-1">
-                            <div class="is-flex is-flex-direction-column-reverse is-justify-content-center has-text-centered"><span class=" is-size-7">others</span><span><font-awesome-icon class="is-size-4 my-1" icon="bars" /></span></div>
+                            <div
+                                class="is-flex is-flex-direction-column-reverse is-justify-content-center has-text-centered"
+                            >
+                                <span class="is-size-7">others</span
+                                ><span
+                                    ><font-awesome-icon class="is-size-4 my-1" icon="bars"
+                                /></span>
+                            </div>
                         </button>
                     </div>
                     <div class="dropdown-menu">
                         <div class="dropdown-content">
-                            <div class="dropdown-item is-size-6"><font-awesome-icon icon="save" /> save</div>
-                            <div class="dropdown-item is-size-6"><font-awesome-icon icon="share-square" /> share</div>
+                            <div class="dropdown-item is-size-6">
+                                <font-awesome-icon icon="save" /> save
+                            </div>
+                            <div class="dropdown-item is-size-6">
+                                <font-awesome-icon icon="share-square" /> share
+                            </div>
                         </div>
                     </div>
                 </div>
             </button>
-            <button class="button is-link level-item is-flex-direction-column-reverse px-1"><span class=" is-size-7">back</span><font-awesome-icon class="is-size-4 my-1" icon="door-open" /></button>
+            <button class="button is-link level-item is-flex-direction-column-reverse px-1">
+                <span class="is-size-7">back</span
+                ><font-awesome-icon class="is-size-4 my-1" icon="door-open" />
+            </button>
         </div>
     </nav>
 </template>
@@ -46,7 +83,7 @@ export default {
     name: 'DrawingTools',
     data() {
         return {
-            isActive:false,
+            isActive: false,
         };
     },
 };
