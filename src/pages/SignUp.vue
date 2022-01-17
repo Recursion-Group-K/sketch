@@ -50,8 +50,8 @@
                                 <!-- router-linkは/loginに後で変更する -->
                                 <p>
                                     Already have an account?
-                                    <router-link to="/"
-                                        ><span class="signup-link">Login</span></router-link
+                                    <router-link to="/login"
+                                        ><span class="link">Login</span></router-link
                                     >
                                 </p>
                             </div>
@@ -82,7 +82,7 @@ export default {
 .box {
     box-shadow: 2px 2px 2px 2px hsl(171, 89%, 35%);
 }
-.signup-link {
+.link {
     color: rgb(6, 69, 173);
 }
 .logo {
