@@ -1,13 +1,19 @@
 <style>
-.drowing-container{
-    height: calc(100vh - 4.5rem);
+.drawing-container{
+    height: 100vh;
+}
+.body{
+    height: calc(100% - 4rem);
 }
 .button-container{
     height: 20%;
 }
 .canvas-container {
-    height: 85%;
-    width: 100vw;
+    height: 80%;
+}
+.canvass{
+    height: calc(100% - 2rem);
+    width: calc(100% - 2rem);
 }
 .move-button {
     height: 4rem;
@@ -16,19 +22,22 @@
 }
 @media (min-width: 1024px) {
     .canvas-container {
-        height: 95%;
+        height: 100%;
     }
+    .button-container{
+    height: 0%;
+}
 }
 </style>
 
 <template>
-    <div>
+    <div class="drawing-container">
         <DrawingTools/>
-        <div class="has-background-primary drowing-container d-flex is-flex-direction-column">
-            <div class="py-0 canvas-container has-background-grey">
-                <canvas class="has-background-white"></canvas>
+        <div class="has-background-primary d-flex is-flex-direction-column body is-fullwidth">
+            <div class="canvas-container has-background-grey is-flex is-align-items-center is-justify-content-center">
+                <canvas class="canvass has-background-white"></canvas>
             </div>
-            <div class="is-flex is-justify-content-space-between button-container pb-3">
+            <div class="is-flex is-justify-content-space-between is-align-items-center button-container is-fullwidth">
                 <div class="is-hidden-desktop px-4">
                     <button class="move-button">up</button>
                     <button class="move-button">down</button>
