@@ -37,7 +37,7 @@
             <div
                 class="canvas-container has-background-grey is-flex is-align-items-center is-justify-content-center"
             >
-                <canvas class="canvas-size has-background-white"></canvas>
+                <Canvas />
             </div>
             <div
                 class="is-flex is-justify-content-space-between is-align-items-center button-container is-fullwidth"
@@ -58,12 +58,13 @@
 
 <script>
 import DrawingTools from '../components/DrawingTools.vue';
+import Canvas from '../components/Canvas.vue';
 
 export default {
-    components: { DrawingTools },
+    components: { DrawingTools, Canvas },
     name: 'Drawing',
     data() {
-        return {};
-    },
+        return {}
+    }
 };
 </script>
