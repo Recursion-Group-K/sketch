@@ -1,21 +1,27 @@
 import DrawingWapper from "../../src/api/drawingWrapper";
-// import Drawing from "..src/models/drawing"
 
 describe('DrawingWrapperクラスのテスト', () => {
-    test('get drawing by id: 1', async () => {  
+    test('getById', async () => {  
         const drawing1 = await new DrawingWapper().getById(1);
         console.log(drawing1);
-        /* const params1 = {
-            id: 1,
-            title: "flower garden",
-            imgUrl: "https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg",
-            isPublic: true,
-            data: {},
-            createdAt: "2022/1/1/13:30",
-            updatedAt: "2022/1/3/15:45",
-            userId: 1,
-        }
-        const drawingTest1 = new Drawing(params1)
-        expect(drawing1).toEqual(drawingTest1) */
+    })
+
+    test('getAll()', async () => {
+        const allDrawings = await new DrawingWapper().getAll();
+        console.log(allDrawings);
+    })
+
+    test('getBy(column, data)', async () => {
+        const drawing3 = await new DrawingWapper().getBy('id', 3);
+        console.log(drawing3);
+
+        const drawingSheep = await new DrawingWapper().getBy('title', 'sheep');
+        console.log(drawingSheep);
+
+        const drawingPublic = await new DrawingWapper().getBy('isPublic', true);
+        console.log(drawingPublic);
+
+        const drawingUser2 = await new DrawingWapper().getBy('userId', 2);
+        console.log(drawingUser2);
     })
 })
