@@ -1,15 +1,15 @@
-import DrawingWapper from "../../src/api/drawingWrapper";
+import DrawingWapper from '../../src/api/drawingWrapper';
 
 describe('DrawingWrapperクラスのテスト', () => {
-    test('getById', async () => {  
+    test('getById', async () => {
         const drawing1 = await new DrawingWapper().getById(1);
         console.log(drawing1);
-    })
+    });
 
     test('getAll()', async () => {
         const allDrawings = await new DrawingWapper().getAll();
         console.log(allDrawings);
-    })
+    });
 
     test('getBy(column, data)', async () => {
         const drawing3 = await new DrawingWapper().getBy('id', 3);
@@ -23,5 +23,5 @@ describe('DrawingWrapperクラスのテスト', () => {
 
         const drawingUser2 = await new DrawingWapper().getBy('userId', 2);
         console.log(drawingUser2);
-    })
-})
+    });
+});
