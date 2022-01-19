@@ -1,7 +1,8 @@
-<style>
+<style lang="scss" scoped>
 .drawing-tools {
     height: 4rem;
 }
+
 </style>
 
 <template>
@@ -10,35 +11,35 @@
             <div class="level-item is-hidden-mobile has-text-weight-bold is-size-4 pr-5">
                 title of work
             </div>
-            <button class="button is-link level-item is-flex-direction-column-reverse px-1">
-                <span class="is-size-7">color</span
-                ><font-awesome-icon class="is-size-4 my-1" icon="palette" />
+            <button class="button is-link level-item is-flex-direction-column px-1">
+                <font-awesome-icon class="is-size-4 my-1" icon="palette" />
+                <span class="is-size-7">color</span>
             </button>
-            <button class="button is-link level-item is-flex-direction-column-reverse px-1">
-                <span class="is-size-7">pixel</span
-                ><font-awesome-icon class="is-size-4 my-1" icon="circle" />
+            <button class="button is-link level-item is-flex-direction-column px-1">
+                <font-awesome-icon class="is-size-4 my-1" icon="circle" />
+                <span class="is-size-7">pixel</span>
             </button>
-            <button class="button is-link level-item is-flex-direction-column-reverse px-1">
-                <span class="is-size-7">redo</span
-                ><font-awesome-icon class="is-size-4 my-1" icon="redo" />
+            <button class="button is-link level-item is-flex-direction-column px-1">
+                <font-awesome-icon class="is-size-4 my-1" icon="redo" />
+                <span class="is-size-7">redo</span>
             </button>
-            <button class="button is-link level-item is-flex-direction-column-reverse px-1">
-                <span class="is-size-7">undo</span
-                ><font-awesome-icon class="is-size-4 my-1" icon="undo" />
+            <button class="button is-link level-item is-flex-direction-column px-1">
+                <font-awesome-icon class="is-size-4 my-1" icon="undo" />
+                <span class="is-size-7">undo</span>
             </button>
         </div>
         <div class="level-right">
             <button
-                class="button is-link level-item is-hidden-mobile is-flex-direction-column-reverse px-1"
+                class="button is-link level-item is-hidden-mobile is-flex-direction-column px-1"
             >
-                <span class="is-size-7">save</span
-                ><font-awesome-icon class="is-size-4 my-1" icon="save" />
+                <font-awesome-icon class="is-size-4 my-1" icon="save" />
+                <span class="is-size-7">save</span>
             </button>
             <button
-                class="button is-link level-item is-hidden-mobile is-flex-direction-column-reverse px-1"
+                class="button is-link level-item is-hidden-mobile is-flex-direction-column px-1"
             >
-                <span class="is-size-7">share</span
-                ><font-awesome-icon class="is-size-4 my-1" icon="share-square" />
+                <font-awesome-icon class="is-size-4 my-1" icon="share-square" />
+                <span class="is-size-7">share</span>
             </button>
             <button class="button is-link level-item is-hidden-tablet p-0">
                 <div
@@ -70,9 +71,9 @@
                     </div>
                 </div>
             </button>
-            <button class="button is-link level-item is-flex-direction-column-reverse px-1">
-                <span class="is-size-7">back</span
-                ><font-awesome-icon class="is-size-4 my-1" icon="door-open" />
+            <button class="button is-link level-item is-flex-direction-column px-1">
+                <font-awesome-icon class="is-size-4 my-1" icon="door-open" />
+                <span class="is-size-7">back</span>
             </button>
         </div>
     </nav>
