@@ -18,7 +18,7 @@ export default class DrawingWapper {
                 createdAt,
                 updatedAt,
                 userId,
-            } = response;
+            } = response.data;
             const params = {
                 id: drawingId,
                 title: title,
@@ -35,13 +35,73 @@ export default class DrawingWapper {
         }
     }
 
-    /*getBy(column, data) { // return array<Drawing>
+    async getBy(column, data) { // return array<Drawing>
         try {
-            
+            const response = await axios.get(`${this.url}?${column}=${data}`)
+            const drawingsArray = response.data
+            let drawings = [];
+            for (const drawing of drawingsArray) {
+                const {
+                    id: drawingId,
+                    title,
+                    imgUrl,
+                    isPublic,
+                    data,
+                    createdAt,
+                    updatedAt,
+                    userId,
+                } = drawing;
+                const params = {
+                    id: drawingId,
+                    title: title,
+                    imgUrl: imgUrl,
+                    isPublic: isPublic,
+                    data: data,
+                    createdAt: createdAt,
+                    updatedAt: updatedAt,
+                    userId: userId,
+                };
+                const newDrawing = new Drawing(params);
+                drawings.push(newDrawing);
+            }
+            return drawings;
+        } catch (error) {
+            console.error(error);
         }
     }
 
-    getAll() { // return array<Drawing>
-
-    }*/
+    async getAll() { // return array<Drawing>
+        try {
+            const response = await axios.get(this.url);
+            const drawingsArray = response.data
+            let drawings = [];
+            for (const drawing of drawingsArray) {
+                const {
+                    id: drawingId,
+                    title,
+                    imgUrl,
+                    isPublic,
+                    data,
+                    createdAt,
+                    updatedAt,
+                    userId,
+                } = drawing;
+                const params = {
+                    id: drawingId,
+                    title: title,
+                    imgUrl: imgUrl,
+                    isPublic: isPublic,
+                    data: data,
+                    createdAt: createdAt,
+                    updatedAt: updatedAt,
+                    userId: userId,
+                };
+                const newDrawing = new Drawing(params);
+                drawings.push(newDrawing);
+            }
+            return drawings;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
