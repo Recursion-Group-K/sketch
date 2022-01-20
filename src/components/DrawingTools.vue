@@ -1,79 +1,144 @@
 <style lang="scss" scoped>
 .drawing-tools {
+    @extend .level;
+    @extend .is-mobile;
+    background-color: $link;
     height: 4rem;
-}
+    color: $white;
 
+    button {
+        @extend .button;
+        @extend .level-item;
+        @extend .is-link;
+        @extend .px-2;
+        @extend .m-1;
+        flex-direction: column;
+        color: $white;
+
+        span {
+            font-size: $size-7;
+        }
+        .awesome-icon {
+            @extend .my-1;
+            font-size: $size-4;
+        }
+    }
+    .dropdown {
+        @extend .p-0;
+        .dropdown-trigger {
+            button {
+                @extend .p-1;
+            }
+        }
+        .dropdown-item {
+            font-size: $size-6;
+        }
+    }
+}
+.color-button {
+    .background-circle {
+        height: 2rem;
+        width: 2rem;
+        border-radius: 2rem;
+        z-index: 1;
+    }
+    .color-picker {
+        opacity: 0;
+        position: absolute;
+        height: 3rem;
+        z-index: 3;
+    }
+    .zindex-2 {
+        z-index: 2;
+    }
+}
 </style>
 
 <template>
-    <nav class="drawing-tools level is-mobile has-background-link has-text-white px-3 m-0">
+    <nav class="drawing-tools px-3 m-0">
         <div class="level-left is-fullheight">
             <div class="level-item is-hidden-mobile has-text-weight-bold is-size-4 pr-5">
                 title of work
             </div>
-            <button class="button is-link level-item is-flex-direction-column px-1">
-                <font-awesome-icon class="is-size-4 my-1" icon="palette" />
-                <span class="is-size-7">color</span>
+            <button class="color-button">
+                <div class="background-circle" v-bind:style="{ backgroundColor: color }">
+                    <font-awesome-icon class="awesome-icon zindex-2" icon="palette" />
+                </div>
+                <input class="color-picker" type="color" v-model="color" />
+                <span class="zindex-2">color</span>
             </button>
-            <button class="button is-link level-item is-flex-direction-column px-1">
-                <font-awesome-icon class="is-size-4 my-1" icon="circle" />
-                <span class="is-size-7">pixel</span>
-            </button>
-            <button class="button is-link level-item is-flex-direction-column px-1">
-                <font-awesome-icon class="is-size-4 my-1" icon="redo" />
-                <span class="is-size-7">redo</span>
-            </button>
-            <button class="button is-link level-item is-flex-direction-column px-1">
-                <font-awesome-icon class="is-size-4 my-1" icon="undo" />
-                <span class="is-size-7">undo</span>
-            </button>
-        </div>
-        <div class="level-right">
-            <button
-                class="button is-link level-item is-hidden-mobile is-flex-direction-column px-1"
+            <div
+                class="dropdown"
+                v-bind:class="{ 'is-active': toggles.weight }"
+                v-on:click="toggles.weight = !toggles.weight"
             >
-                <font-awesome-icon class="is-size-4 my-1" icon="save" />
-                <span class="is-size-7">save</span>
-            </button>
-            <button
-                class="button is-link level-item is-hidden-mobile is-flex-direction-column px-1"
-            >
-                <font-awesome-icon class="is-size-4 my-1" icon="share-square" />
-                <span class="is-size-7">share</span>
-            </button>
-            <button class="button is-link level-item is-hidden-tablet p-0">
-                <div
-                    class="dropdown is-right"
-                    v-bind:class="{ 'is-active': isActive }"
-                    v-on:click="isActive = !isActive"
-                >
-                    <div class="dropdown-trigger">
-                        <button class="button is-link p-1">
-                            <div
-                                class="is-flex is-flex-direction-column-reverse is-justify-content-center has-text-centered"
-                            >
-                                <span class="is-size-7">others</span
-                                ><span
-                                    ><font-awesome-icon class="is-size-4 my-1" icon="bars"
-                                /></span>
-                            </div>
-                        </button>
-                    </div>
-                    <div class="dropdown-menu">
-                        <div class="dropdown-content">
-                            <div class="dropdown-item is-size-6">
-                                <font-awesome-icon icon="save" /> save
-                            </div>
-                            <div class="dropdown-item is-size-6">
-                                <font-awesome-icon icon="share-square" /> share
-                            </div>
+                <div class="dropdown-trigger">
+                    <button>
+                        <span>
+                            <font-awesome-icon class="awesome-icon" icon="circle" />
+                        </span>
+                        <span>weight</span>
+                    </button>
+                </div>
+                <div class="dropdown-menu">
+                    <div class="dropdown-content">
+                        <div class="dropdown-item">
+                            weight: {{ weight }} px
+                            <input type="range" min="1" max="200" v-model="weight" />
                         </div>
                     </div>
                 </div>
+            </div>
+            <button>
+                <font-awesome-icon class="awesome-icon" icon="redo" />
+                <span>redo</span>
             </button>
-            <button class="button is-link level-item is-flex-direction-column px-1">
-                <font-awesome-icon class="is-size-4 my-1" icon="door-open" />
-                <span class="is-size-7">back</span>
+            <button>
+                <font-awesome-icon class="awesome-icon" icon="undo" />
+                <span>undo</span>
+            </button>
+        </div>
+        <div class="level-right">
+            <button class="is-hidden-mobile">
+                <font-awesome-icon class="awesome-icon" icon="save" />
+                <span>save</span>
+            </button>
+            <button class="is-hidden-mobile">
+                <font-awesome-icon class="awesome-icon" :icon="['fab', 'twitter']" />
+                <span>share</span>
+            </button>
+            <button class="is-hidden-mobile">
+                <font-awesome-icon class="awesome-icon" icon="globe-asia" />
+                <span>share</span>
+            </button>
+            <div
+                class="dropdown is-right is-hidden-tablet"
+                v-bind:class="{ 'is-active': toggles.others }"
+                v-on:click="toggles.others = !toggles.others"
+            >
+                <div class="dropdown-trigger">
+                    <button>
+                        <span>
+                            <font-awesome-icon class="awesome-icon" icon="bars" />
+                        </span>
+                        <span>others</span>
+                    </button>
+                </div>
+                <div class="dropdown-menu">
+                    <div class="dropdown-content">
+                        <div class="dropdown-item"><font-awesome-icon icon="save" /> save</div>
+                        <div class="dropdown-item">
+                            <font-awesome-icon :icon="['fab', 'twitter']" /> share twitter
+                        </div>
+                        <div class="dropdown-item">
+                            <font-awesome-icon icon="globe-asia" /> share gallery
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button>
+                <font-awesome-icon class="awesome-icon" icon="door-open" />
+                <span>back</span>
             </button>
         </div>
     </nav>
@@ -84,7 +149,12 @@ export default {
     name: 'DrawingTools',
     data() {
         return {
-            isActive: false,
+            toggles: {
+                weight: false,
+                others: false,
+            },
+            color: '#000000',
+            weight: 50,
         };
     },
 };

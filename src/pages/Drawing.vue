@@ -1,53 +1,51 @@
 <style lang="scss" scoped>
-    .drawing-container {
+.drawing-container {
     height: 100vh;
-    }
+    width: 100vw;
     .body {
+        flex-direction: column;
         height: calc(100% - 4rem);
-    }
-    .button-container {
-        height: 20%;
-    }
-    .canvas-container {
-        height: 80%;
-    }
-    .canvas-size {
-        height: calc(100% - 2rem);
-        width: calc(100% - 2rem);
-    }
-    .move-button {
-        height: 4rem;
-        width: 4rem;
-        margin: 0.25rem;
-    }
-    @media (min-width: 1024px) {
         .canvas-container {
-            height: 100%;
+            height: 80%;
+            background-color: $grey;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            @include desktop {
+                height: 100%;
+            }
         }
         .button-container {
-            height: 0%;
+            @extend .is-hidden-desktop;
+            height: 20%;
+            background-color: $link;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .move-button {
+                @extend .m-1;
+                height: 4rem;
+                width: 4rem;
+            }
         }
     }
+}
 </style>
 
 <template>
     <div class="drawing-container">
         <DrawingTools />
-        <div class="has-background-primary d-flex is-flex-direction-column body is-fullwidth">
-            <div
-                class="canvas-container has-background-grey is-flex is-align-items-center is-justify-content-center"
-            >
+        <div class="body">
+            <div class="canvas-container">
                 <Canvas />
             </div>
-            <div
-                class="is-flex is-justify-content-space-between is-align-items-center button-container is-fullwidth"
-            >
-                <div class="is-hidden-desktop px-4">
+            <div class="button-container">
+                <div class="px-4">
                     <button class="move-button">up</button>
                     <button class="move-button">down</button>
                 </div>
 
-                <div class="is-hidden-desktop px-4">
+                <div class="px-4">
                     <button class="move-button">left</button>
                     <button class="move-button">right</button>
                 </div>
@@ -64,7 +62,7 @@ export default {
     components: { DrawingTools, Canvas },
     name: 'Drawing',
     data() {
-        return {}
-    }
+        return {};
+    },
 };
 </script>
