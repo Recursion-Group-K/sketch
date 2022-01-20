@@ -56,11 +56,6 @@
                                 </p>
                             </div>
                         </form>
-                        <!-- drawingページへ移動するためのボタン(一時的にここに置いておきます)-->
-                        <div>
-                            <router-link to="/drawing">Drawing</router-link>
-                        </div>
-                        <!-- ここまで-->
                     </div>
                 </div>
             </div>
@@ -72,7 +67,7 @@
 
 <script>
 export default {
-    name: 'Home',
+    name: 'Login',
     data() {
         return {};
     },
