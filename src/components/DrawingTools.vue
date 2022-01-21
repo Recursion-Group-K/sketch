@@ -76,7 +76,7 @@
             >
                 <div class="dropdown-trigger">
                     <button>
-                            <font-awesome-icon class="awesome-icon" icon="circle" />
+                        <font-awesome-icon class="awesome-icon" icon="circle" />
                     </button>
                 </div>
                 <div class="dropdown-menu">

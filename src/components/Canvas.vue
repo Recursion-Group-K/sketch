@@ -6,8 +6,7 @@
 
 <template>
     <v-stage :config="configKonva" class="stage">
-        <v-layer>
-        </v-layer>
+        <v-layer> </v-layer>
     </v-stage>
 </template>
 
