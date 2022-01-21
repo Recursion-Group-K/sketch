@@ -11,9 +11,12 @@
         @extend .level-item;
         @extend .is-link;
         @extend .px-2;
+        @extend .py-5;
         @extend .m-1;
         flex-direction: column;
         color: $white;
+        padding-top: 3rem;
+        border-radius: 1rem;
 
         span {
             font-size: $size-7;
@@ -27,7 +30,7 @@
         @extend .p-0;
         .dropdown-trigger {
             button {
-                @extend .p-1;
+                @extend .px-1;
             }
         }
         .dropdown-item {
@@ -61,7 +64,7 @@
                 title of work
             </div>
             <button class="color-button">
-                <div class="background-circle" v-bind:style="{ backgroundColor: color }">
+                <div class="background-circle" :style="{ backgroundColor: color }">
                     <font-awesome-icon class="awesome-icon zindex-2" icon="palette" />
                 </div>
                 <input class="color-picker" type="color" v-model="color" />
@@ -69,8 +72,8 @@
             </button>
             <div
                 class="dropdown"
-                v-bind:class="{ 'is-active': toggles.weight }"
-                v-on:click="toggles.weight = !toggles.weight"
+                :class="{ 'is-active': toggles.weight }"
+                @click="toggles.weight = !toggles.weight"
             >
                 <div class="dropdown-trigger">
                     <button>
@@ -113,8 +116,8 @@
             </button>
             <div
                 class="dropdown is-right is-hidden-tablet"
-                v-bind:class="{ 'is-active': toggles.others }"
-                v-on:click="toggles.others = !toggles.others"
+                :class="{ 'is-active': toggles.others }"
+                @click="toggles.others = !toggles.others"
             >
                 <div class="dropdown-trigger">
                     <button>

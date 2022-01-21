@@ -4,10 +4,16 @@ import Drawing from '../pages/Drawing.vue';
 import Login from '../pages/Login.vue';
 import SignUp from '../pages/SignUp.vue';
 import NotFound from '../pages/NotFound.vue';
+import Header from '../components/Header.vue'
 
 const routes = [
     {
         path: '/',
+        name: 'Header',
+        component: Header,
+    },
+    {
+        path: '/home',
         name: 'Home',
         component: Home,
     },
