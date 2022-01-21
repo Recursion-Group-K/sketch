@@ -11,7 +11,7 @@ header {
             <div class="navbar-brand">
                 <router-link to="/" class="navbar-item">
                     <img src="../assets/images/logo.svg" class="m-3" />
-                    <h3 class="page-title title" style="width:200px">Etch A Sketch</h3>
+                    <h3 class="page-title title" style="width: 200px">Etch A Sketch</h3>
                 </router-link>
 
                 <a
