@@ -68,7 +68,6 @@
                     <font-awesome-icon class="awesome-icon zindex-2" icon="palette" />
                 </div>
                 <input class="color-picker" type="color" v-model="color" />
-                <span class="zindex-2">color</span>
             </button>
             <div
                 class="dropdown"
@@ -77,10 +76,7 @@
             >
                 <div class="dropdown-trigger">
                     <button>
-                        <span>
                             <font-awesome-icon class="awesome-icon" icon="circle" />
-                        </span>
-                        <span>weight</span>
                     </button>
                 </div>
                 <div class="dropdown-menu">
@@ -94,25 +90,20 @@
             </div>
             <button>
                 <font-awesome-icon class="awesome-icon" icon="redo" />
-                <span>redo</span>
             </button>
             <button>
                 <font-awesome-icon class="awesome-icon" icon="undo" />
-                <span>undo</span>
             </button>
         </div>
         <div class="level-right">
             <button class="is-hidden-mobile">
                 <font-awesome-icon class="awesome-icon" icon="save" />
-                <span>save</span>
             </button>
             <button class="is-hidden-mobile">
                 <font-awesome-icon class="awesome-icon" :icon="['fab', 'twitter']" />
-                <span>share</span>
             </button>
             <button class="is-hidden-mobile">
                 <font-awesome-icon class="awesome-icon" icon="globe-asia" />
-                <span>share</span>
             </button>
             <div
                 class="dropdown is-right is-hidden-tablet"
@@ -141,7 +132,6 @@
             </div>
             <button>
                 <font-awesome-icon class="awesome-icon" icon="door-open" />
-                <span>back</span>
             </button>
         </div>
     </nav>
