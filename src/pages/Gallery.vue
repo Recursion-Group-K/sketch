@@ -8,11 +8,11 @@
 
         <div id="showcase" class="is-flex is-justify-content-center">
             <div class="box column is-four-fifths is-flex is-justify-content-space-between is-flex-wrap-wrap p-6" style="height: 85vh">
-                <div class="card mb-4" style="width: 240px">
+                <div class="card mb-4" style="width: 23%">
                     
                 </div>
 
-                <div class="card mb-4" style="width: 240px">
+                <div class="card mb-4" style="width: 23%">
                     <div class="card-img">
                         <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
                     </div>
@@ -26,7 +26,7 @@
                     </footer>
                 </div>
 
-                <div class="card mb-4" style="width: 240px">
+                <div class="card mb-4" style="width: 23%">
                     <div class="card-img" >
                         <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
                     </div>
@@ -40,7 +40,7 @@
                     </footer>
                 </div>
 
-                <div class="card mb-4" style="width: 240px">
+                <div class="card mb-4" style="width: 23%">
                     <div class="card-img" >
                         <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
                     </div>
@@ -54,7 +54,7 @@
                     </footer>
                 </div>
 
-                <div class="card mb-4" style="width: 240px">
+                <div class="card mb-4" style="width: 23%">
                     <div class="card-img" >
                         <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
                     </div>
@@ -68,7 +68,7 @@
                     </footer>
                 </div>
 
-                <div class="card mb-4" style="width: 240px">
+                <div class="card mb-4" style="width: 23%">
                     <div class="card-img" >
                         <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
                     </div>
@@ -82,7 +82,7 @@
                     </footer>
                 </div>
 
-                <div class="card mb-4" style="width: 240px">
+                <div class="card mb-4" style="width: 23%">
                     <div class="card-img" >
                         <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
                     </div>
@@ -96,7 +96,7 @@
                     </footer>
                 </div>
 
-                <div class="card mb-4" style="width: 240px">
+                <div class="card mb-4" style="width: 23%">
                     <div class="card-img" >
                         <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
                     </div>
@@ -110,7 +110,7 @@
                     </footer>
                 </div>
 
-                <div class="card mb-4" style="width: 240px">
+                <div class="card mb-4" style="width: 23%">
                     <div class="card-img" >
                         <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
                     </div>
@@ -124,7 +124,7 @@
                     </footer>
                 </div>
 
-                <div class="card mb-4" style="width: 240px">
+                <div class="card mb-4" style="width: 23%">
                     <div class="card-img" >
                         <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
                     </div>
@@ -138,7 +138,7 @@
                     </footer>
                 </div>
 
-                <div class="card mb-4" style="width: 240px">
+                <div class="card mb-4" style="width: 23%">
                     <div class="card-img" >
                         <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
                     </div>
