@@ -2,8 +2,9 @@ import axios from 'axios';
 import User from '../models/user.js';
 
 export default class UserWrapper {
-    url = 'https://jsonplaceholder.typicode.com';
-    constructor() {}
+    constructor () {
+        this.url = 'https://jsonplaceholder.typicode.com';
+    }
 
     async getById(id) {
         try {
