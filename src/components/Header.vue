@@ -42,12 +42,18 @@ header {
                         <button to="/" class="button navbar-item">Logout</button>
                     </div>
                     <div v-else :class="{ buttons: !isOpenMenu }">
-                        <router-link to="/signup" class="button is-primary navbar-item"
-                            >Signup</router-link
+                        <router-link 
+                            to="/signup" 
+                            class="button is-primary navbar-item"
                         >
-                        <router-link to="/login" class="button is-light navbar-item"
-                            >Login</router-link
+                            Signup
+                        </router-link>
+                        <router-link
+                            to="/login" 
+                            class="button is-light navbar-item"
                         >
+                            Login
+                        </router-link>
                     </div>
                 </div>
                 <button @click="doesUserSignedIn = !doesUserSignedIn">Toggle</button>
