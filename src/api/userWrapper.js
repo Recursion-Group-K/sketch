@@ -2,7 +2,7 @@ import axios from 'axios';
 import User from '../models/user.js';
 
 export default class UserWrapper {
-    constructor () {
+    constructor() {
         this.url = 'https://jsonplaceholder.typicode.com';
     }
 
