@@ -28,17 +28,17 @@ header {
 
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-start">
-                    <router-link to="/drawing" class="navbar-item">drawing</router-link>
+                    <router-link to="/drawing" class="navbar-item sub-title">Drawing</router-link>
                 </div>
 
                 <div class="navbar-end">
                     <div class="navbar-item">
                         <div v-if="doesUserSignedIn" class="buttons">
-                            <button to="/" class="button">logout</button>
+                            <button to="/" class="button">Logout</button>
                         </div>
                         <div v-else class="buttons">
-                            <router-link to="/signup" class="button is-primary">signup</router-link>
-                            <router-link to="/login" class="button is-light">login</router-link>
+                            <router-link to="/signup" class="button is-primary">Signup</router-link>
+                            <router-link to="/login" class="button is-light">Login</router-link>
                         </div>
                     </div>
                 </div>
