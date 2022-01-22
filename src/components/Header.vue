@@ -1,6 +1,11 @@
 <style scoped lang="scss">
 header {
+    background-color: $white;
+    width: 100%;
     min-height: 5rem;
+    position: absolute;
+    top:0;
+    box-shadow: $shadow;
 }
 </style>
 
