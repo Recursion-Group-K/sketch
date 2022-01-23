@@ -1,5 +1,5 @@
 <template>
-    <div class="post">
+    <section class="page">
         <h1>404 Not Found</h1>
-    </div>
+    </section>
 </template>
