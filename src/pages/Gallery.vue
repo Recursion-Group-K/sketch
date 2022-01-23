@@ -5,152 +5,28 @@
         </div> -->
 
         <h1 class="title has-text-centered my-4">Gallery</h1>
-
+        
+        <!--絵の表示エリア-->
         <div id="showcase" class="is-flex is-justify-content-center">
-            <div class="box column is-four-fifths is-flex is-justify-content-space-between is-flex-wrap-wrap p-6" style="height: 85vh">
-                <div class="card mb-4" style="width: 23%">
-                    
+            <div class="box column is-four-fifths is-flex is-justify-content-space-between is-align-items-flex-start is-flex-wrap-wrap p-6" style="height: 85vh">
+
+                <!-- 新規作成用のカード -->
+                <div class="card mb-4 is-align-self-stretch is-flex is-justify-content-center is-align-items-center" style="width: 23%">
+                    <div class="card-content">
+                        <div class="field has-addons">
+                            <div class="control">
+                                <input class="input" type="text" placeholder="title">
+                            </div>
+                            <div class="control">
+                                <button class="button is-primary">new</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="card mb-4" style="width: 23%">
-                    <div class="card-img">
-                        <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
-                    </div>
-                    <div class="p-1 has-text-centered">
-                        <p class="title is-6">Flower Garden</p>
-                    </div>
-                    <footer class="card-footer">
-                        <a class="card-footer-item">Share</a>
-                        <a class="card-footer-item">Edit</a>
-                        <a class="card-footer-item">Delete</a>
-                    </footer>
-                </div>
+                <!-- v-forでDrawingCardコンポーネントを描写 -->
+                <DrawingCard v-for="drawing in allDrawings" :key="drawing.id" :drawing="drawing"></DrawingCard>
 
-                <div class="card mb-4" style="width: 23%">
-                    <div class="card-img" >
-                        <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
-                    </div>
-                    <div class="p-1 has-text-centered">
-                        <p class="title is-6">Flower Garden</p>
-                    </div>
-                    <footer class="card-footer">
-                        <a class="card-footer-item">Share</a>
-                        <a class="card-footer-item">Edit</a>
-                        <a class="card-footer-item">Delete</a>
-                    </footer>
-                </div>
-
-                <div class="card mb-4" style="width: 23%">
-                    <div class="card-img" >
-                        <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
-                    </div>
-                    <div class="p-1 has-text-centered">
-                        <p class="title is-6">Flower Garden</p>
-                    </div>
-                    <footer class="card-footer">
-                        <a class="card-footer-item">Share</a>
-                        <a class="card-footer-item">Edit</a>
-                        <a class="card-footer-item">Delete</a>
-                    </footer>
-                </div>
-
-                <div class="card mb-4" style="width: 23%">
-                    <div class="card-img" >
-                        <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
-                    </div>
-                    <div class="p-1 has-text-centered">
-                        <p class="title is-6">Flower Garden</p>
-                    </div>
-                    <footer class="card-footer">
-                        <a class="card-footer-item">Share</a>
-                        <a class="card-footer-item">Edit</a>
-                        <a class="card-footer-item">Delete</a>
-                    </footer>
-                </div>
-
-                <div class="card mb-4" style="width: 23%">
-                    <div class="card-img" >
-                        <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
-                    </div>
-                    <div class="p-1 has-text-centered">
-                        <p class="title is-6">Flower Garden</p>
-                    </div>
-                    <footer class="card-footer">
-                        <a class="card-footer-item">Share</a>
-                        <a class="card-footer-item">Edit</a>
-                        <a class="card-footer-item">Delete</a>
-                    </footer>
-                </div>
-
-                <div class="card mb-4" style="width: 23%">
-                    <div class="card-img" >
-                        <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
-                    </div>
-                    <div class="p-1 has-text-centered">
-                        <p class="title is-6">Flower Garden</p>
-                    </div>
-                    <footer class="card-footer">
-                        <a class="card-footer-item">Share</a>
-                        <a class="card-footer-item">Edit</a>
-                        <a class="card-footer-item">Delete</a>
-                    </footer>
-                </div>
-
-                <div class="card mb-4" style="width: 23%">
-                    <div class="card-img" >
-                        <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
-                    </div>
-                    <div class="p-1 has-text-centered">
-                        <p class="title is-6">Flower Garden</p>
-                    </div>
-                    <footer class="card-footer">
-                        <a class="card-footer-item">Share</a>
-                        <a class="card-footer-item">Edit</a>
-                        <a class="card-footer-item">Delete</a>
-                    </footer>
-                </div>
-
-                <div class="card mb-4" style="width: 23%">
-                    <div class="card-img" >
-                        <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
-                    </div>
-                    <div class="p-1 has-text-centered">
-                        <p class="title is-6">Flower Garden</p>
-                    </div>
-                    <footer class="card-footer">
-                        <a class="card-footer-item">Share</a>
-                        <a class="card-footer-item">Edit</a>
-                        <a class="card-footer-item">Delete</a>
-                    </footer>
-                </div>
-
-                <div class="card mb-4" style="width: 23%">
-                    <div class="card-img" >
-                        <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
-                    </div>
-                    <div class="p-1 has-text-centered">
-                        <p class="title is-6">Flower Garden</p>
-                    </div>
-                    <footer class="card-footer"> 
-                        <a class="card-footer-item">Share</a>
-                        <a class="card-footer-item">Edit</a>
-                        <a class="card-footer-item">Delete</a>
-                    </footer>
-                </div>
-
-                <div class="card mb-4" style="width: 23%">
-                    <div class="card-img" >
-                        <img src="https://image.rakuten.co.jp/asiantique/cabinet/03189910/img63361868.jpg" alt="...">
-                    </div>
-                    <div class="p-1 has-text-centered">
-                        <p class="title is-6">Flower Garden</p>
-                    </div>
-                    <footer class="card-footer">
-                        <a class="card-footer-item">Share</a>
-                        <a class="card-footer-item">Edit</a>
-                        <a class="card-footer-item">Delete</a>
-                    </footer>
-                </div>
             </div>
 
         </div>
@@ -158,11 +34,21 @@
 </template>
 
 <script>
+import DrawingWapper from '../api/drawingWrapper'
+import DrawingCard from '../components/DrawingCard.vue'
+
 export default {
+  components: { DrawingCard },
     name: 'Gallery',
     data() {
-        return {};
+        return {
+            allDrawings: [],
+        };
     },
+    async mounted() {
+        const drawingWrapper = new DrawingWapper('http://localhost:3000/drawings');
+        this.allDrawings = await drawingWrapper.getAll();
+    }
 };
 </script>
 
