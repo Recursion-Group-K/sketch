@@ -46,7 +46,7 @@ export default {
         };
     },
     async mounted() {
-        const drawingWrapper = new DrawingWapper('http://localhost:3000/drawings');
+        const drawingWrapper = new DrawingWapper();
         this.allDrawings = await drawingWrapper.getAll();
     }
 };
