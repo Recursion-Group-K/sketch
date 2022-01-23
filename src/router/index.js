@@ -1,5 +1,5 @@
 import VueRouter from 'vue-router';
-import Home from '../pages/Home.vue';
+import Drawing from '../pages/Drawing.vue';
 import Login from '../pages/Login.vue';
 import SignUp from '../pages/SignUp.vue';
 import NotFound from '../pages/NotFound.vue';
@@ -8,7 +8,7 @@ const routes = [
     {
         path: '/',
         name: 'Home',
-        component: Home,
+        component: Login,
     },
     {
         path: '/login',
@@ -19,6 +19,11 @@ const routes = [
         path: '/signup',
         name: 'SignUp',
         component: SignUp,
+    },
+    {
+        path: '/drawing',
+        name: 'Drawing',
+        component: Drawing,
     },
     {
         path: '/:pathMatch(.*)*',
