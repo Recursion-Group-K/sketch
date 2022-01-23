@@ -38,8 +38,8 @@ header {
                 </div>
 
                 <div class="navbar-end">
-                    <div v-if="doesUserSignedIn">
-                        <button to="/" class="button navbar-item">Logout</button>
+                    <div v-if="doesUserSignedIn" :class="{ buttons: !isOpenMenu }" >
+                        <a to="/" class="button navbar-item">Logout</a>
                     </div>
                     <div v-else :class="{ buttons: !isOpenMenu }">
                         <router-link 
