@@ -24,7 +24,7 @@ const routes = [
     {
         path: '/gallery',
         name: 'Gallery',
-        component: Gallery
+        component: Gallery,
     },
     {
         path: '/drawing',
