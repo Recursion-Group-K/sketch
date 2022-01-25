@@ -1,17 +1,4 @@
-<template>
-    <div id="app">
-        <router-view />
-    </div>
-</template>
-
-<script>
-export default {
-    name: 'App',
-};
-</script>
-
 <style lang="scss">
-@import 'bulma/bulma.sass';
 #app {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -20,3 +7,22 @@ export default {
     color: #2c3e50;
 }
 </style>
+
+<template>
+    <div id="app">
+        <Header />
+        <main>
+            <router-view />
+        </main>
+    </div>
+</template>
+
+<script>
+import Header from './components/Header.vue';
+export default {
+    name: 'App',
+    components: {
+        Header,
+    },
+};
+</script>
