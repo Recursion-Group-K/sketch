@@ -16,10 +16,10 @@
 export default {
     props: ['drawing'],
     methods: {
-        redirectToDrawingPage(){
-            this.$router.push('/drawing')
-        }
-    }
+        redirectToDrawingPage() {
+            this.$router.push('/drawing');
+        },
+    },
 };
 </script>
 

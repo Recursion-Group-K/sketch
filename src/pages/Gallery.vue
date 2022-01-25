@@ -4,15 +4,15 @@
             <div class="container is-fluid">
                 <div class="columns is-vcentered is-justify-content-center">
                     <div class="box column is-four-fifths p-6 mt-6" style="height: 85vh">
-                        <div
-                            class="columns is-flex-wrap-wrap"
-                        >
+                        <div class="columns is-flex-wrap-wrap">
                             <div class="column is-one-third">
-                                <div class="columns is-vcentered" style="height:100%;">
+                                <div class="columns is-vcentered" style="height: 100%">
                                     <DrawingForm />
                                 </div>
                             </div>
-                            <div v-for="drawing in allDrawings" :key="drawing.id"
+                            <div
+                                v-for="drawing in allDrawings"
+                                :key="drawing.id"
                                 class="column is-one-third"
                             >
                                 <DrawingBox :drawing="drawing"></DrawingBox>
