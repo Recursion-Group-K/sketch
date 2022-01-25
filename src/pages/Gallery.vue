@@ -1,42 +1,39 @@
 <template>
-    <div id="Gallery" class="">
-        <!-- <div id="header">
-
-        </div> -->
-
-        <h1 class="title has-text-centered my-4">Gallery</h1>
-
-        <!--絵の表示エリア-->
-        <div id="showcase" class="is-flex is-justify-content-center">
-            <div class="box column is-four-fifths p-6" style="height: 85vh">
-                <div
-                    class="is-flex is-justify-content-space-between is-align-items-flex-start is-flex-wrap-wrap"
-                >
-                    <!-- 新規作成用のカード -->
-                    <div
-                        class="box is-align-self-stretch is-flex is-justify-content-center is-align-items-center mb-4"
-                        style="width: 270px"
-                    >
-                        <div class="field has-addons">
-                            <div class="control">
-                                <input class="input" type="text" placeholder="title" />
+    <section id="Gallery" class="hero is-primary is-fullheight">
+        <div class="hero-body">
+            <div class="container is-fluid">
+                <div class="columns is-vcentered is-justify-content-center">
+                    <div class="box column is-four-fifths p-6 mt-6" style="height: 85vh">
+                        <div
+                            class="is-flex is-justify-content-space-between is-align-items-flex-start is-flex-wrap-wrap"
+                        >
+                            <!-- 新規作成用のカード -->
+                            <div
+                                class="box is-align-self-stretch is-flex is-justify-content-center is-align-items-center mb-4"
+                                style="width: 270px"
+                            >
+                                <div class="field has-addons">
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="title" />
+                                    </div>
+                                    <div class="control">
+                                        <button class="button is-primary">new</button>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="control">
-                                <button class="button is-primary">new</button>
-                            </div>
+
+                            <!-- v-forでDrawingCardコンポーネントを描写 -->
+                            <DrawingBox
+                                v-for="drawing in allDrawings"
+                                :key="drawing.id"
+                                :drawing="drawing"
+                            ></DrawingBox>
                         </div>
                     </div>
-
-                    <!-- v-forでDrawingCardコンポーネントを描写 -->
-                    <DrawingBox
-                        v-for="drawing in allDrawings"
-                        :key="drawing.id"
-                        :drawing="drawing"
-                    ></DrawingBox>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -60,9 +57,10 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
 .box {
-    box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+    box-shadow: $shadow;
     overflow: scroll;
 }
 
