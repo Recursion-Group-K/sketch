@@ -13,19 +13,18 @@ header {
 </template>
 
 <script>
-import store from "../store/index.js";
+import store from '../store/index.js';
 export default {
     name: 'Header',
     data() {
         return {};
     },
     computed: {
-        drawingMode: function() {
-            if(store.state.mode=='Etch a Sketch'){
+        drawingMode: function () {
+            if (store.state.mode == 'Etch a Sketch') {
                 return '/drawing/etchASketch';
-            }
-            else return "/drawing";
-        }
-    }
+            } else return '/drawing';
+        },
+    },
 };
 </script>
