@@ -1,7 +1,7 @@
 <style lang="scss" scoped></style>
 
 <template>
-    <v-stage :config="configKonva" class="has-background-white">
+    <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
         <v-layer>
             <v-circle :config="pointer"></v-circle>
             <v-line :config="lineConfig"></v-line>
@@ -88,6 +88,13 @@ export default {
                 this.lineConfig.points.push(this.pointer.x, this.pointer.y);
             }
         },
+        movePointer(event) {
+            let stage = event.target;
+            let pos = stage.getPointerPosition();
+            this.pointer.x=pos.x;
+            this.pointer.y=pos.y;
+            console.log(pos);
+        }
     },
 };
 </script>
