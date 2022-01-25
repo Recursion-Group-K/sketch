@@ -22,8 +22,8 @@ const routes = [
         component: SignUp,
     },
     {
-        path: '/drawing',
-        name: 'Drawing',
+        path: '/drawing/etchASketch',
+        name: 'Drawing-EtchASketch',
         component: Drawing,
     },
     {
