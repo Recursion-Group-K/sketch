@@ -69,7 +69,12 @@
                 <div class="background-circle" :style="{ backgroundColor: color }">
                     <font-awesome-icon class="awesome-icon zindex-2" icon="palette" />
                 </div>
-                <input class="color-picker" type="color" v-model="color" @change="$emit('change-color', color)" />
+                <input
+                    class="color-picker"
+                    type="color"
+                    v-model="color"
+                    @change="$emit('change-color', color)"
+                />
             </button>
             <div
                 class="dropdown"

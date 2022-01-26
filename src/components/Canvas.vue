@@ -32,7 +32,7 @@ let canvasHeight = 500;
 
 export default {
     name: 'Drawing',
-    props: ['newWeight','newColor'],
+    props: ['newWeight', 'newColor'],
     data() {
         return {
             lineList: [],
@@ -83,10 +83,10 @@ export default {
             this.lineConfig.weight = newWeight;
             this.pointer.radius = newWeight / 2;
         },
-        newColor: function(){
-            this.lineConfig.color=this.newColor;
-            this.pointer.stroke=this.newColor;
-        }
+        newColor: function () {
+            this.lineConfig.color = this.newColor;
+            this.pointer.stroke = this.newColor;
+        },
     },
     methods: {
         keyEvent(event, boolean) {

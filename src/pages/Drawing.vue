@@ -68,8 +68,8 @@ export default {
         };
     },
     methods: {
-        changeColor: function(newColor){
-            this.color=newColor;
+        changeColor: function (newColor) {
+            this.color = newColor;
         },
         changeWeight: function (newWeight) {
             this.weight = newWeight;
