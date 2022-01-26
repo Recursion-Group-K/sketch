@@ -34,7 +34,9 @@ header {
 
             <div id="header-nav-items" class="navbar-menu" :class="{ 'is-active': isOpenMenu }">
                 <div class="navbar-start">
-                    <router-link :to="drawingMode" class="navbar-item sub-title">Drawing</router-link>
+                    <router-link :to="drawingMode" class="navbar-item sub-title"
+                        >Drawing</router-link
+                    >
                     <router-link to="/gallery" class="navbar-item sub-title">Gallery</router-link>
                 </div>
 
