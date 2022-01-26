@@ -85,7 +85,13 @@
                     <div class="dropdown-content">
                         <div class="dropdown-item">
                             weight: {{ weight }} px
-                            <input type="range" min="1" max="200" v-model="weight" />
+                            <input
+                                type="range"
+                                min="2"
+                                max="20"
+                                v-model="weight"
+                                @change="$emit('change-weight', weight)"
+                            />
                         </div>
                     </div>
                 </div>
@@ -149,7 +155,7 @@ export default {
                 others: false,
             },
             color: '#000000',
-            weight: 50,
+            weight: 3,
         };
     },
 };

@@ -32,6 +32,7 @@ let canvasHeight = 500;
 
 export default {
     name: 'Drawing',
+    props: ['newWeight'],
     data() {
         return {
             lineList: [],
@@ -45,7 +46,7 @@ export default {
                 radius: 3,
                 fill: 'white',
                 stroke: 'black',
-                strokeWidth: 2,
+                strokeWidth: 4,
             },
             lineConfig: {
                 color: 'black',
@@ -75,6 +76,13 @@ export default {
         document.removeEventListener('keydown', this.keyDown);
         document.removeEventListener('keyup', this.keyUp);
         clearInterval(this.timer);
+    },
+    watch: {
+        newWeight: function () {
+            let newWeight = Number(this.newWeight);
+            this.lineConfig.weight = newWeight;
+            this.pointer.radius = newWeight / 2;
+        },
     },
     methods: {
         keyEvent(event, boolean) {

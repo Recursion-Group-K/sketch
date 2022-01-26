@@ -34,10 +34,10 @@
 
 <template>
     <section class="drawing-container is-fullheight">
-        <DrawingTools />
+        <DrawingTools @change-weight="changeWeight" />
         <div class="body">
             <div class="canvas-container">
-                <Canvas />
+                <Canvas :newWeight="weight" />
             </div>
             <div class="button-container">
                 <div class="px-4">
@@ -62,7 +62,14 @@ export default {
     components: { DrawingTools, Canvas },
     name: 'Drawing',
     data() {
-        return {};
+        return {
+            weight: 3,
+        };
+    },
+    methods: {
+        changeWeight: function (newWeight) {
+            this.weight = newWeight;
+        },
     },
 };
 </script>
