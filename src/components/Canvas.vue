@@ -1,12 +1,14 @@
 <style lang="scss" scoped></style>
 
 <template>
-    <v-stage :config="configKonva" class="has-background-white">
-        <v-layer>
-            <v-circle :config="pointer"></v-circle>
-            <v-line :config="lineConfig"></v-line>
-        </v-layer>
-    </v-stage>
+    <div id="canvas" class="container is-fluied" style="height:100%;">
+        <v-stage :config="configKonva" class="has-background-white">
+            <v-layer>
+                <v-circle :config="pointer"></v-circle>
+                <v-line :config="lineConfig"></v-line>
+            </v-layer>
+        </v-stage>
+    </div>
 </template>
 
 <script>
@@ -17,20 +19,18 @@ const keyMap = {
     k: 'isRight',
     j: 'isLeft',
 };
-let canvasWidth = window.innerWidth;
-let canvasHeight = 500;
 
 export default {
     name: 'Drawing',
     data() {
         return {
             configKonva: {
-                width: canvasWidth,
-                height: canvasHeight,
+                width: 100,
+                height: 100,
             },
             pointer: {
-                x: canvasWidth / 2,
-                y: canvasHeight / 2,
+                x: 0,
+                y: 0,
                 radius: 3,
                 fill: 'white',
                 stroke: 'black',
@@ -40,7 +40,7 @@ export default {
                 stroke: 'black',
                 strokeWidth: 3,
                 lineCap: 'round',
-                points: [canvasWidth / 2, canvasHeight / 2],
+                points: [0, 0],
             },
             direction: {
                 isUp: false,
@@ -52,10 +52,24 @@ export default {
         };
     },
     mounted: function () {
-        this.direction.isUp = false;
-        this.direction.isDown = false;
-        this.direction.isRight = false;
-        this.direction.isLeft = false;
+
+        const parent = document.querySelector('#canvas')
+        const { clientWidth, clientHeight } = parent
+
+        /**
+         * Init Konva Config
+         */
+        this.configKonva.width = clientWidth;
+        this.configKonva.height = clientHeight;
+
+        this.pointer.x = clientWidth / 2
+        this.pointer.y = clientHeight / 2
+
+        this.lineConfig.points = [this.pointer.x, this.pointer.y]
+
+        /**
+         * Drawing setting
+         */
         document.addEventListener('keydown', this.keyDown);
         document.addEventListener('keyup', this.keyUp);
         this.timer = setInterval(this.draw, 10);
