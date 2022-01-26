@@ -51,7 +51,6 @@ export default {
                 color: 'black',
                 weight: 3,
                 newLineFlag: false,
-                lastLineId: 0,
             },
             direction: {
                 isUp: false,
@@ -106,15 +105,10 @@ export default {
             if (lastPoint.x != this.pointer.x || lastPoint.y != this.pointer.y) {
                 if (this.lineConfig.newLineFlag) {
                     this.newLinePush(this.pointer.x, this.pointer.y);
-                    console.log(this.lineList[this.lineConfig.lastLineId].points);
-                    this.lineConfig.lastLineId++;
                     console.log(this.lineList);
                 }
                 this.lineConfig.newLineFlag = false;
-                this.lineList[this.lineConfig.lastLineId].points.push(
-                    this.pointer.x,
-                    this.pointer.y
-                );
+                this.lineList[this.lineList.length - 1].points.push(this.pointer.x, this.pointer.y);
             } else {
                 this.lineConfig.newLineFlag = true;
             }
