@@ -5,25 +5,40 @@
         </figure>
         <p class="title is-5 has-text-dark">{{ drawing.title }}</p>
         <div class="column is-one-fifths is-flex is-justify-content-flex-end">
-            <font-awesome-icon
-                class="mx-1 awesome-icon"
+            <font-awesome-icon icon="globe-asia"
                 :class="{ 'has-text-success': isPublic }"
-                icon="globe-asia"
+                class="mx-1 awesome-icon"
                 size="lg"
                 @click="toggoleIsPublic"
             />
-            <font-awesome-icon 
+            <font-awesome-icon :icon="['fab', 'twitter']"
                 class="mx-1 awesome-icon has-text-info" 
-                :icon="['fab', 'twitter']"
                 size="lg"
                 @click="twitterShare"
             />
-            <font-awesome-icon 
+            <font-awesome-icon icon="trash"
                 class="mx-1 awesome-icon has-text-danger" 
-                icon="trash"
                 size="lg"
                 @click="handleDeleteConfirmationModal(true)"
             />
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal" :class="{'is-active': isOpenDeleteConfirmationModal}">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">Delete Confirmation</p>
+                    <button class="delete" aria-label="close" @click="handleDeleteConfirmationModal(false)"></button>
+                </header>
+                <section class="modal-card-body">
+                    Are you sure you want delete the Drawing.
+                </section>
+                <footer class="modal-card-foot is-flex is-justify-content-center">
+                    <button class="button is-danger" @click="deleteDrawing">Delete</button>
+                    <button class="button" @click="handleDeleteConfirmationModal(false)">Cancel</button>
+                </footer>
+            </div>
         </div>
     </div>
 </template>
@@ -52,6 +67,7 @@ export default {
         },
         deleteDrawing() {
             console.log('gggg')
+            this.handleDeleteConfirmationModal(false)
         },
     },
 };
