@@ -102,7 +102,7 @@ export default {
             if (this.direction['isDown']) this.pointer.y += velocityOfPointer;
             if (this.direction['isRight']) this.pointer.x += velocityOfPointer;
             if (this.direction['isLeft']) this.pointer.x -= velocityOfPointer;
-            const isSamePoint=lastPoint.x==this.pointer.x && lastPoint.y == this.pointer.y;
+            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
             if (isSamePoint) {
                 this.lineConfig.newLineFlag = true;
                 return;
@@ -119,7 +119,7 @@ export default {
             let clickPos = stage.getPointerPosition();
             this.pointer.x = clickPos.x;
             this.pointer.y = clickPos.y;
-            this.lineConfig.newLineFlag=true;
+            this.lineConfig.newLineFlag = true;
         },
     },
 };
