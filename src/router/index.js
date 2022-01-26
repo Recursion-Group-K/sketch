@@ -3,6 +3,7 @@ import Drawing from '../pages/Drawing.vue';
 import Login from '../pages/Login.vue';
 import SignUp from '../pages/SignUp.vue';
 import NotFound from '../pages/NotFound.vue';
+import Gallery from '../pages/Gallery.vue';
 
 const routes = [
     {
@@ -19,6 +20,11 @@ const routes = [
         path: '/signup',
         name: 'SignUp',
         component: SignUp,
+    },
+    {
+        path: '/gallery',
+        name: 'Gallery',
+        component: Gallery,
     },
     {
         path: '/drawing',
