@@ -2,10 +2,12 @@
 .drawing-tools {
     @extend .level;
     @extend .is-mobile;
-    background-color: $link;
+    width: 100%;
     height: 4rem;
+    position: absolute;
+    top: 5rem;
     color: $white;
-
+    background-color: $link;
     button {
         @extend .button;
         @extend .level-item;

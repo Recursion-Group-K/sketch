@@ -33,7 +33,7 @@
 </style>
 
 <template>
-    <div class="drawing-container">
+    <section class="drawing-container is-fullheight">
         <DrawingTools />
         <div class="body">
             <div class="canvas-container">
@@ -51,7 +51,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
