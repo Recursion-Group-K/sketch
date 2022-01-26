@@ -1,3 +1,9 @@
+<style scoped lang="scss">
+.box {
+    padding: 0 !important;
+}
+</style>
+
 <template>
     <div class="box container is-fluid">
         <figure class="image is-4by3 mb-2" @click="redirectToDrawingPage">
@@ -72,9 +78,3 @@ export default {
     },
 };
 </script>
-
-<style scoped lang="scss">
-.box {
-    padding: 0 !important;
-}
-</style>
