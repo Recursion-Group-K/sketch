@@ -34,10 +34,10 @@
 
 <template>
     <section class="drawing-container is-fullheight">
-        <DrawingTools @change-weight="changeWeight" />
+        <DrawingTools @change-color="changeColor" @change-weight="changeWeight" />
         <div class="body">
             <div class="canvas-container">
-                <Canvas :newWeight="weight" />
+                <Canvas :newColor="color" :newWeight="weight" />
             </div>
             <div class="button-container">
                 <div class="px-4">
@@ -63,10 +63,14 @@ export default {
     name: 'Drawing',
     data() {
         return {
+            color: '#000000',
             weight: 3,
         };
     },
     methods: {
+        changeColor: function(newColor){
+            this.color=newColor;
+        },
         changeWeight: function (newWeight) {
             this.weight = newWeight;
         },
