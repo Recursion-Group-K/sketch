@@ -34,7 +34,9 @@ header {
 
             <div id="header-nav-items" class="navbar-menu" :class="{ 'is-active': isOpenMenu }">
                 <div class="navbar-start">
-                    <router-link to="/drawing" class="navbar-item sub-title">Drawing</router-link>
+                    <router-link :to="drawingMode" class="navbar-item sub-title"
+                        >Drawing</router-link
+                    >
                     <router-link to="/gallery" class="navbar-item sub-title">Gallery</router-link>
                 </div>
 
@@ -58,6 +60,7 @@ header {
 </template>
 
 <script>
+import store from '../store/index.js';
 import UserWrapper from '../api/userWrapper';
 export default {
     name: 'Header',
@@ -70,6 +73,13 @@ export default {
     },
     mounted() {
         new UserWrapper().getById(1).then((user) => (this.demoUser = user));
+    },
+    computed: {
+        drawingMode: function () {
+            if (store.state.mode == 'Etch a Sketch') {
+                return '/drawing/etchASketch';
+            } else return '/drawing';
+        },
     },
 };
 </script>
