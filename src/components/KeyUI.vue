@@ -19,9 +19,9 @@
         <div class="is-hidden-desktop">
             <div v-for="controlSet in keys" :key="controlSet.index">
                 <div>
-                    <button 
+                    <button
                         class="button is-primary button-ui m-1"
-                        :class="{'is-active': controlSet.isDown}"
+                        :class="{ 'is-active': controlSet.isDown }"
                     >
                         <font-awesome-icon
                             class="awesome-icon"
@@ -35,9 +35,9 @@
         <div class="is-hidden-touch is-flex">
             <div v-for="controlSet in keys" :key="controlSet.index">
                 <div>
-                    <button 
+                    <button
                         class="button is-primary button-ui m-1"
-                        :class="{'is-active': controlSet.isDown}"
+                        :class="{ 'is-active': controlSet.isDown }"
                     >
                         <font-awesome-icon
                             class="awesome-icon"
@@ -46,9 +46,9 @@
                     </button>
                 </div>
                 <div>
-                    <button 
+                    <button
                         class="button is-primary button-ui m-1"
-                        :class="{'is-active': controlSet.isDown}"
+                        :class="{ 'is-active': controlSet.isDown }"
                     >
                         <p class="is-size-5">{{ controlSet.key.toUpperCase() }}</p>
                     </button>

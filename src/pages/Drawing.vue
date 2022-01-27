@@ -12,10 +12,10 @@
     <section class="hero is-primary is-fullheight">
         <div class="hero-body">
             <div class="canvas-container">
-                <Canvas />
+                <Canvas ref="canvas" />
             </div>
         </div>
-        <DrawingTools />
+        <DrawingTools @undo="undo" @redo="redo" />
         <KeyUI />
     </section>
 </template>
@@ -34,6 +34,14 @@ export default {
     name: 'Drawing',
     data() {
         return {};
+    },
+    methods: {
+        undo: function () {
+            this.$refs.canvas.undo();
+        },
+        redo: function () {
+            this.$refs.canvas.redo();
+        },
     },
 };
 </script>

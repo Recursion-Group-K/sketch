@@ -105,18 +105,18 @@ $width__sidebar: 20em;
                 <p class="menu-label">Transactions</p>
                 <ul class="menu-list">
                     <li>
-                        <a>
-                            <font-awesome-icon 
-                                class="awesome-icon has-text-primary" 
+                        <a @click="$emit('redo')">
+                            <font-awesome-icon
+                                class="awesome-icon has-text-primary"
                                 icon="redo"
                                 size="lg"
                             />
                         </a>
                     </li>
                     <li>
-                        <a>
-                            <font-awesome-icon 
-                                class="awesome-icon has-text-primary" 
+                        <a @click="$emit('undo')">
+                            <font-awesome-icon
+                                class="awesome-icon has-text-primary"
                                 icon="undo"
                                 size="lg"
                             />
@@ -127,33 +127,36 @@ $width__sidebar: 20em;
                 <ul class="menu-list">
                     <li @click="twitterShare">
                         <a>
-                            <font-awesome-icon 
-                                :icon="['fab', 'twitter']" 
+                            <font-awesome-icon
+                                :icon="['fab', 'twitter']"
                                 class="mx-1 awesome-icon has-text-info"
                                 size="lg"
-                            /> Twitter
+                            />
+                            Twitter
                         </a>
                     </li>
                     <li @click="toggoleIsPublic">
                         <a>
-                            <font-awesome-icon 
+                            <font-awesome-icon
                                 icon="globe-asia"
                                 :class="{ 'has-text-success': isPublic }"
                                 class="mx-1 awesome-icon"
                                 size="lg"
-                            /> Gallery
+                            />
+                            Gallery
                         </a>
                     </li>
                 </ul>
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
                     <li>
-                        <a> 
-                            <font-awesome-icon 
+                        <a>
+                            <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
                                 icon="hdd"
                                 size="lg"
-                            /> Save 
+                            />
+                            Save
                         </a>
                     </li>
                 </ul>
@@ -164,11 +167,7 @@ $width__sidebar: 20em;
             :class="{ 'is-closed': !isSidebarOpen }"
             @click="toggleSideBar"
         >
-            <font-awesome-icon 
-                class="awesome-icon" 
-                icon="sliders-h" 
-                size="lg" 
-            />
+            <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
         </button>
     </div>
 </template>
