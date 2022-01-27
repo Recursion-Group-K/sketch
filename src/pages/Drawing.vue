@@ -33,9 +33,10 @@
 .shadow {
     box-shadow: $shadow;
 }
-
 .canvas-container {
-    height: 500px;
+    margin-top: 5rem;
+    height: 85vh;
+    width: 100%;
 }
 </style>
 
@@ -43,10 +44,9 @@
     <section class="hero is-primary is-fullheight">
         <!-- <DrawingTools /> -->
         <div class="hero-body">
-            <div class="container">
-                <div class="canvas-container shadow">
-                    <Canvas />
-                </div>
+            <div class="canvas-container">
+                <Canvas /> 
+            </div>
                 <!-- <div class="button-container">
                     <div class="px-4">
                         <button class="move-button">up</button>
@@ -58,7 +58,6 @@
                         <button class="move-button">right</button>
                     </div>
                 </div> -->
-            </div>
         </div>
     </section>
 </template>
@@ -68,9 +67,9 @@
 import Canvas from '../components/Canvas.vue';
 
 export default {
-    components: { 
+    components: {
         // DrawingTools,
-        Canvas 
+        Canvas,
     },
     name: 'Drawing',
     data() {

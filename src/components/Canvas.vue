@@ -1,7 +1,7 @@
 <style lang="scss" scoped></style>
 
 <template>
-    <div id="canvas" class="container is-fluied" style="height:100%;">
+    <div id="canvas" :style="{ height: '100%', width: '100%'}" >
         <v-stage :config="configKonva" class="has-background-white">
             <v-layer>
                 <v-circle :config="pointer"></v-circle>
@@ -52,20 +52,17 @@ export default {
         };
     },
     mounted: function () {
-
-        const parent = document.querySelector('#canvas')
-        const { clientWidth, clientHeight } = parent
+        const parent = document.querySelector('#canvas');
+        const { clientWidth, clientHeight } = parent;
 
         /**
          * Init Konva Config
          */
-        this.configKonva.width = clientWidth;
-        this.configKonva.height = clientHeight;
+        this.fitCanvas();
+        this.pointer.x = clientWidth / 2;
+        this.pointer.y = clientHeight / 2;
 
-        this.pointer.x = clientWidth / 2
-        this.pointer.y = clientHeight / 2
-
-        this.lineConfig.points = [this.pointer.x, this.pointer.y]
+        this.lineConfig.points = [this.pointer.x, this.pointer.y];
 
         /**
          * Drawing setting
@@ -73,6 +70,12 @@ export default {
         document.addEventListener('keydown', this.keyDown);
         document.addEventListener('keyup', this.keyUp);
         this.timer = setInterval(this.draw, 10);
+
+        /**
+         * resize canvas
+         */
+
+        window.addEventListener("resize", this.fitCanvas);
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
@@ -80,6 +83,13 @@ export default {
         clearInterval(this.timer);
     },
     methods: {
+        fitCanvas() {
+            const parent = document.querySelector('#canvas');
+            const { clientWidth, clientHeight } = parent;
+            console.log(clientWidth, clientHeight)
+            this.configKonva.width = clientWidth;
+            this.configKonva.height = clientHeight;
+        },
         keyEvent(event, boolean) {
             let key = event.key;
             if (key in keyMap) {
