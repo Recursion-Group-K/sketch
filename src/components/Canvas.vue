@@ -154,6 +154,7 @@ export default {
             );
         },
         undo() {
+            this.setNewLine();
             if (this.itemList.length == 0) return;
             this.itemStack.push(this.itemList.pop());
             const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
@@ -162,6 +163,7 @@ export default {
             this.isUndoed = true;
         },
         redo() {
+            this.setNewLine();
             if (this.itemStack.length == 0) return;
             this.itemList.push(this.itemStack.pop());
             const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
