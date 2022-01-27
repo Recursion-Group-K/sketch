@@ -34,15 +34,24 @@ $width__sidebar: 20em;
         transform: translateX(-$width__sidebar);
     }
 }
-.non-radious {
-    border-radius: 0;
+
+.menu {
+    @extend .menu;
+    p {
+        text-align: start;
+    }
+    a {
+        text-align: start;
+        padding-left: 2em;
+        padding-right: 2em;
+    }
 }
 </style>
 
 <template>
     <div>
         <div class="sidebar has-text-dark" :class="{'is-closed': !isSidebarOpen}">
-            <aside class="menu py-3">
+            <aside class="menu p-5">
 
                 <div class="level-item is-hidden-mobile has-text-weight-bold is-size-4 pr-5">
                     title of work
@@ -52,7 +61,7 @@ $width__sidebar: 20em;
                 <ul class="menu-list is-align-content-start">
                     <li>
                         <a>
-                            <font-awesome-icon class="awesome-icon zindex-2" icon="palette" />
+                            <font-awesome-icon class="awesome-icon" icon="palette" />
                             <input class="color-picker" type="color" v-model="color" />
                         </a>
                     </li>
