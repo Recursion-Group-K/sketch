@@ -4,31 +4,34 @@ $width__sidebar: 20em;
 
 .sidebar-toggle {
     @extend .button;
-    border-radius: 0%;
     position: absolute;
     top: 5rem;
     left: 0;
-    position: fixed;
     z-index: 2;
-    margin-left: $width__sidebar;
+    margin: 3px;
+    margin-left: calc($width__sidebar + 3px);
     cursor: pointer;
     transition: .7s;
     
     &.is-closed {
-        transform: translateX(- $width__sidebar);  
+        transform: translateX(-$width__sidebar);  
     }
 }
 
 .sidebar {
     z-index: 2;
     position: absolute;
-    top: 5rem;
+    top: 0;
     left: 0;
     width: $width__sidebar;
-    height: calc(100vh - 5rem);
+    height: 100vh;
     background-color: $white;
     transition: .7s;
     box-shadow: $shadow;
+
+    aside {
+        margin-top: 5rem;
+    }
     
     &.is-closed {
         transform: translateX(-$width__sidebar);
