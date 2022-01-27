@@ -4,6 +4,7 @@ $width__sidebar: 20em;
 
 .sidebar-toggle {
     @extend .button;
+    background-color: $white;
     position: absolute;
     top: 5rem;
     left: 0;
@@ -150,7 +151,7 @@ export default {
     name: 'DrawingTools',
     data() {
         return {
-            isSidebarOpen: true,
+            isSidebarOpen: false,
             toggles: {
                 weight: false,
                 others: false,

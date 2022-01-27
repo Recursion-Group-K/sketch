@@ -16,17 +16,20 @@
             </div>
         </div>
         <DrawingTools />
+        <KeyUI/>
     </section>
 </template>
 
 <script>
 import DrawingTools from '../components/DrawingTools.vue';
+import KeyUI from '../components/KeyUI.vue';
 import Canvas from '../components/Canvas.vue';
 
 export default {
     components: {
         DrawingTools,
         Canvas,
+        KeyUI,
     },
     name: 'Drawing',
     data() {
