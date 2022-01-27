@@ -1,21 +1,23 @@
 <style lang="scss" scoped></style>
 
 <template>
-    <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
-        <v-layer>
-            <v-circle :config="pointer"></v-circle>
-            <v-line
-                v-for="line in lineList"
-                :key="line.id"
-                :config="{
-                    points: line.points,
-                    lineCap: 'round',
-                    stroke: line.stroke,
-                    strokeWidth: line.strokeWidth,
-                }"
-            ></v-line>
-        </v-layer>
-    </v-stage>
+    <div id="canvas" :style="{ height: '100%', width: '100%' }">
+        <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
+            <v-layer>
+                <v-circle :config="pointer"></v-circle>
+                <v-line
+                    v-for="item in itemList"
+                    :key="item.id"
+                    :config="{
+                        points: item.line.points,
+                        lineCap: 'round',
+                        stroke: item.line.stroke,
+                        strokeWidth: item.line.strokeWidth,
+                    }"
+                ></v-line>
+            </v-layer>
+        </v-stage>
+    </div>
 </template>
 
 <script>
@@ -27,22 +29,21 @@ const keyMap = {
     j: 'isLeft',
 };
 
-let canvasWidth = window.innerWidth;
-let canvasHeight = 500;
-
 export default {
     name: 'Drawing',
     props: ['newWeight', 'newColor'],
     data() {
         return {
-            lineList: [],
+            itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
+            itemStack: [],
+            isUndoed: false,
             configKonva: {
-                width: canvasWidth,
-                height: canvasHeight,
+                width: 100,
+                height: 100,
             },
             pointer: {
-                x: canvasWidth / 2,
-                y: canvasHeight / 2,
+                x: 0,
+                y: 0,
                 radius: 3,
                 fill: 'white',
                 stroke: 'black',
@@ -63,10 +64,28 @@ export default {
         };
     },
     mounted: function () {
-        this.stopPointer();
+        const parent = document.querySelector('#canvas');
+        const { clientWidth, clientHeight } = parent;
+
+        /**
+         * Init Konva Config
+         */
+        this.fitCanvas();
+        this.pointer.x = clientWidth / 2;
+        this.pointer.y = clientHeight / 2;
+
+        /**
+         * Drawing setting
+         */
         document.addEventListener('keydown', this.keyDown);
         document.addEventListener('keyup', this.keyUp);
         this.timer = setInterval(this.draw, 15);
+
+        /**
+         * resize canvas
+         */
+
+        window.addEventListener('resize', this.fitCanvas);
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
@@ -93,6 +112,13 @@ export default {
             this.direction.isRight = false;
             this.direction.isLeft = false;
         },
+        fitCanvas() {
+            const parent = document.querySelector('#canvas');
+            const { clientWidth, clientHeight } = parent;
+            console.log(clientWidth, clientHeight);
+            this.configKonva.width = clientWidth;
+            this.configKonva.height = clientHeight;
+        },
         keyEvent(event, boolean) {
             let key = event.key;
             if (key in keyMap) {
@@ -105,14 +131,29 @@ export default {
         keyUp(event) {
             this.keyEvent(event, false);
             const areAllKeyUp = Object.values(this.direction).every((bool) => bool == false);
-            if (areAllKeyUp) this.lineConfig.newLineFlag = true;
+            if (areAllKeyUp) this.setNewLine();
         },
         pushNewLine(x, y) {
-            this.lineList.push({
-                points: [x, y],
-                stroke: this.lineConfig.color,
-                strokeWidth: this.lineConfig.weight,
+            console.log(this.itemList);
+            if (this.isUndoed) this.resetStack();
+            this.itemList.push({
+                line: {
+                    points: [x, y],
+                    stroke: this.lineConfig.color,
+                    strokeWidth: this.lineConfig.weight,
+                },
+                lastPoint: {},
             });
+            this.lineConfig.newLineFlag = false;
+        },
+        setNewLine() {
+            if (this.lineConfig.newLineFlag) return;
+            this.itemList[this.itemList.length - 1].lastPoint = {
+                x: this.pointer.x,
+                y: this.pointer.y,
+            };
+            console.log(this.itemList[this.itemList.length - 1].lastPoint);
+            this.lineConfig.newLineFlag = true;
         },
         draw() {
             let lastPoint = { x: this.pointer.x, y: this.pointer.y };
@@ -126,17 +167,39 @@ export default {
             }
             if (this.lineConfig.newLineFlag) {
                 this.pushNewLine(lastPoint.x, lastPoint.y);
-                this.lineConfig.newLineFlag = false;
-                console.log(this.lineList);
             }
-            this.lineList[this.lineList.length - 1].points.push(this.pointer.x, this.pointer.y);
+            this.itemList[this.itemList.length - 1].line.points.push(
+                this.pointer.x,
+                this.pointer.y
+            );
+        },
+        undo() {
+            this.setNewLine();
+            if (this.itemList.length == 0) return;
+            this.itemStack.push(this.itemList.pop());
+            const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
+            this.pointer.x = newPoint.x;
+            this.pointer.y = newPoint.y;
+            this.isUndoed = true;
+        },
+        redo() {
+            this.setNewLine();
+            if (this.itemStack.length == 0) return;
+            this.itemList.push(this.itemStack.pop());
+            const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
+            this.pointer.x = newPoint.x;
+            this.pointer.y = newPoint.y;
+        },
+        resetStack() {
+            this.itemStack = [];
+            this.isUndoed = false;
         },
         movePointer(event) {
+            this.setNewLine();
             let stage = event.target.getStage();
             let clickPos = stage.getPointerPosition();
             this.pointer.x = clickPos.x;
             this.pointer.y = clickPos.y;
-            this.lineConfig.newLineFlag = true;
         },
     },
 };

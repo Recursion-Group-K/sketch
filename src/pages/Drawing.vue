@@ -1,65 +1,36 @@
 <style lang="scss" scoped>
-.drawing-container {
-    height: 100vh;
-    width: 100vw;
-    .body {
-        flex-direction: column;
-        height: calc(100% - 4rem);
-        .canvas-container {
-            height: 80%;
-            background-color: $grey;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            @include desktop {
-                height: 100%;
-            }
-        }
-        .button-container {
-            @extend .is-hidden-desktop;
-            height: 20%;
-            background-color: $link;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            .move-button {
-                @extend .m-1;
-                height: 4rem;
-                width: 4rem;
-            }
-        }
-    }
+.shadow {
+    box-shadow: $shadow;
+}
+.canvas-container {
+    height: calc(85vh - 5rem);
+    width: 100%;
 }
 </style>
 
-<template>
-    <section class="drawing-container is-fullheight">
-        <DrawingTools @click-color-picker="clickColorPicker" @change-color="changeColor" @change-weight="changeWeight" />
-        <div class="body">
+<template>    
+<section class="hero is-primary is-fullheight">
+        <div class="hero-body">
             <div class="canvas-container">
                 <Canvas ref="canvas" :newColor="color" :newWeight="weight" />
             </div>
-            <div class="button-container">
-                <div class="px-4">
-                    <button class="move-button">up</button>
-                    <button class="move-button">down</button>
-                </div>
-
-                <div class="px-4">
-                    <button class="move-button">left</button>
-                    <button class="move-button">right</button>
-                </div>
-            </div>
         </div>
+        <DrawingTools @click-color-picker="clickColorPicker" @change-color="changeColor" @change-weight="changeWeight" @undo="undo" @redo="redo" />
+        <KeyUI />
     </section>
 </template>
 
 <script>
 import DrawingTools from '../components/DrawingTools.vue';
+import KeyUI from '../components/KeyUI.vue';
 import Canvas from '../components/Canvas.vue';
 
 export default {
-    components: { DrawingTools, Canvas },
+    components: {
+        DrawingTools,
+        Canvas,
+        KeyUI,
+    },
     name: 'Drawing',
     data() {
         return {
@@ -76,6 +47,12 @@ export default {
         },
         changeWeight: function (newWeight) {
             this.weight = newWeight;
+        },
+        undo: function () {
+            this.$refs.canvas.undo();
+        },
+        redo: function () {
+            this.$refs.canvas.redo();
         },
     },
 };
