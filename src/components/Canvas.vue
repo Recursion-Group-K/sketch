@@ -51,7 +51,7 @@ export default {
             lineConfig: {
                 color: 'black',
                 weight: 3,
-                newLineFlag: false,
+                newLineFlag: true,
             },
             direction: {
                 isUp: false,
@@ -67,7 +67,6 @@ export default {
         this.direction.isDown = false;
         this.direction.isRight = false;
         this.direction.isLeft = false;
-        this.newLinePush(this.pointer.x, this.pointer.y);
         document.addEventListener('keydown', this.keyDown);
         document.addEventListener('keyup', this.keyUp);
         this.timer = setInterval(this.draw, 15);
@@ -100,8 +99,10 @@ export default {
         },
         keyUp(event) {
             this.keyEvent(event, false);
+            const areAllKeyUp = Object.values(this.direction).every((bool) => bool == false);
+            if (areAllKeyUp) this.lineConfig.newLineFlag = true;
         },
-        newLinePush(x, y) {
+        pushNewLine(x, y) {
             this.lineList.push({
                 points: [x, y],
                 stroke: this.lineConfig.color,
@@ -114,22 +115,23 @@ export default {
             if (this.direction['isDown']) this.pointer.y += velocityOfPointer;
             if (this.direction['isRight']) this.pointer.x += velocityOfPointer;
             if (this.direction['isLeft']) this.pointer.x -= velocityOfPointer;
-            if (lastPoint.x != this.pointer.x || lastPoint.y != this.pointer.y) {
-                if (this.lineConfig.newLineFlag) {
-                    this.newLinePush(this.pointer.x, this.pointer.y);
-                    console.log(this.lineList);
-                }
-                this.lineConfig.newLineFlag = false;
-                this.lineList[this.lineList.length - 1].points.push(this.pointer.x, this.pointer.y);
-            } else {
-                this.lineConfig.newLineFlag = true;
+            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
+            if (isSamePoint) {
+                return;
             }
+            if (this.lineConfig.newLineFlag) {
+                this.pushNewLine(lastPoint.x, lastPoint.y);
+                this.lineConfig.newLineFlag = false;
+                console.log(this.lineList);
+            }
+            this.lineList[this.lineList.length - 1].points.push(this.pointer.x, this.pointer.y);
         },
         movePointer(event) {
             let stage = event.target.getStage();
             let clickPos = stage.getPointerPosition();
             this.pointer.x = clickPos.x;
             this.pointer.y = clickPos.y;
+            this.lineConfig.newLineFlag = true;
         },
     },
 };
