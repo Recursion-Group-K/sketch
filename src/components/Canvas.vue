@@ -63,10 +63,7 @@ export default {
         };
     },
     mounted: function () {
-        this.direction.isUp = false;
-        this.direction.isDown = false;
-        this.direction.isRight = false;
-        this.direction.isLeft = false;
+        this.stopPointer();
         document.addEventListener('keydown', this.keyDown);
         document.addEventListener('keyup', this.keyUp);
         this.timer = setInterval(this.draw, 15);
@@ -81,13 +78,21 @@ export default {
             let newWeight = Number(this.newWeight);
             this.lineConfig.weight = newWeight;
             this.pointer.radius = newWeight / 2;
+            this.lineConfig.newLineFlag = true;
         },
         newColor: function () {
             this.lineConfig.color = this.newColor;
             this.pointer.stroke = this.newColor;
+            this.lineConfig.newLineFlag = true;
         },
     },
     methods: {
+        stopPointer(){
+            this.direction.isUp = false;
+            this.direction.isDown = false;
+            this.direction.isRight = false;
+            this.direction.isLeft = false;
+        },
         keyEvent(event, boolean) {
             let key = event.key;
             if (key in keyMap) {

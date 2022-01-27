@@ -73,6 +73,7 @@
                     class="color-picker"
                     type="color"
                     v-model="color"
+                    @click="$emit('click-color-picker')"
                     @change="$emit('change-color', color)"
                 />
             </button>

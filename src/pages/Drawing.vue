@@ -34,10 +34,10 @@
 
 <template>
     <section class="drawing-container is-fullheight">
-        <DrawingTools @change-color="changeColor" @change-weight="changeWeight" />
+        <DrawingTools @click-color-picker="clickColorPicker" @change-color="changeColor" @change-weight="changeWeight" />
         <div class="body">
             <div class="canvas-container">
-                <Canvas :newColor="color" :newWeight="weight" />
+                <Canvas ref="canvas" :newColor="color" :newWeight="weight" />
             </div>
             <div class="button-container">
                 <div class="px-4">
@@ -68,6 +68,9 @@ export default {
         };
     },
     methods: {
+        clickColorPicker: function(){
+            this.$refs.canvas.stopPointer();
+        },
         changeColor: function (newColor) {
             this.color = newColor;
         },
