@@ -90,7 +90,7 @@ export default {
         keyUp(event) {
             this.keyEvent(event, false);
             const areAllKeyUp = Object.values(this.direction).every((bool) => bool == false);
-            if (areAllKeyUp) this.lineConfig.newLineFlag = true;
+            if (areAllKeyUp) this.setNewLine();
         },
         pushNewLine(x, y) {
             console.log(this.lineList);
@@ -100,6 +100,11 @@ export default {
                 stroke: this.lineConfig.color,
                 strokeWidth: this.lineConfig.weight,
             });
+            this.lineConfig.newLineFlag = false;
+        },
+        setNewLine(){
+            if(this.lineConfig.newLineFlag) return;
+            this.lineConfig.newLineFlag = true;
         },
         draw() {
             let lastPoint = { x: this.pointer.x, y: this.pointer.y };
@@ -113,7 +118,6 @@ export default {
             }
             if (this.lineConfig.newLineFlag) {
                 this.pushNewLine(lastPoint.x, lastPoint.y);
-                this.lineConfig.newLineFlag = false;
             }
             this.lineList[this.lineList.length - 1].points.push(this.pointer.x, this.pointer.y);
         },
@@ -135,7 +139,7 @@ export default {
             let clickPos = stage.getPointerPosition();
             this.pointer.x = clickPos.x;
             this.pointer.y = clickPos.y;
-            this.lineConfig.newLineFlag = true;
+            this.setNewLine();
         },
     },
 };
