@@ -19,7 +19,10 @@
         <div class="is-hidden-desktop">
             <div v-for="controlSet in keys" :key="controlSet.index">
                 <div>
-                    <button class="button is-primary button-ui m-1">
+                    <button 
+                        class="button is-primary button-ui m-1"
+                        :class="{'is-active': controlSet.isDown}"
+                    >
                         <font-awesome-icon
                             class="awesome-icon"
                             :icon="`arrow-${controlSet.direction}`"
@@ -32,7 +35,10 @@
         <div class="is-hidden-touch is-flex">
             <div v-for="controlSet in keys" :key="controlSet.index">
                 <div>
-                    <button class="button is-primary button-ui m-1">
+                    <button 
+                        class="button is-primary button-ui m-1"
+                        :class="{'is-active': controlSet.isDown}"
+                    >
                         <font-awesome-icon
                             class="awesome-icon"
                             :icon="`arrow-${controlSet.direction}`"
@@ -40,7 +46,10 @@
                     </button>
                 </div>
                 <div>
-                    <button class="button is-primary button-ui m-1">
+                    <button 
+                        class="button is-primary button-ui m-1"
+                        :class="{'is-active': controlSet.isDown}"
+                    >
                         <p class="is-size-5">{{ controlSet.key.toUpperCase() }}</p>
                     </button>
                 </div>
@@ -68,6 +77,14 @@ export default {
                 k: new ControlSet('right', 'k'),
             },
         };
+    },
+    mounted: function () {
+        document.addEventListener('keydown', this.keyDown);
+        document.addEventListener('keyup', this.keyUp);
+    },
+    destroyed: function () {
+        document.removeEventListener('keydown', this.keyDown);
+        document.removeEventListener('keyup', this.keyUp);
     },
     methods: {
         keyEvent(event, boolean) {
