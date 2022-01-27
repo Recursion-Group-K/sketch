@@ -81,8 +81,13 @@ $width__sidebar: 20em;
                         <a>
                             <div class="columns is-vcentered">
                                 <div class="column">
-                                    <input type="color" v-model="color" class="color-picker" @click="$emit('click-color-picker')"
-                    @change="$emit('change-color', color)" />
+                                    <input
+                                        type="color"
+                                        v-model="color"
+                                        class="color-picker"
+                                        @click="$emit('click-color-picker')"
+                                        @change="$emit('change-color', color)"
+                                    />
                                     <span :style="{ backgroundColor: color }"></span>
                                 </div>
                                 <div class="column">
@@ -97,7 +102,13 @@ $width__sidebar: 20em;
                 <ul class="menu-list">
                     <li>
                         <a>
-                            <input type="range" min="1" max="20" v-model="weight" @change="$emit('change-weight', weight)" />
+                            <input
+                                type="range"
+                                min="1"
+                                max="20"
+                                v-model="weight"
+                                @change="$emit('change-weight', weight)"
+                            />
                             {{ weight }} px
                         </a>
                     </li>

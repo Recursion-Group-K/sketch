@@ -106,7 +106,7 @@ export default {
         },
     },
     methods: {
-        stopPointer(){
+        stopPointer() {
             this.direction.isUp = false;
             this.direction.isDown = false;
             this.direction.isRight = false;
@@ -177,7 +177,7 @@ export default {
             this.setNewLine();
             if (this.itemList.length == 0) return;
             this.itemStack.push(this.itemList.pop());
-            if(this.itemList.length==0) return;
+            if (this.itemList.length == 0) return;
             const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
             this.pointer.x = newPoint.x;
             this.pointer.y = newPoint.y;
