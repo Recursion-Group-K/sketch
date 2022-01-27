@@ -34,10 +34,10 @@
 
 <template>
     <section class="drawing-container is-fullheight">
-        <DrawingTools />
+        <DrawingTools @undo="undo" @redo="redo" />
         <div class="body">
             <div class="canvas-container">
-                <Canvas />
+                <Canvas ref="canvas" />
             </div>
             <div class="button-container">
                 <div class="px-4">
@@ -64,5 +64,13 @@ export default {
     data() {
         return {};
     },
+    methods: {
+        undo: function(){
+            this.$refs.canvas.undo();
+        },
+        redo: function(){
+            this.$refs.canvas.redo();
+        },
+    }
 };
 </script>

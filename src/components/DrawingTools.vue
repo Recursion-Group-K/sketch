@@ -90,11 +90,11 @@
                     </div>
                 </div>
             </div>
-            <button>
-                <font-awesome-icon class="awesome-icon" icon="redo" />
-            </button>
-            <button>
+            <button @click="$emit('undo')">
                 <font-awesome-icon class="awesome-icon" icon="undo" />
+            </button>
+            <button @click="$emit('redo')">
+                <font-awesome-icon class="awesome-icon" icon="redo" />
             </button>
         </div>
         <div class="level-right">

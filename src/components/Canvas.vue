@@ -35,6 +35,8 @@ export default {
     data() {
         return {
             lineList: [],
+            lineStack: [],
+            isUndoed: false,
             configKonva: {
                 width: canvasWidth,
                 height: canvasHeight,
@@ -91,6 +93,8 @@ export default {
             if (areAllKeyUp) this.lineConfig.newLineFlag = true;
         },
         pushNewLine(x, y) {
+            console.log(this.lineList);
+            if(this.isUndoed)this.resetStack();
             this.lineList.push({
                 points: [x, y],
                 stroke: this.lineConfig.color,
@@ -110,9 +114,21 @@ export default {
             if (this.lineConfig.newLineFlag) {
                 this.pushNewLine(lastPoint.x, lastPoint.y);
                 this.lineConfig.newLineFlag = false;
-                console.log(this.lineList);
             }
             this.lineList[this.lineList.length - 1].points.push(this.pointer.x, this.pointer.y);
+        },
+        undo(){
+            if(this.lineList.length==0)return;
+            this.lineStack.push(this.lineList.pop());
+            this.isUndoed=true;
+        },
+        redo(){
+            if(this.lineStack.length==0)return;
+            this.lineList.push(this.lineStack.pop());
+        },
+        resetStack(){
+            this.lineStack=[];
+            this.isUndoed=false;
         },
         movePointer(event) {
             let stage = event.target.getStage();
