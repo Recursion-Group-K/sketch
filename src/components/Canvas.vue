@@ -5,13 +5,13 @@
         <v-layer>
             <v-circle :config="pointer"></v-circle>
             <v-line
-                v-for="line in lineList"
-                :key="line.id"
+                v-for="item in itemList"
+                :key="item.id"
                 :config="{
-                    points: line.points,
+                    points: item.line.points,
                     lineCap: 'round',
-                    stroke: line.stroke,
-                    strokeWidth: line.strokeWidth,
+                    stroke: item.line.stroke,
+                    strokeWidth: item.line.strokeWidth,
                 }"
             ></v-line>
         </v-layer>
@@ -34,8 +34,8 @@ export default {
     name: 'Drawing',
     data() {
         return {
-            lineList: [],
-            lineStack: [],
+            itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
+            itemStack: [],
             isUndoed: false,
             configKonva: {
                 width: canvasWidth,
@@ -93,17 +93,25 @@ export default {
             if (areAllKeyUp) this.setNewLine();
         },
         pushNewLine(x, y) {
-            console.log(this.lineList);
-            if(this.isUndoed)this.resetStack();
-            this.lineList.push({
-                points: [x, y],
-                stroke: this.lineConfig.color,
-                strokeWidth: this.lineConfig.weight,
+            console.log(this.itemList);
+            if (this.isUndoed) this.resetStack();
+            this.itemList.push({
+                line: {
+                    points: [x, y],
+                    stroke: this.lineConfig.color,
+                    strokeWidth: this.lineConfig.weight,
+                },
+                lastPoint: {},
             });
             this.lineConfig.newLineFlag = false;
         },
-        setNewLine(){
-            if(this.lineConfig.newLineFlag) return;
+        setNewLine() {
+            if (this.lineConfig.newLineFlag) return;
+            this.itemList[this.itemList.length - 1].lastPoint = {
+                x: this.pointer.x,
+                y: this.pointer.y,
+            };
+            console.log(this.itemList[this.itemList.length - 1].lastPoint);
             this.lineConfig.newLineFlag = true;
         },
         draw() {
@@ -119,27 +127,32 @@ export default {
             if (this.lineConfig.newLineFlag) {
                 this.pushNewLine(lastPoint.x, lastPoint.y);
             }
-            this.lineList[this.lineList.length - 1].points.push(this.pointer.x, this.pointer.y);
+            this.itemList[this.itemList.length - 1].line.points.push(
+                this.pointer.x,
+                this.pointer.y
+            );
         },
-        undo(){
-            if(this.lineList.length==0)return;
-            this.lineStack.push(this.lineList.pop());
-            this.isUndoed=true;
+        undo() {
+            if (this.itemList.length == 0) return;
+            this.itemStack.push(this.itemList.pop());
+            this.pointer.x = this.itemList[this.itemList.length - 1].lastPoint.x;
+            this.pointer.y = this.itemList[this.itemList.length - 1].lastPoint.y;
+            this.isUndoed = true;
         },
-        redo(){
-            if(this.lineStack.length==0)return;
-            this.lineList.push(this.lineStack.pop());
+        redo() {
+            if (this.itemStack.length == 0) return;
+            this.itemList.push(this.itemStack.pop());
         },
-        resetStack(){
-            this.lineStack=[];
-            this.isUndoed=false;
+        resetStack() {
+            this.itemStack = [];
+            this.isUndoed = false;
         },
         movePointer(event) {
+            this.setNewLine();
             let stage = event.target.getStage();
             let clickPos = stage.getPointerPosition();
             this.pointer.x = clickPos.x;
             this.pointer.y = clickPos.y;
-            this.setNewLine();
         },
     },
 };

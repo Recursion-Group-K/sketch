@@ -65,12 +65,12 @@ export default {
         return {};
     },
     methods: {
-        undo: function(){
+        undo: function () {
             this.$refs.canvas.undo();
         },
-        redo: function(){
+        redo: function () {
             this.$refs.canvas.redo();
         },
-    }
+    },
 };
 </script>
