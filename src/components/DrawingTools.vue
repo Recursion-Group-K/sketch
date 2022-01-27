@@ -1,142 +1,112 @@
 <style lang="scss" scoped>
-.drawing-tools {
-    @extend .level;
-    @extend .is-mobile;
-    width: 100%;
-    height: 4rem;
+// SIZES
+$width__sidebar: 20em;
+
+.sidebar-toggle {
+    @extend .button;
+    border-radius: 0%;
     position: absolute;
     top: 5rem;
-    color: $white;
-    background-color: $link;
-    button {
-        @extend .button;
-        @extend .level-item;
-        @extend .is-link;
-        @extend .px-2;
-        @extend .py-5;
-        @extend .m-1;
-        flex-direction: column;
-        color: $white;
-        padding-top: 3rem;
-        border-radius: 1rem;
-
-        span {
-            font-size: $size-7;
-        }
-        .awesome-icon {
-            @extend .my-1;
-            font-size: $size-4;
-        }
-    }
-    .dropdown {
-        @extend .p-0;
-        .dropdown-trigger {
-            button {
-                @extend .px-1;
-            }
-        }
-        .dropdown-item {
-            font-size: $size-6;
-        }
+    left: 0;
+    position: fixed;
+    z-index: 2;
+    margin-left: $width__sidebar;
+    cursor: pointer;
+    transition: .7s;
+    
+    &.is-closed {
+        transform: translateX(- $width__sidebar);  
     }
 }
-.color-button {
-    .background-circle {
-        height: 2rem;
-        width: 2rem;
-        border-radius: 2rem;
-        z-index: 1;
+
+.sidebar {
+    z-index: 2;
+    position: absolute;
+    top: 5rem;
+    left: 0;
+    width: $width__sidebar;
+    height: calc(100vh - 5rem);
+    background-color: $white;
+    transition: .7s;
+    box-shadow: $shadow;
+    
+    &.is-closed {
+        transform: translateX(-$width__sidebar);
     }
-    .color-picker {
-        opacity: 0;
-        position: absolute;
-        height: 3rem;
-        z-index: 3;
-    }
-    .zindex-2 {
-        z-index: 2;
-    }
+}
+.non-radious {
+    border-radius: 0;
 }
 </style>
 
 <template>
-    <nav class="drawing-tools px-3 m-0">
-        <div class="level-left is-fullheight">
-            <div class="level-item is-hidden-mobile has-text-weight-bold is-size-4 pr-5">
-                title of work
-            </div>
-            <button class="color-button">
-                <div class="background-circle" :style="{ backgroundColor: color }">
-                    <font-awesome-icon class="awesome-icon zindex-2" icon="palette" />
+    <div>
+        <div class="sidebar has-text-dark" :class="{'is-closed': !isSidebarOpen}">
+            <aside class="menu py-3">
+
+                <div class="level-item is-hidden-mobile has-text-weight-bold is-size-4 pr-5">
+                    title of work
                 </div>
-                <input class="color-picker" type="color" v-model="color" />
-            </button>
-            <div
-                class="dropdown"
-                :class="{ 'is-active': toggles.weight }"
-                @click="toggles.weight = !toggles.weight"
-            >
-                <div class="dropdown-trigger">
-                    <button>
-                        <font-awesome-icon class="awesome-icon" icon="circle" />
-                    </button>
-                </div>
-                <div class="dropdown-menu">
-                    <div class="dropdown-content">
-                        <div class="dropdown-item">
-                            weight: {{ weight }} px
-                            <input type="range" min="1" max="200" v-model="weight" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button>
-                <font-awesome-icon class="awesome-icon" icon="redo" />
-            </button>
-            <button>
-                <font-awesome-icon class="awesome-icon" icon="undo" />
-            </button>
+
+                <p class="menu-label">Color</p>
+                <ul class="menu-list is-align-content-start">
+                    <li>
+                        <a>
+                            <font-awesome-icon class="awesome-icon zindex-2" icon="palette" />
+                            <input class="color-picker" type="color" v-model="color" />
+                        </a>
+                    </li>
+                </ul>
+                
+                <p class="menu-label">Weight</p>
+                <ul class="menu-list">
+                    <li>
+                        <a>
+                            <input type="range"  min="1" max="200" v-model="weight" /> {{ weight }} px
+                        </a>
+                    </li>
+                </ul>
+                <p class="menu-label">Transactions</p>
+                <ul class="menu-list">
+                    <li>
+                        <a>
+                            <font-awesome-icon class="awesome-icon" icon="redo" />
+                        </a>
+                    </li>
+                    <li>
+                        <a>
+                            <font-awesome-icon class="awesome-icon" icon="undo" />
+                        </a>
+                    </li>
+                </ul>
+                <p class="menu-label">Share Option</p>
+                <ul class="menu-list">
+                    <li>
+                        <a><font-awesome-icon :icon="['fab', 'twitter']" /> Twitter</a>
+                    </li>
+                    <li>
+                        <a><font-awesome-icon icon="globe-asia" /> Gallery</a>
+                    </li>
+                </ul>
+                <p class="menu-label">Save Option</p>
+                <ul class="menu-list">
+                    <li>
+                        <a>
+                            <font-awesome-icon icon="save" /> Save
+                        </a>
+                    </li>
+                    
+                </ul>
+            </aside>
         </div>
-        <div class="level-right">
-            <button class="is-hidden-mobile">
-                <font-awesome-icon class="awesome-icon" icon="save" />
-            </button>
-            <button class="is-hidden-mobile">
-                <font-awesome-icon class="awesome-icon" :icon="['fab', 'twitter']" />
-            </button>
-            <button class="is-hidden-mobile">
-                <font-awesome-icon class="awesome-icon" icon="globe-asia" />
-            </button>
-            <div
-                class="dropdown is-right is-hidden-tablet"
-                :class="{ 'is-active': toggles.others }"
-                @click="toggles.others = !toggles.others"
-            >
-                <div class="dropdown-trigger">
-                    <button>
-                        <span>
-                            <font-awesome-icon class="awesome-icon" icon="bars" />
-                        </span>
-                        <span>others</span>
-                    </button>
-                </div>
-                <div class="dropdown-menu">
-                    <div class="dropdown-content">
-                        <div class="dropdown-item"><font-awesome-icon icon="save" /> save</div>
-                        <div class="dropdown-item">
-                            <font-awesome-icon :icon="['fab', 'twitter']" /> share twitter
-                        </div>
-                        <div class="dropdown-item">
-                            <font-awesome-icon icon="globe-asia" /> share gallery
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <button>
-                <font-awesome-icon class="awesome-icon" icon="door-open" />
-            </button>
-        </div>
-    </nav>
+        <button 
+            class="sidebar-toggle"
+            :class="{'is-closed': !isSidebarOpen}" 
+            @click="toggleSideBar"
+        >
+            <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
+        </button>
+    </div>
 </template>
 
 <script>
@@ -144,6 +114,7 @@ export default {
     name: 'DrawingTools',
     data() {
         return {
+            isSidebarOpen: true,
             toggles: {
                 weight: false,
                 others: false,
@@ -152,5 +123,10 @@ export default {
             weight: 50,
         };
     },
+    methods: {
+        toggleSideBar(){
+            this.isSidebarOpen = !this.isSidebarOpen
+        }
+    }
 };
 </script>
