@@ -135,13 +135,17 @@ export default {
         undo() {
             if (this.itemList.length == 0) return;
             this.itemStack.push(this.itemList.pop());
-            this.pointer.x = this.itemList[this.itemList.length - 1].lastPoint.x;
-            this.pointer.y = this.itemList[this.itemList.length - 1].lastPoint.y;
+            const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
+            this.pointer.x = newPoint.x;
+            this.pointer.y = newPoint.y;
             this.isUndoed = true;
         },
         redo() {
             if (this.itemStack.length == 0) return;
             this.itemList.push(this.itemStack.pop());
+            const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
+            this.pointer.x = newPoint.x;
+            this.pointer.y = newPoint.y;
         },
         resetStack() {
             this.itemStack = [];
