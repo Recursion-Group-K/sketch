@@ -106,28 +106,55 @@ $width__sidebar: 20em;
                 <ul class="menu-list">
                     <li>
                         <a>
-                            <font-awesome-icon class="awesome-icon" icon="redo" />
+                            <font-awesome-icon 
+                                class="awesome-icon has-text-primary" 
+                                icon="redo"
+                                size="lg"
+                            />
                         </a>
                     </li>
                     <li>
                         <a>
-                            <font-awesome-icon class="awesome-icon" icon="undo" />
+                            <font-awesome-icon 
+                                class="awesome-icon has-text-primary" 
+                                icon="undo"
+                                size="lg"
+                            />
                         </a>
                     </li>
                 </ul>
-                <p class="menu-label">Share Option</p>
+                <p class="menu-label">Share Options</p>
                 <ul class="menu-list">
-                    <li>
-                        <a><font-awesome-icon :icon="['fab', 'twitter']" /> Twitter</a>
+                    <li @click="twitterShare">
+                        <a>
+                            <font-awesome-icon 
+                                :icon="['fab', 'twitter']" 
+                                class="mx-1 awesome-icon has-text-info"
+                                size="lg"
+                            /> Twitter
+                        </a>
                     </li>
-                    <li>
-                        <a><font-awesome-icon icon="globe-asia" /> Gallery</a>
+                    <li @click="toggoleIsPublic">
+                        <a>
+                            <font-awesome-icon 
+                                icon="globe-asia"
+                                :class="{ 'has-text-success': isPublic }"
+                                class="mx-1 awesome-icon"
+                                size="lg"
+                            /> Gallery
+                        </a>
                     </li>
                 </ul>
-                <p class="menu-label">Save Option</p>
+                <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
                     <li>
-                        <a> <font-awesome-icon icon="save" /> Save </a>
+                        <a> 
+                            <font-awesome-icon 
+                                class="mx-1 awesome-icon has-text-primary"
+                                icon="hdd"
+                                size="lg"
+                            /> Save 
+                        </a>
                     </li>
                 </ul>
             </aside>
@@ -137,7 +164,11 @@ $width__sidebar: 20em;
             :class="{ 'is-closed': !isSidebarOpen }"
             @click="toggleSideBar"
         >
-            <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
+            <font-awesome-icon 
+                class="awesome-icon" 
+                icon="sliders-h" 
+                size="lg" 
+            />
         </button>
     </div>
 </template>
@@ -154,11 +185,18 @@ export default {
             },
             color: '#000000',
             weight: 50,
+            isPublic: false,
         };
     },
     methods: {
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
+        },
+        toggoleIsPublic() {
+            this.isPublic = !this.isPublic;
+        },
+        twitterShare() {
+            console.log('gggg');
         },
     },
 };
