@@ -46,6 +46,23 @@ $width__sidebar: 20em;
         padding-right: 2em;
     }
 }
+
+.color-picker{
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    border: none;
+    outline: none;
+    -webkit-appearance: none;
+}
+.color-picker::-webkit-color-swatch-wrapper {
+    padding: 0; 
+}
+.color-picker::-webkit-color-swatch {
+    border: none;
+    border-radius: 50%;
+}
+
 </style>
 
 <template>
@@ -61,8 +78,15 @@ $width__sidebar: 20em;
                 <ul class="menu-list is-align-content-start">
                     <li>
                         <a>
-                            <font-awesome-icon class="awesome-icon" icon="palette" />
-                            <input class="color-picker" type="color" v-model="color" />
+                            <div class="columns is-vcentered">
+                                <div class="column">
+                                    <input type="color" v-model="color" class="color-picker">
+                                    <span :style="{ backgroundColor: color }"></span>
+                                </div>
+                                <div class="column">
+                                    <p>{{ color }}</p>
+                                </div>
+                            </div>
                         </a>
                     </li>
                 </ul>
