@@ -12,10 +12,10 @@ $width__sidebar: 20em;
     margin: 3px;
     margin-left: calc($width__sidebar + 3px);
     cursor: pointer;
-    transition: .7s;
-    
+    transition: 0.7s;
+
     &.is-closed {
-        transform: translateX(-$width__sidebar);  
+        transform: translateX(-$width__sidebar);
     }
 }
 
@@ -27,13 +27,13 @@ $width__sidebar: 20em;
     width: $width__sidebar;
     height: 100vh;
     background-color: $white;
-    transition: .7s;
+    transition: 0.7s;
     box-shadow: $shadow;
 
     aside {
         margin-top: 5rem;
     }
-    
+
     &.is-closed {
         transform: translateX(-$width__sidebar);
     }
@@ -51,7 +51,7 @@ $width__sidebar: 20em;
     }
 }
 
-.color-picker{
+.color-picker {
     border-radius: 50%;
     height: 40px;
     width: 40px;
@@ -60,20 +60,18 @@ $width__sidebar: 20em;
     -webkit-appearance: none;
 }
 .color-picker::-webkit-color-swatch-wrapper {
-    padding: 0; 
+    padding: 0;
 }
 .color-picker::-webkit-color-swatch {
     border: none;
     border-radius: 50%;
 }
-
 </style>
 
 <template>
     <div>
-        <div class="sidebar has-text-dark" :class="{'is-closed': !isSidebarOpen}">
+        <div class="sidebar has-text-dark" :class="{ 'is-closed': !isSidebarOpen }">
             <aside class="menu p-5">
-
                 <div class="level-item is-hidden-mobile has-text-weight-bold is-size-4 pr-5">
                     title of work
                 </div>
@@ -84,7 +82,7 @@ $width__sidebar: 20em;
                         <a>
                             <div class="columns is-vcentered">
                                 <div class="column">
-                                    <input type="color" v-model="color" class="color-picker">
+                                    <input type="color" v-model="color" class="color-picker" />
                                     <span :style="{ backgroundColor: color }"></span>
                                 </div>
                                 <div class="column">
@@ -94,12 +92,13 @@ $width__sidebar: 20em;
                         </a>
                     </li>
                 </ul>
-                
+
                 <p class="menu-label">Weight</p>
                 <ul class="menu-list">
                     <li>
                         <a>
-                            <input type="range"  min="1" max="200" v-model="weight" /> {{ weight }} px
+                            <input type="range" min="1" max="200" v-model="weight" />
+                            {{ weight }} px
                         </a>
                     </li>
                 </ul>
@@ -128,17 +127,14 @@ $width__sidebar: 20em;
                 <p class="menu-label">Save Option</p>
                 <ul class="menu-list">
                     <li>
-                        <a>
-                            <font-awesome-icon icon="save" /> Save
-                        </a>
+                        <a> <font-awesome-icon icon="save" /> Save </a>
                     </li>
-                    
                 </ul>
             </aside>
         </div>
-        <button 
+        <button
             class="sidebar-toggle"
-            :class="{'is-closed': !isSidebarOpen}" 
+            :class="{ 'is-closed': !isSidebarOpen }"
             @click="toggleSideBar"
         >
             <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
@@ -161,9 +157,9 @@ export default {
         };
     },
     methods: {
-        toggleSideBar(){
-            this.isSidebarOpen = !this.isSidebarOpen
-        }
-    }
+        toggleSideBar() {
+            this.isSidebarOpen = !this.isSidebarOpen;
+        },
+    },
 };
 </script>

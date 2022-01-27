@@ -1,8 +1,8 @@
 <style lang="scss" scoped></style>
 
 <template>
-    <div id="canvas" :style="{ height: '100%', width: '100%'}" >
-            <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
+    <div id="canvas" :style="{ height: '100%', width: '100%' }">
+        <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
             <v-layer>
                 <v-circle :config="pointer"></v-circle>
                 <v-line
@@ -82,7 +82,7 @@ export default {
          * resize canvas
          */
 
-        window.addEventListener("resize", this.fitCanvas);
+        window.addEventListener('resize', this.fitCanvas);
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
@@ -93,7 +93,7 @@ export default {
         fitCanvas() {
             const parent = document.querySelector('#canvas');
             const { clientWidth, clientHeight } = parent;
-            console.log(clientWidth, clientHeight)
+            console.log(clientWidth, clientHeight);
             this.configKonva.width = clientWidth;
             this.configKonva.height = clientHeight;
         },

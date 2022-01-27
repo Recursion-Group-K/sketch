@@ -4,7 +4,6 @@
     bottom: 0;
     right: 0;
     padding: 10px;
-
 }
 
 .button-ui {
@@ -18,47 +17,71 @@
     <div class="key-ui">
         <!-- mobile&tablet -->
         <div class="is-hidden-desktop">
-            <button 
-                v-for="arrow in arrows" :key="arrow.index"
-                class="button is-primary button-ui"
-            >
-                <font-awesome-icon 
-                    class="awesome-icon" 
-                    :icon="`arrow-${arrow}`" 
-                />
-            </button>
+            <div v-for="controlSet in keys" :key="controlSet.index">
+                <div>
+                    <button class="button is-primary button-ui m-1">
+                        <font-awesome-icon
+                            class="awesome-icon"
+                            :icon="`arrow-${controlSet.direction}`"
+                        />
+                    </button>
+                </div>
+            </div>
         </div>
         <!-- desktop -->
-        <div class="is-hidden-touch">
-            <button 
-                v-for="arrow in arrows" :key="arrow.index"
-                class="button is-primary button-ui"
-            >
-                <font-awesome-icon 
-                    class="awesome-icon" 
-                    :icon="`arrow-${arrow}`" 
-                />
-            </button>
-        </div>
-        <div class="is-hidden-touch">
-            <button 
-                v-for="key in keys" :key="key.index"
-                class="button is-primary button-ui"
-            >
-                <p class="is-size-5">{{ key }}</p>
-            </button>
+        <div class="is-hidden-touch is-flex">
+            <div v-for="controlSet in keys" :key="controlSet.index">
+                <div>
+                    <button class="button is-primary button-ui m-1">
+                        <font-awesome-icon
+                            class="awesome-icon"
+                            :icon="`arrow-${controlSet.direction}`"
+                        />
+                    </button>
+                </div>
+                <div>
+                    <button class="button is-primary button-ui m-1">
+                        <p class="is-size-5">{{ controlSet.key.toUpperCase() }}</p>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+class ControlSet {
+    constructor(direction, key) {
+        this.direction = direction;
+        this.key = key;
+        this.isDown = false;
+    }
+}
 export default {
     name: 'Drawing',
     data() {
         return {
-            arrows: ['up','down','left','right'],
-            keys: ['D','F','J','K']
+            keys: {
+                d: new ControlSet('up', 'd'),
+                f: new ControlSet('down', 'f'),
+                j: new ControlSet('left', 'j'),
+                k: new ControlSet('right', 'k'),
+            },
         };
+    },
+    methods: {
+        keyEvent(event, boolean) {
+            const key = event.key;
+            if (key in this.keys) {
+                this.keys[key].isDown = boolean;
+            }
+        },
+        keyDown(event) {
+            this.keyEvent(event, true);
+        },
+        keyUp(event) {
+            this.keyEvent(event, false);
+        },
     },
 };
 </script>

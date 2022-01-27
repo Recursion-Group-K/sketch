@@ -12,11 +12,11 @@
     <section class="hero is-primary is-fullheight">
         <div class="hero-body">
             <div class="canvas-container">
-                <Canvas /> 
+                <Canvas />
             </div>
         </div>
         <DrawingTools />
-        <KeyUI/>
+        <KeyUI />
     </section>
 </template>
 
