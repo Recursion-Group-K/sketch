@@ -1,21 +1,23 @@
 <style lang="scss" scoped></style>
 
 <template>
-    <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
-        <v-layer>
-            <v-circle :config="pointer"></v-circle>
-            <v-line
-                v-for="item in itemList"
-                :key="item.id"
-                :config="{
-                    points: item.line.points,
-                    lineCap: 'round',
-                    stroke: item.line.stroke,
-                    strokeWidth: item.line.strokeWidth,
-                }"
-            ></v-line>
-        </v-layer>
-    </v-stage>
+    <div id="canvas" :style="{ height: '100%', width: '100%' }">
+        <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
+            <v-layer>
+                <v-circle :config="pointer"></v-circle>
+                <v-line
+                    v-for="item in itemList"
+                    :key="item.id"
+                    :config="{
+                        points: item.line.points,
+                        lineCap: 'round',
+                        stroke: item.line.stroke,
+                        strokeWidth: item.line.strokeWidth,
+                    }"
+                ></v-line>
+            </v-layer>
+        </v-stage>
+    </div>
 </template>
 
 <script>
@@ -27,9 +29,6 @@ const keyMap = {
     j: 'isLeft',
 };
 
-let canvasWidth = window.innerWidth;
-let canvasHeight = 500;
-
 export default {
     name: 'Drawing',
     data() {
@@ -38,12 +37,12 @@ export default {
             itemStack: [],
             isUndoed: false,
             configKonva: {
-                width: canvasWidth,
-                height: canvasHeight,
+                width: 100,
+                height: 100,
             },
             pointer: {
-                x: canvasWidth / 2,
-                y: canvasHeight / 2,
+                x: 0,
+                y: 0,
                 radius: 3,
                 fill: 'white',
                 stroke: 'black',
@@ -64,13 +63,28 @@ export default {
         };
     },
     mounted: function () {
-        this.direction.isUp = false;
-        this.direction.isDown = false;
-        this.direction.isRight = false;
-        this.direction.isLeft = false;
+        const parent = document.querySelector('#canvas');
+        const { clientWidth, clientHeight } = parent;
+
+        /**
+         * Init Konva Config
+         */
+        this.fitCanvas();
+        this.pointer.x = clientWidth / 2;
+        this.pointer.y = clientHeight / 2;
+
+        /**
+         * Drawing setting
+         */
         document.addEventListener('keydown', this.keyDown);
         document.addEventListener('keyup', this.keyUp);
         this.timer = setInterval(this.draw, 15);
+
+        /**
+         * resize canvas
+         */
+
+        window.addEventListener('resize', this.fitCanvas);
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
@@ -78,6 +92,13 @@ export default {
         clearInterval(this.timer);
     },
     methods: {
+        fitCanvas() {
+            const parent = document.querySelector('#canvas');
+            const { clientWidth, clientHeight } = parent;
+            console.log(clientWidth, clientHeight);
+            this.configKonva.width = clientWidth;
+            this.configKonva.height = clientHeight;
+        },
         keyEvent(event, boolean) {
             let key = event.key;
             if (key in keyMap) {

@@ -1,5 +1,6 @@
 <style scoped lang="scss">
 header {
+    z-index: 100;
     background-color: $white;
     width: 100%;
     min-height: 5rem;
