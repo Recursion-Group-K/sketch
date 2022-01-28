@@ -15,6 +15,16 @@
                         strokeWidth: item.line.strokeWidth,
                     }"
                 ></v-line>
+                <v-line
+                    v-for="item in savedItemList"
+                    :key="item.id"
+                    :config="{
+                        points: item.line.points,
+                        lineCap: 'round',
+                        stroke: item.line.stroke,
+                        strokeWidth: item.line.strokeWidth,
+                    }"
+                ></v-line>
             </v-layer>
         </v-stage>
     </div>
@@ -35,6 +45,7 @@ export default {
     data() {
         return {
             itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
+            savedItemList: [], //saveしたitemList。undoで消えない。
             itemStack: [],
             isUndoed: false,
             configKonva: {
@@ -228,11 +239,16 @@ export default {
         },
         load() {
             const data = localStorage.getItem('storage') || '[]';
-            this.itemList = JSON.parse(data);
+            this.savedItemList = JSON.parse(data);
+            this.itemList=[];
+            this.resetStack();
         },
-
         save() {
-            localStorage.setItem('storage', JSON.stringify(this.itemList));
+            this.itemList.forEach(element=>{
+                this.savedItemList.push(element);
+            });
+            localStorage.setItem('storage', JSON.stringify(this.savedItemList));
+            this.itemList=[];
         }
     },
 };
