@@ -75,14 +75,19 @@ $width__sidebar: 20em;
                 <div class="level-item is-hidden-mobile has-text-weight-bold is-size-4 pr-5">
                     title of work
                 </div>
-
                 <p class="menu-label">Color</p>
                 <ul class="menu-list is-align-content-start">
                     <li>
                         <a>
                             <div class="columns is-vcentered">
                                 <div class="column">
-                                    <input type="color" v-model="color" class="color-picker" />
+                                    <input
+                                        type="color"
+                                        v-model="color"
+                                        class="color-picker"
+                                        @click="$emit('click-color-picker')"
+                                        @change="$emit('change-color', color)"
+                                    />
                                     <span :style="{ backgroundColor: color }"></span>
                                 </div>
                                 <div class="column">
@@ -97,7 +102,13 @@ $width__sidebar: 20em;
                 <ul class="menu-list">
                     <li>
                         <a>
-                            <input type="range" min="1" max="200" v-model="weight" />
+                            <input
+                                type="range"
+                                min="1"
+                                max="20"
+                                v-model="weight"
+                                @change="$emit('change-weight', weight)"
+                            />
                             {{ weight }} px
                         </a>
                     </li>
@@ -183,7 +194,7 @@ export default {
                 others: false,
             },
             color: '#000000',
-            weight: 50,
+            weight: 3,
             isPublic: false,
         };
     },

@@ -31,6 +31,7 @@ const keyMap = {
 
 export default {
     name: 'Drawing',
+    props: ['newWeight', 'newColor'],
     data() {
         return {
             itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
@@ -46,7 +47,7 @@ export default {
                 radius: 3,
                 fill: 'white',
                 stroke: 'black',
-                strokeWidth: 2,
+                strokeWidth: 4,
             },
             lineConfig: {
                 color: 'black',
@@ -91,7 +92,26 @@ export default {
         document.removeEventListener('keyup', this.keyUp);
         clearInterval(this.timer);
     },
+    watch: {
+        newWeight: function () {
+            let newWeight = Number(this.newWeight);
+            this.lineConfig.weight = newWeight;
+            this.pointer.radius = newWeight / 2;
+            this.lineConfig.newLineFlag = true;
+        },
+        newColor: function () {
+            this.lineConfig.color = this.newColor;
+            this.pointer.stroke = this.newColor;
+            this.lineConfig.newLineFlag = true;
+        },
+    },
     methods: {
+        stopPointer() {
+            this.direction.isUp = false;
+            this.direction.isDown = false;
+            this.direction.isRight = false;
+            this.direction.isLeft = false;
+        },
         fitCanvas() {
             const parent = document.querySelector('#canvas');
             const { clientWidth, clientHeight } = parent;
@@ -157,6 +177,7 @@ export default {
             this.setNewLine();
             if (this.itemList.length == 0) return;
             this.itemStack.push(this.itemList.pop());
+            if (this.itemList.length == 0) return;
             const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
             this.pointer.x = newPoint.x;
             this.pointer.y = newPoint.y;

@@ -12,10 +12,16 @@
     <section class="hero is-primary is-fullheight">
         <div class="hero-body">
             <div class="canvas-container">
-                <Canvas ref="canvas" />
+                <Canvas ref="canvas" :newColor="color" :newWeight="weight" />
             </div>
         </div>
-        <DrawingTools @undo="undo" @redo="redo" />
+        <DrawingTools
+            @click-color-picker="clickColorPicker"
+            @change-color="changeColor"
+            @change-weight="changeWeight"
+            @undo="undo"
+            @redo="redo"
+        />
         <KeyUI />
     </section>
 </template>
@@ -33,9 +39,21 @@ export default {
     },
     name: 'Drawing',
     data() {
-        return {};
+        return {
+            color: '#000000',
+            weight: 3,
+        };
     },
     methods: {
+        clickColorPicker: function () {
+            this.$refs.canvas.stopPointer();
+        },
+        changeColor: function (newColor) {
+            this.color = newColor;
+        },
+        changeWeight: function (newWeight) {
+            this.weight = newWeight;
+        },
         undo: function () {
             this.$refs.canvas.undo();
         },
