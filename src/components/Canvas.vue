@@ -139,6 +139,14 @@ export default {
             if (key in keyMap) {
                 this.direction[keyMap[key]] = boolean;
             }
+            if(key=="z"){
+                console.log("saved");
+                this.save();
+            }
+            if(key=="x"){
+                console.log("loaded");
+                this.load();
+            }
         },
         keyDown(event) {
             this.keyEvent(event, true);
@@ -218,6 +226,14 @@ export default {
             this.pointer.x = clickPos.x;
             this.pointer.y = clickPos.y;
         },
+        load() {
+            const data = localStorage.getItem('storage') || '[]';
+            this.itemList = JSON.parse(data);
+        },
+
+        save() {
+            localStorage.setItem('storage', JSON.stringify(this.itemList));
+        }
     },
 };
 </script>
