@@ -23,10 +23,10 @@
 <script>
 const velocityOfPointer = 2;
 const keyMap = {
-    d: 'isUp',
-    f: 'isDown',
-    k: 'isRight',
-    j: 'isLeft',
+    d: 'up',
+    f: 'down',
+    k: 'right',
+    j: 'left',
 };
 
 export default {
@@ -55,10 +55,16 @@ export default {
                 newLineFlag: true,
             },
             direction: {
-                isUp: false,
-                isDown: false,
-                isRight: false,
-                isLeft: false,
+                up: false,
+                down: false,
+                right: false,
+                left: false,
+            },
+            limit: {
+                up: 0,
+                down: 0,
+                right: 0,
+                left: 0,
             },
             timer: undefined,
         };
@@ -107,17 +113,26 @@ export default {
     },
     methods: {
         stopPointer() {
-            this.direction.isUp = false;
-            this.direction.isDown = false;
-            this.direction.isRight = false;
-            this.direction.isLeft = false;
+            this.direction.up = false;
+            this.direction.down = false;
+            this.direction.right = false;
+            this.direction.left = false;
         },
         fitCanvas() {
             const parent = document.querySelector('#canvas');
             const { clientWidth, clientHeight } = parent;
-            console.log(clientWidth, clientHeight);
+            //console.log(clientWidth, clientHeight);
             this.configKonva.width = clientWidth;
             this.configKonva.height = clientHeight;
+            this.limit.down = clientHeight;
+            this.limit.right = clientWidth;
+            this.checkOverLimit(this.pointer);
+        },
+        checkOverLimit(point) {
+            if (point.x < this.limit.left) point.x = this.limit.left;
+            if (point.x > this.limit.right) point.x = this.limit.right;
+            if (point.y < this.limit.up) point.y = this.limit.up;
+            if (point.y > this.limit.down) point.y = this.limit.down;
         },
         keyEvent(event, boolean) {
             let key = event.key;
@@ -134,7 +149,6 @@ export default {
             if (areAllKeyUp) this.setNewLine();
         },
         pushNewLine(x, y) {
-            console.log(this.itemList);
             if (this.isUndoed) this.resetStack();
             this.itemList.push({
                 line: {
@@ -152,15 +166,16 @@ export default {
                 x: this.pointer.x,
                 y: this.pointer.y,
             };
-            console.log(this.itemList[this.itemList.length - 1].lastPoint);
+            console.log(this.itemList[this.itemList.length - 1]);
             this.lineConfig.newLineFlag = true;
         },
         draw() {
             let lastPoint = { x: this.pointer.x, y: this.pointer.y };
-            if (this.direction['isUp']) this.pointer.y -= velocityOfPointer;
-            if (this.direction['isDown']) this.pointer.y += velocityOfPointer;
-            if (this.direction['isRight']) this.pointer.x += velocityOfPointer;
-            if (this.direction['isLeft']) this.pointer.x -= velocityOfPointer;
+            if (this.direction['up']) this.pointer.y -= velocityOfPointer;
+            if (this.direction['down']) this.pointer.y += velocityOfPointer;
+            if (this.direction['right']) this.pointer.x += velocityOfPointer;
+            if (this.direction['left']) this.pointer.x -= velocityOfPointer;
+            this.checkOverLimit(this.pointer);
             const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
             if (isSamePoint) {
                 return;
@@ -199,6 +214,7 @@ export default {
             this.setNewLine();
             let stage = event.target.getStage();
             let clickPos = stage.getPointerPosition();
+            this.checkOverLimit(clickPos);
             this.pointer.x = clickPos.x;
             this.pointer.y = clickPos.y;
         },
