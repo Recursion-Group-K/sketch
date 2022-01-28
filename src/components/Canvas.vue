@@ -4,17 +4,6 @@
     <div id="canvas" :style="{ height: '100%', width: '100%' }">
         <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
             <v-layer>
-                <v-circle :config="pointer"></v-circle>
-                <v-line
-                    v-for="item in itemList"
-                    :key="item.id"
-                    :config="{
-                        points: item.line.points,
-                        lineCap: 'round',
-                        stroke: item.line.stroke,
-                        strokeWidth: item.line.strokeWidth,
-                    }"
-                ></v-line>
                 <v-line
                     v-for="item in savedItemList"
                     :key="item.id"
@@ -25,6 +14,17 @@
                         strokeWidth: item.line.strokeWidth,
                     }"
                 ></v-line>
+                <v-line
+                    v-for="item in itemList"
+                    :key="item.id"
+                    :config="{
+                        points: item.line.points,
+                        lineCap: 'round',
+                        stroke: item.line.stroke,
+                        strokeWidth: item.line.strokeWidth,
+                    }"
+                ></v-line>
+                <v-circle :config="pointer"></v-circle>
             </v-layer>
         </v-stage>
     </div>
@@ -57,8 +57,8 @@ export default {
                 x: 0,
                 y: 0,
                 radius: 3,
-                fill: 'white',
-                stroke: 'black',
+                fill: 'black',
+                stroke: 'gray',
                 strokeWidth: 4,
             },
             lineConfig: {
@@ -122,7 +122,7 @@ export default {
         },
         newColor: function () {
             this.lineConfig.color = this.newColor;
-            this.pointer.stroke = this.newColor;
+            this.pointer.fill = this.newColor;
             this.lineConfig.newLineFlag = true;
         },
     },
