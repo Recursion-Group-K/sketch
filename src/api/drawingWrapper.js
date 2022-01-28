@@ -29,8 +29,9 @@ function toParams(drawingData) {
 }
 
 export default class DrawingWapper {
-    url = 'http://localhost:3000/drawings';
-    constructor() {}
+    constructor() {
+        this.url = 'http://localhost:3000/drawings';
+    }
 
     async getById(id) {
         // return Drawing
