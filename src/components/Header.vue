@@ -1,5 +1,6 @@
 <style scoped lang="scss">
 header {
+    z-index: 100;
     background-color: $white;
     width: 100%;
     min-height: 5rem;
@@ -34,24 +35,18 @@ header {
 
             <div id="header-nav-items" class="navbar-menu" :class="{ 'is-active': isOpenMenu }">
                 <div class="navbar-start">
-                    <router-link to="/drawing" class="navbar-item sub-title">Drawing</router-link>
+                    <router-link to="/gallery" class="navbar-item sub-title">Gallery</router-link>
                 </div>
 
                 <div class="navbar-end">
-                    <div v-if="doesUserSignedIn" :class="{ buttons: !isOpenMenu }" >
+                    <div v-if="doesUserSignedIn" :class="{ buttons: !isOpenMenu }">
                         <a to="/" class="button navbar-item">Logout</a>
                     </div>
                     <div v-else :class="{ buttons: !isOpenMenu }">
-                        <router-link 
-                            to="/signup" 
-                            class="button is-primary navbar-item"
-                        >
+                        <router-link to="/signup" class="button is-primary navbar-item">
                             Signup
                         </router-link>
-                        <router-link
-                            to="/login" 
-                            class="button is-light navbar-item"
-                        >
+                        <router-link to="/login" class="button is-light navbar-item">
                             Login
                         </router-link>
                     </div>
@@ -64,6 +59,7 @@ header {
 
 <script>
 import UserWrapper from '../api/userWrapper';
+
 export default {
     name: 'Header',
     data() {
