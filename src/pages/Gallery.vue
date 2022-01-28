@@ -6,7 +6,7 @@
                     <div class="box column is-four-fifths p-6 mt-6" style="height: 85vh">
                         <div class="columns is-flex-wrap-wrap">
                             <div class="column is-one-third">
-                                <div class="columns is-vcentered" style="height: 100%">
+                                <div class="columns is-vcentered is-flex is-justify-content-center" style="height: 100%">
                                     <DrawingForm />
                                 </div>
                             </div>
@@ -28,7 +28,7 @@
 <script>
 import DrawingWapper from '../api/drawingWrapper';
 import DrawingBox from '../components/DrawingBox.vue';
-import DrawingForm from '../components/DrawingForm.vue';
+import DrawingForm from '../components/NewDrawingButton.vue';
 
 export default {
     components: {
