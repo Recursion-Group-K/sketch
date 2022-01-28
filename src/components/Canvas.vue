@@ -48,6 +48,7 @@ export default {
             savedItemList: [], //saveしたitemList。undoで消えない。
             itemStack: [],
             isUndoed: false,
+            isAllSaved: false,
             configKonva: {
                 width: 100,
                 height: 100,
@@ -103,11 +104,14 @@ export default {
          */
 
         window.addEventListener('resize', this.fitCanvas);
+        this.load();
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
         document.removeEventListener('keyup', this.keyUp);
         clearInterval(this.timer);
+        if(this.isAllSaved)return;
+        if(window.confirm("変更をセーブしますか？"))this.save();
     },
     watch: {
         newWeight: function () {
@@ -149,10 +153,6 @@ export default {
             let key = event.key;
             if (key in keyMap) {
                 this.direction[keyMap[key]] = boolean;
-            }
-            if(key=="z"){
-                console.log("saved");
-                this.save();
             }
             if(key=="x"){
                 console.log("loaded");
@@ -202,6 +202,7 @@ export default {
             }
             if (this.lineConfig.newLineFlag) {
                 this.pushNewLine(lastPoint.x, lastPoint.y);
+                this.isAllSaved=false;
             }
             this.itemList[this.itemList.length - 1].line.points.push(
                 this.pointer.x,
@@ -247,6 +248,7 @@ export default {
             this.resetStack();
             this.itemList=[];
             this.setNewLine();
+            this.isAllSaved=true;
         },
         save() {
             this.setNewLine();
@@ -255,6 +257,7 @@ export default {
             });
             localStorage.setItem('storage', JSON.stringify(this.savedItemList));
             this.itemList=[];
+            this.isAllSaved=true;
         }
     },
 };

@@ -161,7 +161,7 @@ $width__sidebar: 20em;
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
                     <li>
-                        <a>
+                        <a @click="$emit('save')">
                             <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
                                 icon="hdd"

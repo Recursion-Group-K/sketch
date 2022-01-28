@@ -21,6 +21,7 @@
             @change-weight="changeWeight"
             @undo="undo"
             @redo="redo"
+            @save="save"
         />
         <KeyUI />
     </section>
@@ -60,6 +61,9 @@ export default {
         redo: function () {
             this.$refs.canvas.redo();
         },
+        save: function () {
+            this.$refs.canvas.save();
+        }
     },
 };
 </script>
