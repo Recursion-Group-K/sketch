@@ -63,7 +63,7 @@ export default {
         },
         save: function () {
             this.$refs.canvas.save();
-        }
+        },
     },
 };
 </script>

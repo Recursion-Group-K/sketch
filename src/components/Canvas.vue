@@ -110,8 +110,8 @@ export default {
         document.removeEventListener('keydown', this.keyDown);
         document.removeEventListener('keyup', this.keyUp);
         clearInterval(this.timer);
-        if(this.isAllSaved)return;
-        if(window.confirm("変更をセーブしますか？"))this.save();
+        if (this.isAllSaved) return;
+        if (window.confirm('変更をセーブしますか？')) this.save();
     },
     watch: {
         newWeight: function () {
@@ -154,8 +154,8 @@ export default {
             if (key in keyMap) {
                 this.direction[keyMap[key]] = boolean;
             }
-            if(key=="x"){
-                console.log("loaded");
+            if (key == 'x') {
+                console.log('loaded');
                 this.load();
             }
         },
@@ -182,7 +182,7 @@ export default {
         setNewLine() {
             if (this.lineConfig.newLineFlag) return;
             this.lineConfig.newLineFlag = true;
-            if(this.itemList.length==0)return
+            if (this.itemList.length == 0) return;
             this.itemList[this.itemList.length - 1].lastPoint = {
                 x: this.pointer.x,
                 y: this.pointer.y,
@@ -202,7 +202,7 @@ export default {
             }
             if (this.lineConfig.newLineFlag) {
                 this.pushNewLine(lastPoint.x, lastPoint.y);
-                this.isAllSaved=false;
+                this.isAllSaved = false;
             }
             this.itemList[this.itemList.length - 1].line.points.push(
                 this.pointer.x,
@@ -242,23 +242,23 @@ export default {
         load() {
             const data = localStorage.getItem('storage') || '[]';
             this.savedItemList = JSON.parse(data);
-            const newPoint=this.savedItemList[this.savedItemList.length-1].lastPoint;
-            this.pointer.x=newPoint.x;
-            this.pointer.y=newPoint.y;
+            const newPoint = this.savedItemList[this.savedItemList.length - 1].lastPoint;
+            this.pointer.x = newPoint.x;
+            this.pointer.y = newPoint.y;
             this.resetStack();
-            this.itemList=[];
+            this.itemList = [];
             this.setNewLine();
-            this.isAllSaved=true;
+            this.isAllSaved = true;
         },
         save() {
             this.setNewLine();
-            this.itemList.forEach(element=>{
+            this.itemList.forEach((element) => {
                 this.savedItemList.push(element);
             });
             localStorage.setItem('storage', JSON.stringify(this.savedItemList));
-            this.itemList=[];
-            this.isAllSaved=true;
-        }
+            this.itemList = [];
+            this.isAllSaved = true;
+        },
     },
 };
 </script>
