@@ -61,10 +61,10 @@ export default {
                 left: false,
             },
             limit: {
-                up:0,
-                down:0,
-                right:0,
-                left:0,
+                up: 0,
+                down: 0,
+                right: 0,
+                left: 0,
             },
             timer: undefined,
         };
@@ -124,15 +124,15 @@ export default {
             //console.log(clientWidth, clientHeight);
             this.configKonva.width = clientWidth;
             this.configKonva.height = clientHeight;
-            this.limit.down=clientHeight;
-            this.limit.right=clientWidth;
+            this.limit.down = clientHeight;
+            this.limit.right = clientWidth;
             this.checkOverLimit(this.pointer);
         },
         checkOverLimit(point) {
-            if(point.x<this.limit.left)point.x=this.limit.left;
-            if(point.x>this.limit.right)point.x=this.limit.right;
-            if(point.y<this.limit.up)point.y=this.limit.up;
-            if(point.y>this.limit.down)point.y=this.limit.down;
+            if (point.x < this.limit.left) point.x = this.limit.left;
+            if (point.x > this.limit.right) point.x = this.limit.right;
+            if (point.y < this.limit.up) point.y = this.limit.up;
+            if (point.y > this.limit.down) point.y = this.limit.down;
         },
         keyEvent(event, boolean) {
             let key = event.key;
