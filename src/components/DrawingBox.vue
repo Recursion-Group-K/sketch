@@ -5,7 +5,7 @@
 </style>
 
 <template>
-    <div class="box container is-fluid">
+    <div class="box container is-fluid" >
         <figure class="image is-4by3 mb-2" @click="redirectToDrawingPage">
             <img :src="drawing.imgUrl" />
         </figure>
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
     props: ['drawing'],
     data() {
@@ -65,9 +66,13 @@ export default {
             isOpenDeleteConfirmationModal: false,
         };
     },
+    computed: mapGetters('drawing', ['isEtchASketchMode']),
     methods: {
         redirectToDrawingPage() {
-            this.$router.push('/drawing');
+            let path = '';
+            if (this.isEtchASketchMode) path = '/drawing/etchASketch';
+            else path = '/drawing';
+            this.$router.push(path);
         },
         toggoleIsPublic() {
             this.isPublic = !this.isPublic;
