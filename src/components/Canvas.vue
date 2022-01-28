@@ -181,12 +181,13 @@ export default {
         },
         setNewLine() {
             if (this.lineConfig.newLineFlag) return;
+            this.lineConfig.newLineFlag = true;
+            if(this.itemList.length==0)return
             this.itemList[this.itemList.length - 1].lastPoint = {
                 x: this.pointer.x,
                 y: this.pointer.y,
             };
             console.log(this.itemList[this.itemList.length - 1]);
-            this.lineConfig.newLineFlag = true;
         },
         draw() {
             let lastPoint = { x: this.pointer.x, y: this.pointer.y };
@@ -240,10 +241,15 @@ export default {
         load() {
             const data = localStorage.getItem('storage') || '[]';
             this.savedItemList = JSON.parse(data);
-            this.itemList=[];
+            const newPoint=this.savedItemList[this.savedItemList.length-1].lastPoint;
+            this.pointer.x=newPoint.x;
+            this.pointer.y=newPoint.y;
             this.resetStack();
+            this.itemList=[];
+            this.setNewLine();
         },
         save() {
+            this.setNewLine();
             this.itemList.forEach(element=>{
                 this.savedItemList.push(element);
             });
