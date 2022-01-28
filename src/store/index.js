@@ -1,13 +1,21 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import createLogger from 'vuex/dist/logger';
+
+import drawing from './drawing';
+import auth from './auth';
+import signup from './signup';
+
+const debug = process.env.NODE_ENV !== 'production';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-    state: {
-        mode: 'Etch a Sketch',
+    modules: {
+        auth,
+        drawing,
+        signup,
     },
-    mutations: {},
-    actions: {},
-    modules: {},
+    strict: debug,
+    plugins: debug ? [createLogger()] : [],
 });
