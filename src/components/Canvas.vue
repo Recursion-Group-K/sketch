@@ -158,6 +158,10 @@ export default {
                 console.log('loaded');
                 this.load();
             }
+            if(key == 'c'){
+                console.log('reset');
+                this.reset();
+            }
         },
         keyDown(event) {
             this.keyEvent(event, true);
@@ -242,9 +246,11 @@ export default {
         load() {
             const data = localStorage.getItem('storage') || '[]';
             this.savedItemList = JSON.parse(data);
-            const newPoint = this.savedItemList[this.savedItemList.length - 1].lastPoint;
-            this.pointer.x = newPoint.x;
-            this.pointer.y = newPoint.y;
+            if(this.savedItemList.length >= 1){
+                const newPoint = this.savedItemList[this.savedItemList.length - 1].lastPoint;
+                this.pointer.x = newPoint.x;
+                this.pointer.y = newPoint.y;
+            }
             this.resetStack();
             this.itemList = [];
             this.setNewLine();
@@ -258,6 +264,10 @@ export default {
             localStorage.setItem('storage', JSON.stringify(this.savedItemList));
             this.itemList = [];
             this.isAllSaved = true;
+        },
+        reset() {
+            this.savedItemList = [];
+            localStorage.setItem('storage', JSON.stringify(this.savedItemList));
         },
     },
 };
