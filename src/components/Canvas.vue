@@ -244,8 +244,7 @@ export default {
             this.pointer.y = clickPos.y;
         },
         load() {
-            const data = localStorage.getItem('storage') || '[]';
-            this.savedItemList = JSON.parse(data);
+            this.loadDB();
             if(this.savedItemList.length >= 1){
                 const newPoint = this.savedItemList[this.savedItemList.length - 1].lastPoint;
                 this.pointer.x = newPoint.x;
@@ -261,9 +260,16 @@ export default {
             this.itemList.forEach((element) => {
                 this.savedItemList.push(element);
             });
-            localStorage.setItem('storage', JSON.stringify(this.savedItemList));
+            this.saveDB();
             this.itemList = [];
             this.isAllSaved = true;
+        },
+        loadDB(){
+            const data = localStorage.getItem('storage') || '[]';
+            this.savedItemList = JSON.parse(data);
+        },
+        saveDB() {
+            localStorage.setItem('storage', JSON.stringify(this.savedItemList));
         },
         reset() {
             this.savedItemList = [];
