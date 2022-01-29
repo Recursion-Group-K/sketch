@@ -5,16 +5,6 @@
         <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
             <v-layer>
                 <v-line
-                    v-for="item in savedItemList"
-                    :key="item.id"
-                    :config="{
-                        points: item.line.points,
-                        lineCap: 'round',
-                        stroke: item.line.stroke,
-                        strokeWidth: item.line.strokeWidth,
-                    }"
-                ></v-line>
-                <v-line
                     v-for="item in itemList"
                     :key="item.id"
                     :config="{
@@ -45,7 +35,6 @@ export default {
     data() {
         return {
             itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
-            savedItemList: [], //saveしたitemList。undoで消えない。
             itemStack: [],
             isUndoed: false,
             isAllSaved: false,
@@ -245,35 +234,30 @@ export default {
         },
         load() {
             this.loadDB();
-            if(this.savedItemList.length >= 1){
-                const newPoint = this.savedItemList[this.savedItemList.length - 1].lastPoint;
+            if(this.itemList.length >= 1){
+                const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
                 this.pointer.x = newPoint.x;
                 this.pointer.y = newPoint.y;
             }
             this.resetStack();
-            this.itemList = [];
             this.setNewLine();
             this.isAllSaved = true;
         },
         save() {
             this.setNewLine();
-            this.itemList.forEach((element) => {
-                this.savedItemList.push(element);
-            });
             this.saveDB();
-            this.itemList = [];
             this.isAllSaved = true;
         },
         loadDB(){
             const data = localStorage.getItem('storage') || '[]';
-            this.savedItemList = JSON.parse(data);
+            this.itemList = JSON.parse(data);
         },
         saveDB() {
-            localStorage.setItem('storage', JSON.stringify(this.savedItemList));
+            localStorage.setItem('storage', JSON.stringify(this.itemList));
         },
         reset() {
-            this.savedItemList = [];
-            localStorage.setItem('storage', JSON.stringify(this.savedItemList));
+            this.itemList = [];
+            localStorage.setItem('storage', JSON.stringify(this.itemList));
         },
     },
 };
