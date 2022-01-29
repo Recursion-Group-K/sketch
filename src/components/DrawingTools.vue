@@ -2,9 +2,7 @@
 // SIZES
 $width__sidebar: 20em;
 
-.sidebar-toggle {
-    @extend .button;
-    background-color: $white;
+.sidebar-group {
     position: absolute;
     top: 5rem;
     left: 0;
@@ -113,27 +111,6 @@ $width__sidebar: 20em;
                         </a>
                     </li>
                 </ul>
-                <p class="menu-label">Transactions</p>
-                <ul class="menu-list">
-                    <li>
-                        <a @click="$emit('redo')">
-                            <font-awesome-icon
-                                class="awesome-icon has-text-primary"
-                                icon="redo"
-                                size="lg"
-                            />
-                        </a>
-                    </li>
-                    <li>
-                        <a @click="$emit('undo')">
-                            <font-awesome-icon
-                                class="awesome-icon has-text-primary"
-                                icon="undo"
-                                size="lg"
-                            />
-                        </a>
-                    </li>
-                </ul>
                 <p class="menu-label">Share Options</p>
                 <ul class="menu-list">
                     <li @click="twitterShare">
@@ -161,7 +138,7 @@ $width__sidebar: 20em;
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
                     <li>
-                        <a>
+                        <a @click="$emit('save')">
                             <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
                                 icon="hdd"
@@ -173,13 +150,35 @@ $width__sidebar: 20em;
                 </ul>
             </aside>
         </div>
-        <button
-            class="sidebar-toggle"
-            :class="{ 'is-closed': !isSidebarOpen }"
-            @click="toggleSideBar"
-        >
-            <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
-        </button>
+        <div class="sidebar-group" :class="{ 'is-closed': !isSidebarOpen }">
+            <button 
+                class="button m-1"
+                @click="toggleSideBar"
+            >
+                <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
+            </button>
+            <button
+                class="button m-1"
+                @click="$emit('undo')"
+            >
+                <font-awesome-icon
+                    class="awesome-icon has-text-primary"
+                    icon="undo"
+                    size="lg"
+                />
+            </button>
+            <button
+                class="button m-1"
+                @click="$emit('redo')"
+            >
+                <font-awesome-icon
+                    class="awesome-icon has-text-primary"
+                    icon="redo"
+                    size="lg"
+                />
+            </button>
+            
+        </div>
     </div>
 </template>
 

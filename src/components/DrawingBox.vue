@@ -6,9 +6,11 @@
 
 <template>
     <div class="box container is-fluid" >
-        <figure class="image is-4by3 mb-2" @click="redirectToDrawingPage">
-            <img :src="drawing.imgUrl" />
-        </figure>
+        <router-link :to="`/drawing/${drawing.id}`">
+            <figure class="image is-4by3 mb-2" @click="redirectToDrawingPage" >
+                <img :src="drawing.imgUrl" />
+            </figure>
+        </router-link>
         <p class="title is-5 has-text-dark">{{ drawing.title }}</p>
         <div class="column is-one-fifths is-flex is-justify-content-flex-end">
             <font-awesome-icon
@@ -68,12 +70,6 @@ export default {
     },
     computed: mapGetters('drawing', ['isEtchASketchMode']),
     methods: {
-        redirectToDrawingPage() {
-            let path = '';
-            if (this.isEtchASketchMode) path = '/drawing/etchASketch';
-            else path = '/drawing';
-            this.$router.push(path);
-        },
         toggoleIsPublic() {
             this.isPublic = !this.isPublic;
         },
