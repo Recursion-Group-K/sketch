@@ -4,7 +4,6 @@
     <div id="canvas" :style="{ height: '100%', width: '100%' }">
         <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
             <v-layer>
-                <v-circle :config="pointer"></v-circle>
                 <v-line
                     v-for="item in itemList"
                     :key="item.id"
@@ -15,6 +14,16 @@
                         strokeWidth: item.line.strokeWidth,
                     }"
                 ></v-line>
+                <v-circle
+                    :config="{
+                        x: pointer.x,
+                        y: pointer.y,
+                        radius: selectedWeight / 2,
+                        fill: 'white',
+                        stroke: selectedColor,
+                        strokeWidth: 4,
+                    }"
+                ></v-circle>
             </v-layer>
         </v-stage>
     </div>
@@ -31,7 +40,6 @@ const keyMap = {
 
 export default {
     name: 'Drawing',
-    props: ['newWeight', 'newColor'],
     data() {
         return {
             itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
@@ -44,16 +52,8 @@ export default {
             pointer: {
                 x: 0,
                 y: 0,
-                radius: 3,
-                fill: 'white',
-                stroke: 'black',
-                strokeWidth: 4,
             },
-            lineConfig: {
-                color: 'black',
-                weight: 3,
-                newLineFlag: true,
-            },
+            newLineFlag: true,
             direction: {
                 up: false,
                 down: false,
@@ -98,17 +98,17 @@ export default {
         document.removeEventListener('keyup', this.keyUp);
         clearInterval(this.timer);
     },
-    watch: {
-        newWeight: function () {
-            let newWeight = Number(this.newWeight);
-            this.lineConfig.weight = newWeight;
-            this.pointer.radius = newWeight / 2;
-            this.lineConfig.newLineFlag = true;
+    computed: {
+        selectedColor: function () {
+            return this.$store.state.drawing.color;
         },
-        newColor: function () {
-            this.lineConfig.color = this.newColor;
-            this.pointer.stroke = this.newColor;
-            this.lineConfig.newLineFlag = true;
+        selectedWeight: function () {
+            return this.$store.state.drawing.weight;
+        },
+    },
+    watch: {
+        selectedWeight() {
+            this.setNewLine();
         },
     },
     methods: {
@@ -117,6 +117,7 @@ export default {
             this.direction.down = false;
             this.direction.right = false;
             this.direction.left = false;
+            this.setNewLine();
         },
         fitCanvas() {
             const parent = document.querySelector('#canvas');
@@ -153,21 +154,21 @@ export default {
             this.itemList.push({
                 line: {
                     points: [x, y],
-                    stroke: this.lineConfig.color,
-                    strokeWidth: this.lineConfig.weight,
+                    stroke: this.selectedColor,
+                    strokeWidth: this.selectedWeight,
                 },
                 lastPoint: {},
             });
-            this.lineConfig.newLineFlag = false;
+            this.newLineFlag = false;
         },
         setNewLine() {
-            if (this.lineConfig.newLineFlag) return;
+            if (this.newLineFlag) return;
             this.itemList[this.itemList.length - 1].lastPoint = {
                 x: this.pointer.x,
                 y: this.pointer.y,
             };
             console.log(this.itemList[this.itemList.length - 1]);
-            this.lineConfig.newLineFlag = true;
+            this.newLineFlag = true;
         },
         draw() {
             let lastPoint = { x: this.pointer.x, y: this.pointer.y };
@@ -180,7 +181,7 @@ export default {
             if (isSamePoint) {
                 return;
             }
-            if (this.lineConfig.newLineFlag) {
+            if (this.newLineFlag) {
                 this.pushNewLine(lastPoint.x, lastPoint.y);
             }
             this.itemList[this.itemList.length - 1].line.points.push(
