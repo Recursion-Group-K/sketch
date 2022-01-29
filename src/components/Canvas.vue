@@ -45,6 +45,7 @@ export default {
             itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
             itemStack: [],
             isUndoed: false,
+            isAllSaved: false,
             configKonva: {
                 width: 100,
                 height: 100,
@@ -92,11 +93,14 @@ export default {
          */
 
         window.addEventListener('resize', this.fitCanvas);
+        this.load();
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
         document.removeEventListener('keyup', this.keyUp);
         clearInterval(this.timer);
+        if (this.isAllSaved) return;
+        if (window.confirm('変更をセーブしますか？')) this.save();
     },
     computed: {
         selectedColor: function () {
@@ -140,6 +144,14 @@ export default {
             if (key in keyMap) {
                 this.direction[keyMap[key]] = boolean;
             }
+            if (key == 'x') {
+                console.log('loaded');
+                this.load();
+            }
+            if(key == 'c'){
+                console.log('reset');
+                this.reset();
+            }
         },
         keyDown(event) {
             this.keyEvent(event, true);
@@ -163,6 +175,8 @@ export default {
         },
         setNewLine() {
             if (this.newLineFlag) return;
+            this.newLineFlag = true;
+            if (this.itemList.length == 0) return;
             this.itemList[this.itemList.length - 1].lastPoint = {
                 x: this.pointer.x,
                 y: this.pointer.y,
@@ -183,6 +197,7 @@ export default {
             }
             if (this.newLineFlag) {
                 this.pushNewLine(lastPoint.x, lastPoint.y);
+                this.isAllSaved = false;
             }
             this.itemList[this.itemList.length - 1].line.points.push(
                 this.pointer.x,
@@ -218,6 +233,34 @@ export default {
             this.checkOverLimit(clickPos);
             this.pointer.x = clickPos.x;
             this.pointer.y = clickPos.y;
+        },
+        load() {
+            this.loadDB();
+            if(this.itemList.length >= 1){
+                const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
+                this.pointer.x = newPoint.x;
+                this.pointer.y = newPoint.y;
+            }
+            this.resetStack();
+            this.setNewLine();
+            this.isAllSaved = true;
+        },
+        save() {
+            this.setNewLine();
+            this.saveDB();
+            this.isAllSaved = true;
+            console.log("saved");
+        },
+        loadDB(){
+            const data = localStorage.getItem('storage') || '[]';
+            this.itemList = JSON.parse(data);
+        },
+        saveDB() {
+            localStorage.setItem('storage', JSON.stringify(this.itemList));
+        },
+        reset() {
+            this.itemList = [];
+            localStorage.setItem('storage', JSON.stringify(this.itemList));
         },
     },
 };

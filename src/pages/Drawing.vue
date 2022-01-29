@@ -15,7 +15,7 @@
                 <Canvas ref="canvas" />
             </div>
         </div>
-        <DrawingTools @click-color-picker="clickColorPicker" @undo="undo" @redo="redo" />
+        <DrawingTools @click-color-picker="clickColorPicker" @undo="undo" @redo="redo" @save="save" />
         <KeyUI />
     </section>
 </template>
@@ -47,6 +47,9 @@ export default {
         },
         redo: function () {
             this.$refs.canvas.redo();
+        },
+        save: function () {
+            this.$refs.canvas.save();
         },
     },
 };
