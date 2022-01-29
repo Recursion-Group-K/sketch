@@ -5,12 +5,12 @@ require('dotenv').config();
 
 export default class UserWrapper {
     constructor() {
-        this.url = 'https://sketch-skgl-server-test.herokuapp.com/api';
+        this.url = process.env.SERVER_URL + 'api/users/';
     }
 
     async getById(id) {
         try {
-            const response = await axios.get(`${this.url}/users/${id}/`, {
+            const response = await axios.get(`${this.url}${id}/`, {
                 auth: {
                     username: process.env.SUPERUSER_NAME,
                     password: process.env.SUPERUSER_PASSWORD,
