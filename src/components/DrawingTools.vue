@@ -81,10 +81,14 @@ $width__sidebar: 20em;
                                 <div class="column">
                                     <input
                                         type="color"
-                                        v-model="color"
+                                        v-model="selectedColor"
                                         class="color-picker"
                                         @click="$emit('click-color-picker')"
-                                        @change="$emit('change-color', color)"
+                                        @change="
+                                            $store.dispatch('drawing/changeColor', {
+                                                newColor: selectedColor,
+                                            })
+                                        "
                                     />
                                     <span :style="{ backgroundColor: color }"></span>
                                 </div>
@@ -104,8 +108,12 @@ $width__sidebar: 20em;
                                 type="range"
                                 min="1"
                                 max="20"
-                                v-model="weight"
-                                @change="$emit('change-weight', weight)"
+                                v-model="selectedWeight"
+                                @change="
+                                    $store.dispatch('drawing/changeWeight', {
+                                        newWeight: selectedWeight,
+                                    })
+                                "
                             />
                             {{ weight }} px
                         </a>
@@ -151,38 +159,21 @@ $width__sidebar: 20em;
             </aside>
         </div>
         <div class="sidebar-group" :class="{ 'is-closed': !isSidebarOpen }">
-            <button 
-                class="button m-1"
-                @click="toggleSideBar"
-            >
+            <button class="button m-1" @click="toggleSideBar">
                 <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
             </button>
-            <button
-                class="button m-1"
-                @click="$emit('undo')"
-            >
-                <font-awesome-icon
-                    class="awesome-icon has-text-primary"
-                    icon="undo"
-                    size="lg"
-                />
+            <button class="button m-1" @click="$emit('undo')">
+                <font-awesome-icon class="awesome-icon has-text-primary" icon="undo" size="lg" />
             </button>
-            <button
-                class="button m-1"
-                @click="$emit('redo')"
-            >
-                <font-awesome-icon
-                    class="awesome-icon has-text-primary"
-                    icon="redo"
-                    size="lg"
-                />
+            <button class="button m-1" @click="$emit('redo')">
+                <font-awesome-icon class="awesome-icon has-text-primary" icon="redo" size="lg" />
             </button>
-            
         </div>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
     name: 'DrawingTools',
     data() {
@@ -192,10 +183,15 @@ export default {
                 weight: false,
                 others: false,
             },
-            color: '#000000',
-            weight: 3,
+            selectedColor: '',
+            selectedWeight: 0,
             isPublic: false,
         };
+    },
+    computed: mapState('drawing', ['color', 'weight']),
+    mounted: function () {
+        this.selectedColor = this.color;
+        this.selectedWeight = this.weight;
     },
     methods: {
         toggleSideBar() {

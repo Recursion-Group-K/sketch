@@ -14,13 +14,23 @@
                         strokeWidth: item.line.strokeWidth,
                     }"
                 ></v-line>
-                <v-circle :config="pointer"></v-circle>
+                <v-circle
+                    :config="{
+                        x: pointer.x,
+                        y: pointer.y,
+                        radius: weight / 2,
+                        fill: 'white',
+                        stroke: color,
+                        strokeWidth: 4,
+                    }"
+                ></v-circle>
             </v-layer>
         </v-stage>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 const velocityOfPointer = 2;
 const keyMap = {
     d: 'up',
@@ -31,7 +41,6 @@ const keyMap = {
 
 export default {
     name: 'Drawing',
-    props: ['newWeight', 'newColor'],
     data() {
         return {
             itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
@@ -45,16 +54,8 @@ export default {
             pointer: {
                 x: 0,
                 y: 0,
-                radius: 3,
-                fill: 'black',
-                stroke: 'gray',
-                strokeWidth: 4,
             },
-            lineConfig: {
-                color: 'black',
-                weight: 3,
-                newLineFlag: true,
-            },
+            newLineFlag: true,
             direction: {
                 up: false,
                 down: false,
@@ -102,17 +103,12 @@ export default {
         if (this.isAllSaved) return;
         if (window.confirm('変更をセーブしますか？')) this.save();
     },
+    computed: {
+        ...mapState('drawing', ['color', 'weight']),
+    },
     watch: {
-        newWeight: function () {
-            let newWeight = Number(this.newWeight);
-            this.lineConfig.weight = newWeight;
-            this.pointer.radius = newWeight / 2;
-            this.lineConfig.newLineFlag = true;
-        },
-        newColor: function () {
-            this.lineConfig.color = this.newColor;
-            this.pointer.fill = this.newColor;
-            this.lineConfig.newLineFlag = true;
+        weight() {
+            this.setNewLine();
         },
     },
     methods: {
@@ -121,6 +117,7 @@ export default {
             this.direction.down = false;
             this.direction.right = false;
             this.direction.left = false;
+            this.setNewLine();
         },
         fitCanvas() {
             const parent = document.querySelector('#canvas');
@@ -147,7 +144,7 @@ export default {
                 console.log('loaded');
                 this.load();
             }
-            if(key == 'c'){
+            if (key == 'c') {
                 console.log('reset');
                 this.reset();
             }
@@ -165,22 +162,23 @@ export default {
             this.itemList.push({
                 line: {
                     points: [x, y],
-                    stroke: this.lineConfig.color,
-                    strokeWidth: this.lineConfig.weight,
+                    stroke: this.color,
+                    strokeWidth: this.weight,
                 },
                 lastPoint: {},
             });
-            this.lineConfig.newLineFlag = false;
+            this.newLineFlag = false;
         },
         setNewLine() {
-            if (this.lineConfig.newLineFlag) return;
-            this.lineConfig.newLineFlag = true;
+            if (this.newLineFlag) return;
+            this.newLineFlag = true;
             if (this.itemList.length == 0) return;
             this.itemList[this.itemList.length - 1].lastPoint = {
                 x: this.pointer.x,
                 y: this.pointer.y,
             };
             console.log(this.itemList[this.itemList.length - 1]);
+            this.newLineFlag = true;
         },
         draw() {
             let lastPoint = { x: this.pointer.x, y: this.pointer.y };
@@ -193,7 +191,7 @@ export default {
             if (isSamePoint) {
                 return;
             }
-            if (this.lineConfig.newLineFlag) {
+            if (this.newLineFlag) {
                 this.pushNewLine(lastPoint.x, lastPoint.y);
                 this.isAllSaved = false;
             }
@@ -234,7 +232,7 @@ export default {
         },
         load() {
             this.loadDB();
-            if(this.itemList.length >= 1){
+            if (this.itemList.length >= 1) {
                 const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
                 this.pointer.x = newPoint.x;
                 this.pointer.y = newPoint.y;
@@ -247,8 +245,9 @@ export default {
             this.setNewLine();
             this.saveDB();
             this.isAllSaved = true;
+            console.log('saved');
         },
-        loadDB(){
+        loadDB() {
             const data = localStorage.getItem('storage') || '[]';
             this.itemList = JSON.parse(data);
         },
