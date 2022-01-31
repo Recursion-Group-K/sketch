@@ -18,9 +18,9 @@
                     :config="{
                         x: pointer.x,
                         y: pointer.y,
-                        radius: selectedWeight / 2,
+                        radius: weight / 2,
                         fill: 'white',
-                        stroke: selectedColor,
+                        stroke: color,
                         strokeWidth: 4,
                     }"
                 ></v-circle>
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 const velocityOfPointer = 2;
 const keyMap = {
     d: 'up',
@@ -103,15 +104,10 @@ export default {
         if (window.confirm('変更をセーブしますか？')) this.save();
     },
     computed: {
-        selectedColor: function () {
-            return this.$store.state.drawing.color;
-        },
-        selectedWeight: function () {
-            return this.$store.state.drawing.weight;
-        },
+        ...mapState('drawing',['color','weight']),
     },
     watch: {
-        selectedWeight() {
+        weight() {
             this.setNewLine();
         },
     },
@@ -166,8 +162,8 @@ export default {
             this.itemList.push({
                 line: {
                     points: [x, y],
-                    stroke: this.selectedColor,
-                    strokeWidth: this.selectedWeight,
+                    stroke: this.color,
+                    strokeWidth: this.weight,
                 },
                 lastPoint: {},
             });
