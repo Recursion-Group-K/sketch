@@ -1,10 +1,11 @@
 import Config from '../config';
-import { 
-    CHNAGE_MODE, 
-    CHANGE_COLOR, 
-    CHANGE_WEIGHT, 
-    SET_UNDOFLAG,
-    SET_REDOFLAG,
+import {
+    CHNAGE_MODE,
+    CHANGE_COLOR,
+    CHANGE_WEIGHT,
+    SET_UNDOTRIGGER,
+    SET_REDOTRIGGER,
+    SET_POINTERSPEED,
 } from './types';
 
 export default {
@@ -13,8 +14,14 @@ export default {
         mode: Config.mode.EtchASketch,
         color: '#000000',
         weight: 3,
-        undoFlag: false,
-        redoFlag: false,
+        pointerSpeed: {
+            up: { keys: ['d'], value: false },
+            down: { keys: ['f'], value: false },
+            right: { keys: ['k'], value: false },
+            left: { keys: ['j'], value: false },
+        },
+        undoTrigger: false,
+        redoTrigger: false,
     },
     getters: {
         isEtchASketchMode: (state) => state.mode == Config.mode.EtchASketch,
@@ -25,18 +32,20 @@ export default {
             commit(CHNAGE_MODE, mode);
             return true;
         },
-        changeColor({ commit, state }, { newColor }) {
+        changeColor({ commit }, { newColor }) {
             commit(CHANGE_COLOR, newColor);
-            console.log(state.color);
         },
         changeWeight({ commit }, { newWeight }) {
             commit(CHANGE_WEIGHT, newWeight);
         },
-        undo({commit}) {
-            commit(SET_UNDOFLAG);
+        undo({ commit }) {
+            commit(SET_UNDOTRIGGER);
         },
-        redo({commit}){
-            commit(SET_REDOFLAG);
+        redo({ commit }) {
+            commit(SET_REDOTRIGGER);
+        },
+        setPointerSpeed({ commit }, { direction, value }) {
+            commit(SET_POINTERSPEED, { direction: direction, value: value });
         },
     },
     mutations: {
@@ -49,12 +58,14 @@ export default {
         [CHANGE_WEIGHT](state, weight) {
             state.weight = Number(weight);
         },
-        [SET_UNDOFLAG](state){
-            state.undoFlag = !state.undoFlag;
+        [SET_UNDOTRIGGER](state) {
+            state.undoTrigger = !state.undoTrigger;
         },
-        [SET_REDOFLAG](state){
-            state.redoFlag=!state.redoFlag;
-        }
+        [SET_REDOTRIGGER](state) {
+            state.redoTrigger = !state.redoTrigger;
+        },
+        [SET_POINTERSPEED](state, payload) {
+            state.pointerSpeed[payload.direction].value = payload.value;
+        },
     },
 };
-

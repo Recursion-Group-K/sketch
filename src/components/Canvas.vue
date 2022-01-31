@@ -30,14 +30,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 const velocityOfPointer = 2;
-const keyMap = {
-    d: 'up',
-    f: 'down',
-    k: 'right',
-    j: 'left',
-};
 
 export default {
     name: 'Drawing',
@@ -56,12 +50,6 @@ export default {
                 y: 0,
             },
             newLineFlag: true,
-            direction: {
-                up: false,
-                down: false,
-                right: false,
-                left: false,
-            },
             limit: {
                 up: 0,
                 down: 0,
@@ -104,26 +92,26 @@ export default {
         if (window.confirm('変更をセーブしますか？')) this.save();
     },
     computed: {
-        ...mapState('drawing',['color','weight','undoFlag','redoFlag'])
+        ...mapState('drawing', ['color', 'weight', 'undoTrigger', 'redoTrigger', 'pointerSpeed']),
     },
     watch: {
         weight() {
             this.setNewLine();
         },
-        undoFlag() {
-            console.log(this.undoFlag);
+        undoTrigger() {
             this.undo();
         },
-        redoFlag() {
+        redoTrigger() {
             this.redo();
         },
     },
     methods: {
+        ...mapActions('drawing', ['setPointerSpeed']),
         stopPointer() {
-            this.direction.up = false;
-            this.direction.down = false;
-            this.direction.right = false;
-            this.direction.left = false;
+            this.pointerSpeed.up = false;
+            this.pointerSpeed.down = false;
+            this.pointerSpeed.right = false;
+            this.pointerSpeed.left = false;
             this.setNewLine();
         },
         fitCanvas() {
@@ -144,9 +132,13 @@ export default {
         },
         keyEvent(event, boolean) {
             let key = event.key;
-            if (key in keyMap) {
-                this.direction[keyMap[key]] = boolean;
-            }
+            Object.keys(this.pointerSpeed).forEach((direction) => {
+                const keyIncludes = this.pointerSpeed[direction].keys.includes(key);
+                if (keyIncludes) {
+                    this.setPointerSpeed({ direction: direction, value: boolean });
+                }
+            });
+
             if (key == 'x') {
                 console.log('loaded');
                 this.load();
@@ -161,7 +153,9 @@ export default {
         },
         keyUp(event) {
             this.keyEvent(event, false);
-            const areAllKeyUp = Object.values(this.direction).every((bool) => bool == false);
+            const areAllKeyUp = Object.values(this.pointerSpeed).every(
+                (element) => element.value == false
+            );
             if (areAllKeyUp) this.setNewLine();
         },
         pushNewLine(x, y) {
@@ -189,10 +183,10 @@ export default {
         },
         draw() {
             let lastPoint = { x: this.pointer.x, y: this.pointer.y };
-            if (this.direction['up']) this.pointer.y -= velocityOfPointer;
-            if (this.direction['down']) this.pointer.y += velocityOfPointer;
-            if (this.direction['right']) this.pointer.x += velocityOfPointer;
-            if (this.direction['left']) this.pointer.x -= velocityOfPointer;
+            if (this.pointerSpeed['up'].value) this.pointer.y -= velocityOfPointer;
+            if (this.pointerSpeed['down'].value) this.pointer.y += velocityOfPointer;
+            if (this.pointerSpeed['right'].value) this.pointer.x += velocityOfPointer;
+            if (this.pointerSpeed['left'].value) this.pointer.x -= velocityOfPointer;
             this.checkOverLimit(this.pointer);
             const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
             if (isSamePoint) {

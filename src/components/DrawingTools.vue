@@ -84,11 +84,7 @@ $width__sidebar: 20em;
                                         v-model="selectedColor"
                                         class="color-picker"
                                         @click="$emit('click-color-picker')"
-                                        @change="
-                                            $store.dispatch('drawing/changeColor', {
-                                                newColor: selectedColor,
-                                            })
-                                        "
+                                        @change="changeColor({ newColor: selectedColor })"
                                     />
                                     <span :style="{ backgroundColor: color }"></span>
                                 </div>
@@ -109,11 +105,7 @@ $width__sidebar: 20em;
                                 min="1"
                                 max="20"
                                 v-model="selectedWeight"
-                                @change="
-                                    $store.dispatch('drawing/changeWeight', {
-                                        newWeight: selectedWeight,
-                                    })
-                                "
+                                @change="changeWeight({ newWeight: selectedWeight })"
                             />
                             {{ weight }} px
                         </a>
@@ -165,7 +157,7 @@ $width__sidebar: 20em;
             <button class="button m-1" @click="undo">
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="undo" size="lg" />
             </button>
-            <button class="button m-1" @click="redo" >
+            <button class="button m-1" @click="redo">
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="redo" size="lg" />
             </button>
         </div>
@@ -194,10 +186,7 @@ export default {
         this.selectedWeight = this.weight;
     },
     methods: {
-        ...mapActions('drawing',[
-            'redo',
-            'undo',
-        ]),
+        ...mapActions('drawing', ['changeColor', 'changeWeight', 'redo', 'undo']),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
         },
