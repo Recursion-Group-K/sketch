@@ -81,12 +81,12 @@ $width__sidebar: 20em;
                                 <div class="column">
                                     <input
                                         type="color"
-                                        v-model="color"
+                                        v-model="selectedColor"
                                         class="color-picker"
                                         @click="$emit('click-color-picker')"
                                         @change="
                                             $store.dispatch('drawing/changeColor', {
-                                                newColor: color,
+                                                newColor: selectedColor,
                                             })
                                         "
                                     />
@@ -108,9 +108,9 @@ $width__sidebar: 20em;
                                 type="range"
                                 min="1"
                                 max="20"
-                                v-model="weight"
+                                v-model="selectedWeight"
                                 @change="
-                                    $store.dispatch('drawing/changeWeight', { newWeight: weight })
+                                    $store.dispatch('drawing/changeWeight', { newWeight: selectedWeight })
                                 "
                             />
                             {{ weight }} px
@@ -160,10 +160,10 @@ $width__sidebar: 20em;
             <button class="button m-1" @click="toggleSideBar">
                 <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
             </button>
-            <button class="button m-1" @click="$emit('undo')">
+            <button class="button m-1" @click="undo">
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="undo" size="lg" />
             </button>
-            <button class="button m-1" @click="$emit('redo')">
+            <button class="button m-1" @click="redo" >
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="redo" size="lg" />
             </button>
         </div>
@@ -171,6 +171,7 @@ $width__sidebar: 20em;
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 export default {
     name: 'DrawingTools',
     data() {
@@ -180,16 +181,21 @@ export default {
                 weight: false,
                 others: false,
             },
-            color: '',
-            weight: 0,
+            selectedColor: '',
+            selectedWeight: 0,
             isPublic: false,
         };
     },
+    computed: mapState('drawing',['color','weight']),
     mounted: function () {
-        this.color = this.$store.state.drawing.color;
-        this.weight = this.$store.state.drawing.weight;
+        this.selectedColor=this.color;
+        this.selectedWeight=this.weight;
     },
     methods: {
+        ...mapActions('drawing',[
+            'redo',
+            'undo',
+        ]),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
         },

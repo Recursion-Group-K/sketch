@@ -1,5 +1,11 @@
 import Config from '../config';
-import { CHNAGE_MODE, CHANGE_COLOR, CHANGE_WEIGHT } from './types';
+import { 
+    CHNAGE_MODE, 
+    CHANGE_COLOR, 
+    CHANGE_WEIGHT, 
+    SET_UNDOFLAG,
+    SET_REDOFLAG,
+} from './types';
 
 export default {
     namespaced: true,
@@ -7,6 +13,8 @@ export default {
         mode: Config.mode.EtchASketch,
         color: '#000000',
         weight: 3,
+        undoFlag: false,
+        redoFlag: false,
     },
     getters: {
         isEtchASketchMode: (state) => state.mode == Config.mode.EtchASketch,
@@ -17,11 +25,18 @@ export default {
             commit(CHNAGE_MODE, mode);
             return true;
         },
-        changeColor({ commit }, { newColor }) {
+        changeColor({ commit, state }, { newColor }) {
             commit(CHANGE_COLOR, newColor);
+            console.log(state.color);
         },
         changeWeight({ commit }, { newWeight }) {
             commit(CHANGE_WEIGHT, newWeight);
+        },
+        undo({commit}) {
+            commit(SET_UNDOFLAG);
+        },
+        redo({commit}){
+            commit(SET_REDOFLAG);
         },
     },
     mutations: {
@@ -34,5 +49,12 @@ export default {
         [CHANGE_WEIGHT](state, weight) {
             state.weight = Number(weight);
         },
+        [SET_UNDOFLAG](state){
+            state.undoFlag = !state.undoFlag;
+        },
+        [SET_REDOFLAG](state){
+            state.redoFlag=!state.redoFlag;
+        }
     },
 };
+
