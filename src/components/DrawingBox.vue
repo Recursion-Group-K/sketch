@@ -5,9 +5,9 @@
 </style>
 
 <template>
-    <div class="box container is-fluid" >
+    <div class="box container is-fluid">
         <router-link :to="`/drawing/${drawing.id}`">
-            <figure class="image is-4by3 mb-2" @click="redirectToDrawingPage" >
+            <figure class="image is-4by3 mb-2" @click="redirectToDrawingPage">
                 <img :src="drawing.imgUrl" />
             </figure>
         </router-link>

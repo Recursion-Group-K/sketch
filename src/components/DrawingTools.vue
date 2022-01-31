@@ -110,7 +110,9 @@ $width__sidebar: 20em;
                                 max="20"
                                 v-model="selectedWeight"
                                 @change="
-                                    $store.dispatch('drawing/changeWeight', { newWeight: selectedWeight })
+                                    $store.dispatch('drawing/changeWeight', {
+                                        newWeight: selectedWeight,
+                                    })
                                 "
                             />
                             {{ weight }} px
@@ -186,10 +188,10 @@ export default {
             isPublic: false,
         };
     },
-    computed: mapState('drawing',['color','weight']),
+    computed: mapState('drawing', ['color', 'weight']),
     mounted: function () {
-        this.selectedColor=this.color;
-        this.selectedWeight=this.weight;
+        this.selectedColor = this.color;
+        this.selectedWeight = this.weight;
     },
     methods: {
         ...mapActions('drawing',[
