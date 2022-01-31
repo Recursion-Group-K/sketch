@@ -104,7 +104,7 @@ export default {
         if (window.confirm('変更をセーブしますか？')) this.save();
     },
     computed: {
-        ...mapState('drawing',['color','weight']),
+        ...mapState('drawing', ['color', 'weight']),
     },
     watch: {
         weight() {
@@ -144,7 +144,7 @@ export default {
                 console.log('loaded');
                 this.load();
             }
-            if(key == 'c'){
+            if (key == 'c') {
                 console.log('reset');
                 this.reset();
             }
@@ -232,7 +232,7 @@ export default {
         },
         load() {
             this.loadDB();
-            if(this.itemList.length >= 1){
+            if (this.itemList.length >= 1) {
                 const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
                 this.pointer.x = newPoint.x;
                 this.pointer.y = newPoint.y;
@@ -245,9 +245,9 @@ export default {
             this.setNewLine();
             this.saveDB();
             this.isAllSaved = true;
-            console.log("saved");
+            console.log('saved');
         },
-        loadDB(){
+        loadDB() {
             const data = localStorage.getItem('storage') || '[]';
             this.itemList = JSON.parse(data);
         },

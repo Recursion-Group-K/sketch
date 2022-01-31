@@ -15,7 +15,12 @@
                 <Canvas ref="canvas" />
             </div>
         </div>
-        <DrawingTools @click-color-picker="clickColorPicker" @undo="undo" @redo="redo" @save="save" />
+        <DrawingTools
+            @click-color-picker="clickColorPicker"
+            @undo="undo"
+            @redo="redo"
+            @save="save"
+        />
         <KeyUI />
     </section>
 </template>
