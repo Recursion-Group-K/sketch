@@ -37,6 +37,7 @@
                                 <label for="" class="label">Email</label>
                                 <div class="control has-icons-left">
                                     <input
+                                        v-model="inputs.username"
                                         type="email"
                                         placeholder="e.g. recursionist@gmail.com"
                                         class="input"
@@ -51,6 +52,7 @@
                                 <label for="" class="label">Password</label>
                                 <div class="control has-icons-left">
                                     <input
+                                        v-model="inputs.password"
                                         type="password"
                                         placeholder="*******"
                                         class="input"
@@ -62,7 +64,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <button class="button is-success">Login</button>
+                                <button @click="login(inputs)" class="button is-success">Login</button>
                             </div>
                             <hr />
                             <div class="field">
@@ -88,7 +90,18 @@
 export default {
     name: 'Login',
     data() {
-        return {};
+        return {
+            inputs: {
+                username: 'admin',
+                password: '0maR3zSs',
+            },
+        };
     },
+    methods: {
+        login({ username, password }) {
+            this.$store.dispatch('auth/login', { username, password })
+                // .then(() => this.$router.push('/'));
+    },
+  },
 };
 </script>
