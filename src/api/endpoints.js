@@ -1,3 +1,4 @@
+require('dotenv').config();
 const root = process.env.SERVER_URL;
 const endpoints = {
     auth: {
@@ -6,7 +7,7 @@ const endpoints = {
     },
     users: {
         current: () => `${root}/api/current_user`,
-        list: () => `${root}/api/users/`,
+        // list: () => `${root}/api/users/`,
         create: () => `${root}/api/users/`,
         retrieve: (id) => `${root}/api/users/${id}/`,
         update: (id) => `${root}/api/users/${id}/`,
