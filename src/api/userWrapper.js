@@ -6,7 +6,7 @@ require('dotenv').config();
 const superUserAuth = {
     username: process.env.SUPERUSER_NAME,
     password: process.env.SUPERUSER_PASSWORD,
-},
+}
 
 const {
     current,
