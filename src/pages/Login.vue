@@ -85,10 +85,22 @@
 <style scoped lang="scss"></style>
 
 <script>
+import UserWrapper from '../api/userWrapper';
 export default {
     name: 'Login',
     data() {
         return {};
+    },
+    methods: {
+        async createUser() {
+            const userPrams = {
+                name: `ggggggg`,
+                email: `ggggggg@gmail.com`,
+                password: `ggggggg`,
+            };
+            const user = await new UserWrapper().create(userPrams);
+            console.log(user);
+        },
     },
 };
 </script>
