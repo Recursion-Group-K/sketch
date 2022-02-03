@@ -1,21 +1,36 @@
 import UserWrapper from '../../src/api/userWrapper.js';
 
 describe('UserWrapper', () => {
-    it('get User by id:1', async () => {
+    it('GET admin User by id:1', async () => {
         const user1 = await new UserWrapper().getById(1);
-
-        console.log(user1);
+        expect(user1).not.toBeNull();
+        expect(user1).not.toBeUndefined();
+        expect(user1.id).toEqual(1);
     });
 
-    it('get User by id:2', async () => {
-        const user2 = await new UserWrapper().getById(2);
+    /**
+     * jestでformdataはうまく送らないらしい。
+     * ボタンをおいて実際にブラウザでテストしたらうまく行ったけど、
+     * こっちのコードではうまくいかないので一旦コメントアウト
+     */
+    // it('POST user', async () => {
+    //     const numStr = process.env.VUE_APP_TEST_USER_NUMBER;
+    //     process.env.VUE_APP_TEST_USER_NUMBER = String(parseInt(numStr) + 1);
 
-        console.log(user2);
-    });
+    //     const userPrams = {
+    //         name: `test${numStr}`,
+    //         email: `test${numStr}@gmail.com`,
+    //         password: `test${numStr}`,
+    //     };
 
-    it('get User by id:3', async () => {
-        const user3 = await new UserWrapper().getById(3);
+    //     const user = await new UserWrapper().create(userPrams);
 
-        console.log(user3);
-    });
+    //     expect(user).not.toBeNull();
+    //     expect(user).not.toBeUndefined();
+    //     expect(user.name).toEqual(userPrams.name);
+    //     expect(user.email).toEqual(userPrams.email);
+    //     expect(user.isActive).toEqual(true);
+    //     expect(user.id).not.toBeNull();
+    //     expect(user.id).not.toBeUndefined();
+    // });
 });
