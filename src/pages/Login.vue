@@ -29,6 +29,14 @@
                     </div>
                     <div class="column is-5-tablet is-4-desktop is-4-widescreen">
                         <form @submit.prevent="login(inputs)" class="box">
+                            <!-- Error Message -->
+                            <div
+                                v-if="isisAuthenticatedFailed"
+                                class="has-text-danger is-size-4 p-3"
+                            >
+                                {{ errorMessage }}
+                            </div>
+
                             <div class="title">
                                 <h1 class="has-text-black has-text-weight-bold">Login</h1>
                             </div>
@@ -87,24 +95,29 @@
 
 <script>
 import UserWrapper from '../api/userWrapper';
-
+import { mapGetters } from 'vuex';
 export default {
     name: 'Login',
     data() {
         return {
             inputs: {
-                username: process.env.VUE_APP_SUPERUSER_NAME,
-                password: process.env.VUE_APP_SUPERUSER_PASSWORD,
+                username: '',
+                password: '',
             },
+            errorMessage: 'Login failed. Try again.',
         };
+    },
+    computed: {
+        ...mapGetters('auth', ['isAuthenticated', 'isisAuthenticatedFailed']),
     },
     methods: {
         async login({ username, password }) {
+            this.errors = [];
             try {
                 await this.$store.dispatch('auth/login', { username, password });
-                this.$router.push({ name: 'Gallery' });
-            } catch(error) {
-                console.error(error);
+                if (this.isAuthenticated) this.$router.push({ name: 'Gallery' });
+            } catch (error) {
+                this.errors.push(error);
             }
         },
         async createUser() {

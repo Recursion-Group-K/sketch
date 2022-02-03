@@ -68,11 +68,11 @@ export default {
             demoUser: null,
         };
     },
-    watch:{
-        isAuthenticated(to, from){
-            console.log(to, from)
-            if(to == false)this.$router.push({name: 'Home'})
-        }
+    watch: {
+        isAuthenticated(to, from) {
+            console.log(to, from);
+            if (to == false) this.$router.push({ name: 'Home' });
+        },
     },
     computed: {
         ...mapGetters('auth', ['isAuthenticated']),
@@ -80,8 +80,8 @@ export default {
     mounted() {
         new UserWrapper().getById(1).then((user) => (this.demoUser = user));
     },
-    methods:{
-        ...mapActions('auth',['logout']),
-    }
+    methods: {
+        ...mapActions('auth', ['logout']),
+    },
 };
 </script>

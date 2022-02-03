@@ -23,6 +23,7 @@ export default {
     },
     getters: {
         isAuthenticated: (state) => !!state.token,
+        isisAuthenticatedFailed: (state) => state.error,
     },
     actions: {
         initSession({ dispatch }) {
