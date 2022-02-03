@@ -4,11 +4,6 @@ import endpoints from '../api/endpoints';
 
 const { list, listFilter, retrieve, create, update, destroy } = endpoints.drawings;
 
-const superUserAuth = {
-    username: process.env.VUE_APP_SUPERUSER_NAME,
-    password: process.env.VUE_APP_SUPERUSER_PASSWORD,
-};
-
 class ParamsConverter {
     toClientParams({ id, title, image, is_public, data, created_at, updated_at, user_id }) {
         const params = {

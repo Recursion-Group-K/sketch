@@ -11,10 +11,10 @@ class Auth {
         });
     }
 
-    refreshToken (refreshToken) {
+    refreshToken(refreshToken) {
         return client.post(endpoints.auth.refresh(), {
             refresh: refreshToken,
-        })
+        });
     }
 }
 

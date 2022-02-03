@@ -25,6 +25,24 @@ export default {
         isAuthenticated: (state) => !!state.token,
     },
     actions: {
+        initSession({ dispatch }) {
+            if (Cookies.get(ACCESS_TOKEN_STORAGE_KEY) && Cookies.get(REFRESH_TOKEN_STORAGE_KEY)) {
+                const refresh = Cookies.get(REFRESH_TOKEN_STORAGE_KEY);
+                dispatch('refreshToken', refresh);
+            }
+        },
+        async refreshToken({ commit }, refreshToken) {
+            commit(LOGIN_BEGIN);
+            try {
+                const response = await new Auth().refreshToken(refreshToken);
+
+                commit(SET_TOKEN, { access: response.data.access, refresh: refreshToken });
+                commit(LOGIN_SUCCESS);
+            } catch (error) {
+                console.error(error);
+                commit(LOGIN_FAILURE);
+            }
+        },
         async login({ commit }, { username, password }) {
             commit(LOGIN_BEGIN);
             try {

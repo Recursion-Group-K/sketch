@@ -19,17 +19,17 @@
 
 <script>
 import Header from './components/Header.vue';
-import {mapActions} from 'vuex'
+import { mapActions } from 'vuex';
 export default {
     name: 'App',
     components: {
         Header,
     },
-    methods:{
-        ...mapActions('auth',['initSession'])
+    methods: {
+        ...mapActions('auth', ['initSession']),
     },
-    mounted(){
-        this.initSession()
-    }
+    mounted() {
+        this.initSession();
+    },
 };
 </script>

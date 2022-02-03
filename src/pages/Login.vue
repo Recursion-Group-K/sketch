@@ -28,7 +28,7 @@
                         <p class="subtitle">Unlock your imagination</p>
                     </div>
                     <div class="column is-5-tablet is-4-desktop is-4-widescreen">
-                        <form action="" class="box">
+                        <form @submit.prevent="login(inputs)" class="box">
                             <div class="title">
                                 <h1 class="has-text-black has-text-weight-bold">Login</h1>
                             </div>
@@ -63,9 +63,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <button @click="login(inputs)" class="button is-success">
-                                    Login
-                                </button>
+                                <button class="button is-success">Login</button>
                             </div>
                             <hr />
                             <div class="field">
@@ -101,9 +99,13 @@ export default {
         };
     },
     methods: {
-        login({ username, password }) {
-            this.$store.dispatch('auth/login', { username, password });
-            // .then(() => this.$router.push('/'));
+        async login({ username, password }) {
+            try {
+                await this.$store.dispatch('auth/login', { username, password });
+                this.$router.push({ name: 'Gallery' });
+            } catch(error) {
+                console.error(error);
+            }
         },
         async createUser() {
             const userPrams = {
