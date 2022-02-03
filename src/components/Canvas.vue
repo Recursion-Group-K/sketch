@@ -92,7 +92,7 @@ export default {
         if (window.confirm('変更をセーブしますか？')) this.save();
     },
     computed: {
-        ...mapState('drawing', ['color', 'weight', 'undoTrigger', 'redoTrigger', 'pointerSpeed']),
+        ...mapState('drawing', ['color', 'weight', 'undoTrigger', 'redoTrigger','saveTrigger', 'stopPointerTrigger', 'pointerSpeed']),
     },
     watch: {
         weight() {
@@ -104,14 +104,20 @@ export default {
         redoTrigger() {
             this.redo();
         },
+        saveTrigger() {
+            this.save();
+        },
+        stopPointerTrigger(){
+            this.stopPointer();
+        }
     },
     methods: {
         ...mapActions('drawing', ['setPointerSpeed']),
         stopPointer() {
-            this.pointerSpeed.up = false;
-            this.pointerSpeed.down = false;
-            this.pointerSpeed.right = false;
-            this.pointerSpeed.left = false;
+            Object.keys(this.pointerSpeed).forEach((direction) => {
+                    this.setPointerSpeed({ direction: direction, value: false });
+                }
+            );
             this.setNewLine();
         },
         fitCanvas() {

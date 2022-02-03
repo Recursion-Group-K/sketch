@@ -83,7 +83,7 @@ $width__sidebar: 20em;
                                         type="color"
                                         v-model="selectedColor"
                                         class="color-picker"
-                                        @click="$emit('click-color-picker')"
+                                        @click="stopPointer"
                                         @change="changeColor({ newColor: selectedColor })"
                                     />
                                     <span :style="{ backgroundColor: color }"></span>
@@ -123,7 +123,7 @@ $width__sidebar: 20em;
                             Twitter
                         </a>
                     </li>
-                    <li @click="toggoleIsPublic">
+                    <li @click="toggleIsPublic">
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
@@ -138,7 +138,7 @@ $width__sidebar: 20em;
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
                     <li>
-                        <a @click="$emit('save')">
+                        <a @click="save">
                             <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
                                 icon="hdd"
@@ -177,24 +177,17 @@ export default {
             },
             selectedColor: '',
             selectedWeight: 0,
-            isPublic: false,
         };
     },
-    computed: mapState('drawing', ['color', 'weight']),
+    computed: mapState('drawing', ['color', 'weight', 'isPublic']),
     mounted: function () {
         this.selectedColor = this.color;
         this.selectedWeight = this.weight;
     },
     methods: {
-        ...mapActions('drawing', ['changeColor', 'changeWeight', 'redo', 'undo']),
+        ...mapActions('drawing', ['changeColor', 'changeWeight', 'redo', 'undo', 'save', 'stopPointer','toggleIsPublic','twitterShare']),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
-        },
-        toggoleIsPublic() {
-            this.isPublic = !this.isPublic;
-        },
-        twitterShare() {
-            console.log('gggg');
         },
     },
 };

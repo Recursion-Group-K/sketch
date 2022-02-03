@@ -12,10 +12,10 @@
     <section class="hero is-primary is-fullheight">
         <div class="hero-body">
             <div class="canvas-container">
-                <Canvas ref="canvas" />
+                <Canvas />
             </div>
         </div>
-        <DrawingTools @click-color-picker="clickColorPicker" @save="save" />
+        <DrawingTools />
         <KeyUI />
     </section>
 </template>
@@ -33,18 +33,7 @@ export default {
     },
     name: 'Drawing',
     data() {
-        return {
-            color: '#000000',
-            weight: 3,
-        };
-    },
-    methods: {
-        clickColorPicker: function () {
-            this.$refs.canvas.stopPointer();
-        },
-        save: function () {
-            this.$refs.canvas.save();
-        },
+        return {};
     },
 };
 </script>
