@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import DrawingWapper from '../api/drawingWrapper';
+import { mapActions, mapState } from 'vuex';
 import DrawingBox from '../components/DrawingBox.vue';
 import DrawingForm from '../components/NewDrawingButton.vue';
 
@@ -40,14 +40,17 @@ export default {
     },
     name: 'Gallery',
     data() {
-        return {
-            allDrawings: [],
-        };
+        return {};
     },
-    async mounted() {
-        const drawingWrapper = new DrawingWapper();
-        this.allDrawings = await drawingWrapper.getAll();
+    computed:{
+        ...mapState('drawing',['allDrawings']),
     },
+    mounted() {
+        this.getAllDrawings();
+    },
+    methods:{
+        ...mapActions('drawing',['getAllDrawings']),
+    }
 };
 </script>
 

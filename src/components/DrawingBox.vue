@@ -7,7 +7,7 @@
 <template>
     <div class="box container is-fluid">
         <router-link :to="`/drawing/${drawing.id}`">
-            <figure class="image is-4by3 mb-2" @click="redirectToDrawingPage">
+            <figure class="image is-4by3 mb-2" @click="redirectToDrawingPage({id:drawing.id})">
                 <img :src="drawing.imgUrl" />
             </figure>
         </router-link>
@@ -18,7 +18,7 @@
                 :class="{ 'has-text-success': isPublic }"
                 class="mx-1 awesome-icon"
                 size="lg"
-                @click="toggoleIsPublic"
+                @click="toggleIsPublic"
             />
             <font-awesome-icon
                 :icon="['fab', 'twitter']"
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
     props: ['drawing'],
     data() {
@@ -70,7 +70,8 @@ export default {
     },
     computed: mapGetters('drawing', ['isEtchASketchMode']),
     methods: {
-        toggoleIsPublic() {
+        ...mapActions('drawing',['redirectToDrawingPage']),
+        toggleIsPublic() {
             this.isPublic = !this.isPublic;
         },
         twitterShare() {

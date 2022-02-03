@@ -4,6 +4,15 @@
     <div id="canvas" :style="{ height: '100%', width: '100%' }">
         <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
             <v-layer>
+                <v-rect
+                    :config="{
+                        x:0,
+                        y:0,
+                        width:configKonva.width,
+                        height:configKonva.height,
+                        fill:'white',
+                    }"
+                ></v-rect>
                 <v-line
                     v-for="item in itemList"
                     :key="item.id"
@@ -60,6 +69,7 @@ export default {
         };
     },
     mounted: function () {
+        this.itemList = [];
         const parent = document.querySelector('#canvas');
         const { clientWidth, clientHeight } = parent;
 
@@ -82,14 +92,15 @@ export default {
          */
 
         window.addEventListener('resize', this.fitCanvas);
-        this.load();
+    },
+    beforeDestroy: function(){
+        if (this.isAllSaved) return;
+        if (window.confirm('変更をセーブしますか？')) this.save();
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
         document.removeEventListener('keyup', this.keyUp);
         clearInterval(this.timer);
-        if (this.isAllSaved) return;
-        if (window.confirm('変更をセーブしますか？')) this.save();
     },
     computed: {
         ...mapState('drawing', [
@@ -98,8 +109,10 @@ export default {
             'undoTrigger',
             'redoTrigger',
             'saveTrigger',
+            'loadTrigger',
             'stopPointerTrigger',
             'pointerSpeed',
+            'currentDrawing',
         ]),
     },
     watch: {
@@ -115,12 +128,15 @@ export default {
         saveTrigger() {
             this.save();
         },
+        loadTrigger() {
+            this.load();
+        },
         stopPointerTrigger() {
             this.stopPointer();
         },
     },
     methods: {
-        ...mapActions('drawing', ['setPointerSpeed']),
+        ...mapActions('drawing', ['setPointerSpeed','saveDB']),
         stopPointer() {
             Object.keys(this.pointerSpeed).forEach((direction) => {
                 this.setPointerSpeed({ direction: direction, value: false });
@@ -130,7 +146,6 @@ export default {
         fitCanvas() {
             const parent = document.querySelector('#canvas');
             const { clientWidth, clientHeight } = parent;
-            //console.log(clientWidth, clientHeight);
             this.configKonva.width = clientWidth;
             this.configKonva.height = clientHeight;
             this.limit.down = clientHeight;
@@ -245,6 +260,7 @@ export default {
             this.pointer.y = clickPos.y;
         },
         load() {
+            console.log("loading");
             this.loadDB();
             if (this.itemList.length >= 1) {
                 const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
@@ -256,21 +272,44 @@ export default {
             this.isAllSaved = true;
         },
         save() {
+            console.log("saving");
             this.setNewLine();
-            this.saveDB();
+
+            let stage=document.getElementById("canvas");
+            let canvas=stage.querySelector("canvas");
+            let dataURL = canvas.toDataURL();
+            this.saveDB({itemList:this.itemList,dataURL:dataURL});
+            
             this.isAllSaved = true;
+            console.log(dataURL);
             console.log('saved');
+
+            //画像download
+            this.downloadURI(dataURL, 'stage.png');
         },
         loadDB() {
-            const data = localStorage.getItem('storage') || '[]';
-            this.itemList = JSON.parse(data);
-        },
-        saveDB() {
-            localStorage.setItem('storage', JSON.stringify(this.itemList));
+            console.log("fire");
+            console.log(this.currentDrawing.data);
+            const data = JSON.stringify(this.currentDrawing.data);
+            if(data=="{}"){
+                this.itemList = JSON.parse("[]");
+                return;
+            }
+            console.log(data);
+            this.itemList = JSON.parse(JSON.parse(data));
+            console.log(this.itemList);
         },
         reset() {
             this.itemList = [];
             localStorage.setItem('storage', JSON.stringify(this.itemList));
+        },
+        downloadURI(uri, name) {
+            var link = document.createElement('a');
+            link.download = name;
+            link.href = uri;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         },
     },
 };
