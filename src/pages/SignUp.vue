@@ -50,6 +50,7 @@
                                         v-model="inputs.username"
                                         type="text"
                                         class="input"
+                                        required
                                     />
                                     <span class="icon is-small is-left">
                                         <i class="fa fa-envelope"></i>
