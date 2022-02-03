@@ -15,6 +15,10 @@
 .vertical-align {
     margin-bottom: auto;
 }
+.error {
+    color: crimson;
+    font-size: 16px;
+}
 </style>
 
 <template>
@@ -28,15 +32,35 @@
                         <p class="subtitle">Unlock your imagination</p>
                     </div>
                     <div class="column is-5-tablet is-4-desktop is-4-widescreen">
-                        <form action="" class="box">
+                        <form @submit.prevent="createAccount(inputs)" class="box">
                             <div class="title">
                                 <h1 class="has-text-black has-text-weight-bold">Sign Up</h1>
                             </div>
+                            <div v-if="isLoading">
+                                loading...
+                            </div>
+                            <span class="error" v-show="hasError">
+                                An error occured while processing your request.
+                            </span>
                             <hr />
+                            <div class="field">
+                                <label for="" class="label">Name</label>
+                                <div class="control has-icons-left">
+                                    <input
+                                        v-model="inputs.username"
+                                        type="text"
+                                        class="input"
+                                    />
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
+                                </div>
+                            </div>
                             <div class="field">
                                 <label for="" class="label">Email</label>
                                 <div class="control has-icons-left">
                                     <input
+                                        v-model="inputs.email"
                                         type="email"
                                         placeholder="e.g. recursionist@gmail.com"
                                         class="input"
@@ -51,6 +75,7 @@
                                 <label for="" class="label">Password</label>
                                 <div class="control has-icons-left">
                                     <input
+                                        v-model="inputs.password"
                                         type="password"
                                         placeholder="*******"
                                         class="input"
@@ -62,7 +87,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <button class="button is-success">Sign Up</button>
+                                <button class="button is-success">Create account</button>
                             </div>
                             <hr />
                             <div class="field">
@@ -82,13 +107,34 @@
     </section>
 </template>
 
-<style scoped lang="scss"></style>
-
 <script>
+import { mapState } from 'vuex'
+
 export default {
     name: 'SignUp',
     data() {
-        return {};
+        return {
+            inputs: {
+                username: '',
+                email: '',
+                password: '',
+            },
+        };
     },
+    computed: mapState('signup', [
+        'isLoading',
+        'hasError',
+    ]),
+    methods: {
+        async createAccount({ username, email, password }) {
+            this.isLoading = true;
+            try {
+                await this.$store.dispatch('signup/createAccount', { username, email, password });
+                if(!this.hasError) this.$router.push({ name: 'Drawing' });
+            } catch(error) {
+                console.log(error);
+            }
+        }
+    }
 };
 </script>
