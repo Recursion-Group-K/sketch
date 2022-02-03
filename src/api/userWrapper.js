@@ -1,14 +1,17 @@
-import axios from 'axios';
+import client from './client';
 import User from '../models/user.js';
 import endpoints from '../api/endpoints';
+const FormData = require('form-data');
+
+
+console.log(FormData)
+
 const superUserAuth = {
     username: process.env.VUE_APP_SUPERUSER_NAME,
     password: process.env.VUE_APP_SUPERUSER_PASSWORD,
 };
 
 const { current, retrieve, create } = endpoints.users;
-console.log(superUserAuth)
-console.log(retrieve(1))
 
 export default class UserWrapper {
     constructor() {}
@@ -27,7 +30,7 @@ export default class UserWrapper {
     /* GET current user */
     async getCurrent(access_token) {
         try {
-            const response = await axios.get(current(), {
+            const response = await client.get(current(), {
                 headers: {
                     Authorization: `Bearer ${access_token}`,
                 },
@@ -42,9 +45,13 @@ export default class UserWrapper {
     /* GET user */
     async getById(id) {
         try {
-            const response = await axios.get(retrieve(id), {}, {
-                auth: superUserAuth,
-            });
+            const response = await client.get(
+                retrieve(id),
+                {},
+                {
+                    auth: superUserAuth,
+                }
+            );
             const params = this.getParams(response.data);
             console.log(params);
             return new User(params);
@@ -53,15 +60,25 @@ export default class UserWrapper {
         }
     }
 
-    async create({ name, email, password }) {
-        const formData = new FormData();
-        formData.append('username', name);
-        formData.append('email', email);
-        formData.append('password', password);
-        formData.append('is_active', true);
+    async create({ name, email = '', password, isActive = true }) {
+        const data = new FormData();
+        data.append('username', name);
+        data.append('email', email);
+        data.append('password', password);
+        data.append('is_active', isActive);
+
+        // const data = {
+        //     username: name,
+        //     email: email,
+        //     password: password,
+        //     is_active: isActive,
+        // }
 
         try {
-            const response = await axios.post(create(), formData, {
+            const response = await client.post(create(), data, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
                 auth: superUserAuth,
             });
             return new User(this.getParams(response.data));

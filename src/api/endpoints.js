@@ -1,5 +1,5 @@
 const root = process.env.VUE_APP_SERVER_URL;
-console.log(root)
+console.log(root);
 const endpoints = {
     auth: {
         token: () => `${root}/api/token-auth/`,
