@@ -4,6 +4,11 @@ import endpoints from '../api/endpoints';
 
 const { list, listFilter, retrieve, create, update, destroy } = endpoints.drawings;
 
+const superUserAuth = {
+    username: process.env.VUE_APP_SUPERUSER_NAME,
+    password: process.env.VUE_APP_SUPERUSER_PASSWORD,
+};
+
 class ParamsConverter {
     toClientParams({ id, title, image, is_public, data, created_at, updated_at, user_id }) {
         const params = {
@@ -46,7 +51,9 @@ export default class DrawingWapper {
      */
     async getById(id) {
         try {
-            const response = await client.get(retrieve(id));
+            const response = await client.get(retrieve(id), {
+                auth: superUserAuth
+            });
             const params = ParamsConverter.toClientParams(response.data);
             return new Drawing(params);
         } catch (error) {
@@ -62,7 +69,7 @@ export default class DrawingWapper {
      */
     async getBy(column, data) {
         try {
-            const response = await client.get(listFilter(column, data));
+            const response = await client.get(listFilter(column, data),{auth:superUserAuth});
             const drawingsArray = response.data;
             let drawings = [];
             for (const drawing of drawingsArray) {
@@ -82,7 +89,7 @@ export default class DrawingWapper {
      */
     async getAll() {
         try {
-            const response = await client.get(list());
+            const response = await client.get(list(), {auth:superUserAuth});
             const drawingsArray = response.data;
             let drawings = [];
             for (const drawing of drawingsArray) {
@@ -104,7 +111,7 @@ export default class DrawingWapper {
         const requestParams = ParamsConverter.toRequestParams(params);
         try {
             const response = await client.get(create(requestParams));
-            return new Drawing(ParamsConverter.toClientParams(response.data));
+            return new Drawing(ParamsConverter.toClientParams(response.data),{auth:superUserAuth});
         } catch (error) {
             console.error(error);
         }

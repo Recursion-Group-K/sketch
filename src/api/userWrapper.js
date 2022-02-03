@@ -4,8 +4,6 @@ import endpoints from '../api/endpoints';
 const FormData = require('form-data');
 
 
-console.log(FormData)
-
 const superUserAuth = {
     username: process.env.VUE_APP_SUPERUSER_NAME,
     password: process.env.VUE_APP_SUPERUSER_PASSWORD,
@@ -66,13 +64,6 @@ export default class UserWrapper {
         data.append('email', email);
         data.append('password', password);
         data.append('is_active', isActive);
-
-        // const data = {
-        //     username: name,
-        //     email: email,
-        //     password: password,
-        //     is_active: isActive,
-        // }
 
         try {
             const response = await client.post(create(), data, {
