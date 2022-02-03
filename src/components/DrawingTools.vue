@@ -2,9 +2,7 @@
 // SIZES
 $width__sidebar: 20em;
 
-.sidebar-toggle {
-    @extend .button;
-    background-color: $white;
+.sidebar-group {
     position: absolute;
     top: 5rem;
     left: 0;
@@ -83,10 +81,10 @@ $width__sidebar: 20em;
                                 <div class="column">
                                     <input
                                         type="color"
-                                        v-model="color"
+                                        v-model="selectedColor"
                                         class="color-picker"
-                                        @click="$emit('click-color-picker')"
-                                        @change="$emit('change-color', color)"
+                                        @click="stopPointer"
+                                        @change="changeColor({ newColor: selectedColor })"
                                     />
                                     <span :style="{ backgroundColor: color }"></span>
                                 </div>
@@ -106,31 +104,10 @@ $width__sidebar: 20em;
                                 type="range"
                                 min="1"
                                 max="20"
-                                v-model="weight"
-                                @change="$emit('change-weight', weight)"
+                                v-model="selectedWeight"
+                                @change="changeWeight({ newWeight: selectedWeight })"
                             />
                             {{ weight }} px
-                        </a>
-                    </li>
-                </ul>
-                <p class="menu-label">Transactions</p>
-                <ul class="menu-list">
-                    <li>
-                        <a @click="$emit('redo')">
-                            <font-awesome-icon
-                                class="awesome-icon has-text-primary"
-                                icon="redo"
-                                size="lg"
-                            />
-                        </a>
-                    </li>
-                    <li>
-                        <a @click="$emit('undo')">
-                            <font-awesome-icon
-                                class="awesome-icon has-text-primary"
-                                icon="undo"
-                                size="lg"
-                            />
                         </a>
                     </li>
                 </ul>
@@ -146,7 +123,7 @@ $width__sidebar: 20em;
                             Twitter
                         </a>
                     </li>
-                    <li @click="toggoleIsPublic">
+                    <li @click="toggleIsPublic">
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
@@ -161,7 +138,7 @@ $width__sidebar: 20em;
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
                     <li>
-                        <a>
+                        <a @click="save">
                             <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
                                 icon="hdd"
@@ -173,17 +150,22 @@ $width__sidebar: 20em;
                 </ul>
             </aside>
         </div>
-        <button
-            class="sidebar-toggle"
-            :class="{ 'is-closed': !isSidebarOpen }"
-            @click="toggleSideBar"
-        >
-            <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
-        </button>
+        <div class="sidebar-group" :class="{ 'is-closed': !isSidebarOpen }">
+            <button class="button m-1" @click="toggleSideBar">
+                <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
+            </button>
+            <button class="button m-1" @click="undo">
+                <font-awesome-icon class="awesome-icon has-text-primary" icon="undo" size="lg" />
+            </button>
+            <button class="button m-1" @click="redo">
+                <font-awesome-icon class="awesome-icon has-text-primary" icon="redo" size="lg" />
+            </button>
+        </div>
     </div>
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 export default {
     name: 'DrawingTools',
     data() {
@@ -193,20 +175,28 @@ export default {
                 weight: false,
                 others: false,
             },
-            color: '#000000',
-            weight: 3,
-            isPublic: false,
+            selectedColor: '',
+            selectedWeight: 0,
         };
     },
+    computed: mapState('drawing', ['color', 'weight', 'isPublic']),
+    mounted: function () {
+        this.selectedColor = this.color;
+        this.selectedWeight = this.weight;
+    },
     methods: {
+        ...mapActions('drawing', [
+            'changeColor',
+            'changeWeight',
+            'redo',
+            'undo',
+            'save',
+            'stopPointer',
+            'toggleIsPublic',
+            'twitterShare',
+        ]),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
-        },
-        toggoleIsPublic() {
-            this.isPublic = !this.isPublic;
-        },
-        twitterShare() {
-            console.log('gggg');
         },
     },
 };

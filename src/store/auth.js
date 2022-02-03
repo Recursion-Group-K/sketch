@@ -1,4 +1,4 @@
-import client from '../api/client'
+import client from '../api/client';
 import Auth from '../api/auth';
 import {
     LOGIN_BEGIN,
@@ -12,7 +12,7 @@ import Cookies from 'js-cookie';
 
 const ACCESS_TOKEN_STORAGE_KEY = 'ACCESS_TOKEN_STORAGE_KEY';
 const REFRESH_TOKEN_STORAGE_KEY = 'REFRESH_STORAGE_KEY';
-const isProduction = process.env.NODE_ENV === 'production';
+// const isProduction = process.env.NODE_ENV === 'production';
 
 export default {
     namespaced: true,
@@ -59,8 +59,8 @@ export default {
             state.token = token;
         },
         [REMOVE_TOKEN](state) {
-            Cookies.remove(ACCESS_TOKEN_STORAGE_KEY)
-            Cookies.remove(REFRESH_TOKEN_STORAGE_KEY)
+            Cookies.remove(ACCESS_TOKEN_STORAGE_KEY);
+            Cookies.remove(REFRESH_TOKEN_STORAGE_KEY);
             delete client.defaults.headers.Authorization;
             state.token = null;
         },

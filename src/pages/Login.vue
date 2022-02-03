@@ -89,6 +89,7 @@
 <style scoped lang="scss"></style>
 
 <script>
+import UserWrapper from '../api/userWrapper';
 export default {
     name: 'Login',
     data() {
@@ -103,6 +104,15 @@ export default {
         login({ username, password }) {
             this.$store.dispatch('auth/login', { username, password });
             // .then(() => this.$router.push('/'));
+        },
+        async createUser() {
+            const userPrams = {
+                name: `ggggggg`,
+                email: `ggggggg@gmail.com`,
+                password: `ggggggg`,
+            };
+            const user = await new UserWrapper().create(userPrams);
+            console.log(user);
         },
     },
 };

@@ -27,8 +27,8 @@ const routes = [
         component: Gallery,
     },
     {
-        path: '/drawing/etchASketch',
-        name: 'Drawing-EtchASketch',
+        path: '/drawing/:id',
+        name: 'Drawing',
         component: Drawing,
     },
     {

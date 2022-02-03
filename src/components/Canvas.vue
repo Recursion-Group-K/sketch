@@ -4,7 +4,6 @@
     <div id="canvas" :style="{ height: '100%', width: '100%' }">
         <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
             <v-layer>
-                <v-circle :config="pointer"></v-circle>
                 <v-line
                     v-for="item in itemList"
                     :key="item.id"
@@ -15,28 +14,33 @@
                         strokeWidth: item.line.strokeWidth,
                     }"
                 ></v-line>
+                <v-circle
+                    :config="{
+                        x: pointer.x,
+                        y: pointer.y,
+                        radius: weight / 2,
+                        fill: 'white',
+                        stroke: color,
+                        strokeWidth: 4,
+                    }"
+                ></v-circle>
             </v-layer>
         </v-stage>
     </div>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
 const velocityOfPointer = 2;
-const keyMap = {
-    d: 'up',
-    f: 'down',
-    k: 'right',
-    j: 'left',
-};
 
 export default {
     name: 'Drawing',
-    props: ['newWeight', 'newColor'],
     data() {
         return {
             itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
             itemStack: [],
             isUndoed: false,
+            isAllSaved: false,
             configKonva: {
                 width: 100,
                 height: 100,
@@ -44,22 +48,8 @@ export default {
             pointer: {
                 x: 0,
                 y: 0,
-                radius: 3,
-                fill: 'white',
-                stroke: 'black',
-                strokeWidth: 4,
             },
-            lineConfig: {
-                color: 'black',
-                weight: 3,
-                newLineFlag: true,
-            },
-            direction: {
-                up: false,
-                down: false,
-                right: false,
-                left: false,
-            },
+            newLineFlag: true,
             limit: {
                 up: 0,
                 down: 0,
@@ -92,31 +82,50 @@ export default {
          */
 
         window.addEventListener('resize', this.fitCanvas);
+        this.load();
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
         document.removeEventListener('keyup', this.keyUp);
         clearInterval(this.timer);
+        if (this.isAllSaved) return;
+        if (window.confirm('変更をセーブしますか？')) this.save();
+    },
+    computed: {
+        ...mapState('drawing', [
+            'color',
+            'weight',
+            'undoTrigger',
+            'redoTrigger',
+            'saveTrigger',
+            'stopPointerTrigger',
+            'pointerSpeed',
+        ]),
     },
     watch: {
-        newWeight: function () {
-            let newWeight = Number(this.newWeight);
-            this.lineConfig.weight = newWeight;
-            this.pointer.radius = newWeight / 2;
-            this.lineConfig.newLineFlag = true;
+        weight() {
+            this.setNewLine();
         },
-        newColor: function () {
-            this.lineConfig.color = this.newColor;
-            this.pointer.stroke = this.newColor;
-            this.lineConfig.newLineFlag = true;
+        undoTrigger() {
+            this.undo();
+        },
+        redoTrigger() {
+            this.redo();
+        },
+        saveTrigger() {
+            this.save();
+        },
+        stopPointerTrigger() {
+            this.stopPointer();
         },
     },
     methods: {
+        ...mapActions('drawing', ['setPointerSpeed']),
         stopPointer() {
-            this.direction.up = false;
-            this.direction.down = false;
-            this.direction.right = false;
-            this.direction.left = false;
+            Object.keys(this.pointerSpeed).forEach((direction) => {
+                this.setPointerSpeed({ direction: direction, value: false });
+            });
+            this.setNewLine();
         },
         fitCanvas() {
             const parent = document.querySelector('#canvas');
@@ -136,8 +145,20 @@ export default {
         },
         keyEvent(event, boolean) {
             let key = event.key;
-            if (key in keyMap) {
-                this.direction[keyMap[key]] = boolean;
+            Object.keys(this.pointerSpeed).forEach((direction) => {
+                const keyIncludes = this.pointerSpeed[direction].keys.includes(key);
+                if (keyIncludes) {
+                    this.setPointerSpeed({ direction: direction, value: boolean });
+                }
+            });
+
+            if (key == 'x') {
+                console.log('loaded');
+                this.load();
+            }
+            if (key == 'c') {
+                console.log('reset');
+                this.reset();
             }
         },
         keyDown(event) {
@@ -145,7 +166,9 @@ export default {
         },
         keyUp(event) {
             this.keyEvent(event, false);
-            const areAllKeyUp = Object.values(this.direction).every((bool) => bool == false);
+            const areAllKeyUp = Object.values(this.pointerSpeed).every(
+                (element) => element.value == false
+            );
             if (areAllKeyUp) this.setNewLine();
         },
         pushNewLine(x, y) {
@@ -153,35 +176,38 @@ export default {
             this.itemList.push({
                 line: {
                     points: [x, y],
-                    stroke: this.lineConfig.color,
-                    strokeWidth: this.lineConfig.weight,
+                    stroke: this.color,
+                    strokeWidth: this.weight,
                 },
                 lastPoint: {},
             });
-            this.lineConfig.newLineFlag = false;
+            this.newLineFlag = false;
         },
         setNewLine() {
-            if (this.lineConfig.newLineFlag) return;
+            if (this.newLineFlag) return;
+            this.newLineFlag = true;
+            if (this.itemList.length == 0) return;
             this.itemList[this.itemList.length - 1].lastPoint = {
                 x: this.pointer.x,
                 y: this.pointer.y,
             };
             console.log(this.itemList[this.itemList.length - 1]);
-            this.lineConfig.newLineFlag = true;
+            this.newLineFlag = true;
         },
         draw() {
             let lastPoint = { x: this.pointer.x, y: this.pointer.y };
-            if (this.direction['up']) this.pointer.y -= velocityOfPointer;
-            if (this.direction['down']) this.pointer.y += velocityOfPointer;
-            if (this.direction['right']) this.pointer.x += velocityOfPointer;
-            if (this.direction['left']) this.pointer.x -= velocityOfPointer;
+            if (this.pointerSpeed['up'].value) this.pointer.y -= velocityOfPointer;
+            if (this.pointerSpeed['down'].value) this.pointer.y += velocityOfPointer;
+            if (this.pointerSpeed['right'].value) this.pointer.x += velocityOfPointer;
+            if (this.pointerSpeed['left'].value) this.pointer.x -= velocityOfPointer;
             this.checkOverLimit(this.pointer);
             const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
             if (isSamePoint) {
                 return;
             }
-            if (this.lineConfig.newLineFlag) {
+            if (this.newLineFlag) {
                 this.pushNewLine(lastPoint.x, lastPoint.y);
+                this.isAllSaved = false;
             }
             this.itemList[this.itemList.length - 1].line.points.push(
                 this.pointer.x,
@@ -217,6 +243,34 @@ export default {
             this.checkOverLimit(clickPos);
             this.pointer.x = clickPos.x;
             this.pointer.y = clickPos.y;
+        },
+        load() {
+            this.loadDB();
+            if (this.itemList.length >= 1) {
+                const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
+                this.pointer.x = newPoint.x;
+                this.pointer.y = newPoint.y;
+            }
+            this.resetStack();
+            this.setNewLine();
+            this.isAllSaved = true;
+        },
+        save() {
+            this.setNewLine();
+            this.saveDB();
+            this.isAllSaved = true;
+            console.log('saved');
+        },
+        loadDB() {
+            const data = localStorage.getItem('storage') || '[]';
+            this.itemList = JSON.parse(data);
+        },
+        saveDB() {
+            localStorage.setItem('storage', JSON.stringify(this.itemList));
+        },
+        reset() {
+            this.itemList = [];
+            localStorage.setItem('storage', JSON.stringify(this.itemList));
         },
     },
 };
