@@ -1,4 +1,4 @@
-import axios from 'axios';
+import client from './client.js';
 import User from '../models/user.js';
 
 require('dotenv').config();
@@ -10,7 +10,7 @@ export default class UserWrapper {
 
     async getById(id) {
         try {
-            const response = await axios.get(`${this.url}${id}/`, {
+            const response = await client.get(`${this.url}${id}/`, {
                 auth: {
                     username: process.env.SUPERUSER_NAME,
                     password: process.env.SUPERUSER_PASSWORD,

@@ -1,15 +1,17 @@
-import auth from '../api/auth';
+import client from '../api/client'
+import Auth from '../api/auth';
 import {
     LOGIN_BEGIN,
     LOGIN_FAILURE,
     LOGIN_SUCCESS,
-    // LOGOUT,
-    // REMOVE_TOKEN,
+    LOGOUT,
+    REMOVE_TOKEN,
     SET_TOKEN,
 } from './types';
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
 
-const TOKEN_STORAGE_KEY = 'TOKEN_STORAGE_KEY';
+const ACCESS_TOKEN_STORAGE_KEY = 'ACCESS_TOKEN_STORAGE_KEY';
+const REFRESH_TOKEN_STORAGE_KEY = 'REFRESH_STORAGE_KEY';
 const isProduction = process.env.NODE_ENV === 'production';
 
 export default {
@@ -20,41 +22,47 @@ export default {
         token: null,
     },
     actions: {
-        async login({ commit }, { username, password}) {
+        async login({ commit }, { username, password }) {
             commit(LOGIN_BEGIN);
             try {
-              const response = await auth.login(username, password);
-              console.log(response.data);
-              commit(SET_TOKEN, response.data)
-              commit(LOGIN_SUCCESS)
+                const response = await new Auth().login(username, password);
+                console.log(response.data);
+                commit(SET_TOKEN, response.data);
+                commit(LOGIN_SUCCESS);
             } catch (error) {
-              console.error(error);
-              commit(LOGIN_FAILURE);
+                console.error(error);
+                commit(LOGIN_FAILURE);
             }
-        }
+        },
     },
     mutations: {
         [LOGIN_BEGIN](state) {
             state.authenticating = true;
             state.error = false;
-          },
-          [LOGIN_FAILURE](state) {
+        },
+        [LOGIN_FAILURE](state) {
             state.authenticating = false;
             state.error = true;
-          },
-          [LOGIN_SUCCESS](state) {
+        },
+        [LOGIN_SUCCESS](state) {
             state.authenticating = false;
             state.error = false;
-          },
-          /* [LOGOUT](state) {
+        },
+        [LOGOUT](state) {
             state.authenticating = false;
             state.error = false;
-          }, */
-          [SET_TOKEN](state, token) {
-            if (!isProduction) Cookies.set(TOKEN_STORAGE_KEY, token);
-            Cookies.set(`TokenAccess ${token.access}`);
-            Cookies.set(`TokenRefresh ${token.refresh}`);
+        },
+        [SET_TOKEN](state, token) {
+            Cookies.set(ACCESS_TOKEN_STORAGE_KEY, token.access);
+            Cookies.set(REFRESH_TOKEN_STORAGE_KEY, token.refresh);
+            client.defaults.headers.Authorization = `Bearer ${token.access}`;
             state.token = token;
-          },
+        },
+        [REMOVE_TOKEN](state) {
+            Cookies.remove(ACCESS_TOKEN_STORAGE_KEY)
+            Cookies.remove(REFRESH_TOKEN_STORAGE_KEY)
+            delete client.defaults.headers.Authorization;
+            state.token = null;
+        },
     },
 };

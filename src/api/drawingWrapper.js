@@ -1,6 +1,5 @@
 import Drawing from '../models/drawing';
-
-const axios = require('axios');
+import client from './client';
 
 function toParams(drawingData) {
     // object
@@ -36,7 +35,7 @@ export default class DrawingWapper {
     async getById(id) {
         // return Drawing
         try {
-            const response = await axios.get(`${this.url}/${id}`);
+            const response = await client.get(`${this.url}/${id}`);
             const params = toParams(response.data);
             return new Drawing(params);
         } catch (error) {
@@ -47,7 +46,7 @@ export default class DrawingWapper {
     async getBy(column, data) {
         // return array<Drawing>
         try {
-            const response = await axios.get(`${this.url}?${column}=${data}`);
+            const response = await client.get(`${this.url}?${column}=${data}`);
             const drawingsArray = response.data;
             let drawings = [];
             for (const drawing of drawingsArray) {
@@ -64,7 +63,7 @@ export default class DrawingWapper {
     async getAll() {
         // return array<Drawing>
         try {
-            const response = await axios.get(this.url);
+            const response = await client.get(this.url);
             const drawingsArray = response.data;
             let drawings = [];
             for (const drawing of drawingsArray) {

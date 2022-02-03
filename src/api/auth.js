@@ -1,7 +1,15 @@
-import axios from "axios";
+import axios from 'axios';
 
-export default {
+class Auth {
+    constructor () { }
+    
     login(username, password) {
-        return axios.post('https://sketch-skgl-server-staging.herokuapp.com/api/token-auth/', { username, password });
+        return axios.post('https://sketch-skgl-server-staging.herokuapp.com/api/token-auth/', {
+            username,
+            password,
+        });
     }
+
 }
+
+export default Auth

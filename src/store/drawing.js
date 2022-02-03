@@ -7,7 +7,7 @@ export default {
         mode: Config.mode.EtchASketch,
     },
     getters: {
-        isEtchASketchMode: (state) => (state.mode == Config.mode.EtchASketch),
+        isEtchASketchMode: (state) => state.mode == Config.mode.EtchASketch,
     },
     actions: {
         changeMode({ commit }, { mode }) {

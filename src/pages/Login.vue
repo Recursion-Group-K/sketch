@@ -64,7 +64,9 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <button @click="login(inputs)" class="button is-success">Login</button>
+                                <button @click="login(inputs)" class="button is-success">
+                                    Login
+                                </button>
                             </div>
                             <hr />
                             <div class="field">
@@ -99,9 +101,9 @@ export default {
     },
     methods: {
         login({ username, password }) {
-            this.$store.dispatch('auth/login', { username, password })
-                // .then(() => this.$router.push('/'));
+            this.$store.dispatch('auth/login', { username, password });
+            // .then(() => this.$router.push('/'));
+        },
     },
-  },
 };
 </script>

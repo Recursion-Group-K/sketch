@@ -5,7 +5,7 @@
 </style>
 
 <template>
-    <div class="box container is-fluid" >
+    <div class="box container is-fluid">
         <figure class="image is-4by3 mb-2" @click="redirectToDrawingPage">
             <img :src="drawing.imgUrl" />
         </figure>
