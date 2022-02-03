@@ -14,7 +14,6 @@ export const REMOVE_TOKEN = 'REMOVE_TOKEN';
 export const SIGNUP_BEGIN = 'SIGNUP_BEGIN';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
 export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
-export const SET_TOKEN2 = 'SET_TOKEN';
 
 /**
  * Drawging
