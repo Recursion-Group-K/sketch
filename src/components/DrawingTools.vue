@@ -185,7 +185,16 @@ export default {
         this.selectedWeight = this.weight;
     },
     methods: {
-        ...mapActions('drawing', ['changeColor', 'changeWeight', 'redo', 'undo', 'save', 'stopPointer','toggleIsPublic','twitterShare']),
+        ...mapActions('drawing', [
+            'changeColor',
+            'changeWeight',
+            'redo',
+            'undo',
+            'save',
+            'stopPointer',
+            'toggleIsPublic',
+            'twitterShare',
+        ]),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
         },

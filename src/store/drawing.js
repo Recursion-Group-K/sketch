@@ -53,19 +53,19 @@ export default {
         setPointerSpeed({ commit }, { direction, value }) {
             commit(SET_POINTERSPEED, { direction: direction, value: value });
         },
-        save({commit}){
+        save({ commit }) {
             commit(SET_SAVETRIGGER);
         },
-        stopPointer({commit,state}){
+        stopPointer({ commit, state }) {
             commit(SET_STOPPOINTERTRIGGER);
             console.log(state.stopPointerTrigger);
         },
-        toggleIsPublic({commit}){
+        toggleIsPublic({ commit }) {
             commit(TOGGLE_ISPUBLIC);
         },
-        twitterShare(){
-            console.log("gggg");
-        }
+        twitterShare() {
+            console.log('gggg');
+        },
     },
     mutations: {
         [CHNAGE_MODE](state, mode) {
@@ -86,13 +86,13 @@ export default {
         [SET_POINTERSPEED](state, payload) {
             state.pointerSpeed[payload.direction].value = payload.value;
         },
-        [SET_SAVETRIGGER](state){
+        [SET_SAVETRIGGER](state) {
             state.saveTrigger = !state.saveTrigger;
         },
-        [SET_STOPPOINTERTRIGGER](state){
+        [SET_STOPPOINTERTRIGGER](state) {
             state.stopPointerTrigger = !state.stopPointerTrigger;
         },
-        [TOGGLE_ISPUBLIC](state){
+        [TOGGLE_ISPUBLIC](state) {
             state.isPublic = !state.isPublic;
         },
     },
