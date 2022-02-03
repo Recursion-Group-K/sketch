@@ -83,12 +83,8 @@ $width__sidebar: 20em;
                                         type="color"
                                         v-model="selectedColor"
                                         class="color-picker"
-                                        @click="$emit('click-color-picker')"
-                                        @change="
-                                            $store.dispatch('drawing/changeColor', {
-                                                newColor: selectedColor,
-                                            })
-                                        "
+                                        @click="stopPointer"
+                                        @change="changeColor({ newColor: selectedColor })"
                                     />
                                     <span :style="{ backgroundColor: color }"></span>
                                 </div>
@@ -109,11 +105,7 @@ $width__sidebar: 20em;
                                 min="1"
                                 max="20"
                                 v-model="selectedWeight"
-                                @change="
-                                    $store.dispatch('drawing/changeWeight', {
-                                        newWeight: selectedWeight,
-                                    })
-                                "
+                                @change="changeWeight({ newWeight: selectedWeight })"
                             />
                             {{ weight }} px
                         </a>
@@ -131,7 +123,7 @@ $width__sidebar: 20em;
                             Twitter
                         </a>
                     </li>
-                    <li @click="toggoleIsPublic">
+                    <li @click="toggleIsPublic">
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
@@ -146,7 +138,7 @@ $width__sidebar: 20em;
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
                     <li>
-                        <a @click="$emit('save')">
+                        <a @click="save">
                             <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
                                 icon="hdd"
@@ -162,10 +154,10 @@ $width__sidebar: 20em;
             <button class="button m-1" @click="toggleSideBar">
                 <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
             </button>
-            <button class="button m-1" @click="$emit('undo')">
+            <button class="button m-1" @click="undo">
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="undo" size="lg" />
             </button>
-            <button class="button m-1" @click="$emit('redo')">
+            <button class="button m-1" @click="redo">
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="redo" size="lg" />
             </button>
         </div>
@@ -173,7 +165,7 @@ $width__sidebar: 20em;
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 export default {
     name: 'DrawingTools',
     data() {
@@ -185,23 +177,26 @@ export default {
             },
             selectedColor: '',
             selectedWeight: 0,
-            isPublic: false,
         };
     },
-    computed: mapState('drawing', ['color', 'weight']),
+    computed: mapState('drawing', ['color', 'weight', 'isPublic']),
     mounted: function () {
         this.selectedColor = this.color;
         this.selectedWeight = this.weight;
     },
     methods: {
+        ...mapActions('drawing', [
+            'changeColor',
+            'changeWeight',
+            'redo',
+            'undo',
+            'save',
+            'stopPointer',
+            'toggleIsPublic',
+            'twitterShare',
+        ]),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
-        },
-        toggoleIsPublic() {
-            this.isPublic = !this.isPublic;
-        },
-        twitterShare() {
-            console.log('gggg');
         },
     },
 };
