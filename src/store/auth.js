@@ -21,18 +21,24 @@ export default {
         error: false,
         token: null,
     },
+    getters: {
+        isAuthenticated: (state) => !!state.token,
+    },
     actions: {
         async login({ commit }, { username, password }) {
             commit(LOGIN_BEGIN);
             try {
                 const response = await new Auth().login(username, password);
-                console.log(response.data);
                 commit(SET_TOKEN, response.data);
                 commit(LOGIN_SUCCESS);
             } catch (error) {
                 console.error(error);
                 commit(LOGIN_FAILURE);
             }
+        },
+        logout({ commit }) {
+            commit(LOGOUT);
+            commit(REMOVE_TOKEN);
         },
     },
     mutations: {

@@ -3,10 +3,10 @@ console.log(root);
 const endpoints = {
     auth: {
         token: () => `${root}/api/token-auth/`,
-        refresh: () => `${root}/api/token-auth/refresh`,
+        refresh: () => `${root}/api/token-auth/refresh/`,
     },
     users: {
-        current: () => `${root}/api/current_user`,
+        current: () => `${root}/api/current_user/`,
         // list: () => `${root}/api/users/`,
         create: () => `${root}/api/users/`,
         retrieve: (id) => `${root}/api/users/${id}/`,
