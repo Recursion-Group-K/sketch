@@ -34,12 +34,11 @@
                             </div>
                             <hr />
                             <div class="field">
-                                <label for="" class="label">Email</label>
+                                <label for="" class="label">Name</label>
                                 <div class="control has-icons-left">
                                     <input
                                         v-model="inputs.username"
-                                        type="email"
-                                        placeholder="e.g. recursionist@gmail.com"
+                                        type="text"
                                         class="input"
                                         required
                                     />
@@ -73,9 +72,9 @@
                                 <!-- router-linkは/signupに後で変更する -->
                                 <p>
                                     Not Registered?
-                                    <router-link to="/signup"
-                                        ><span class="link">Sign Up</span></router-link
-                                    >
+                                    <router-link to="/signup">
+                                        <span class="link">Sign Up</span>
+                                    </router-link>
                                 </p>
                             </div>
                         </form>
@@ -90,13 +89,14 @@
 
 <script>
 import UserWrapper from '../api/userWrapper';
+
 export default {
     name: 'Login',
     data() {
         return {
             inputs: {
-                username: 'admin',
-                password: '0maR3zSs',
+                username: process.env.VUE_APP_SUPERUSER_NAME,
+                password: process.env.VUE_APP_SUPERUSER_PASSWORD,
             },
         };
     },
