@@ -25,6 +25,4 @@ describe('DrawingWrapperクラスのテスト', () => {
             expect(drawing.id).toEqual(1);
         }
     });
-
-
 });

@@ -40,8 +40,8 @@ header {
                 </div>
 
                 <div class="navbar-end">
-                    <div v-if="doesUserSignedIn" :class="{ buttons: !isOpenMenu }">
-                        <a to="/" class="button navbar-item">Logout</a>
+                    <div v-if="isAuthenticated" :class="{ buttons: !isOpenMenu }">
+                        <button to="/" @click="logout" class="button navbar-item">Logout</button>
                     </div>
                     <div v-else :class="{ buttons: !isOpenMenu }">
                         <router-link to="/signup" class="button is-primary navbar-item">
@@ -52,7 +52,6 @@ header {
                         </router-link>
                     </div>
                 </div>
-                <button @click="doesUserSignedIn = !doesUserSignedIn">Toggle</button>
             </div>
         </nav>
     </header>
@@ -60,18 +59,29 @@ header {
 
 <script>
 import UserWrapper from '../api/userWrapper';
-
+import { mapActions, mapGetters } from 'vuex';
 export default {
     name: 'Header',
     data() {
         return {
             isOpenMenu: false,
-            doesUserSignedIn: false,
             demoUser: null,
         };
     },
+    watch: {
+        isAuthenticated(to, from) {
+            console.log(to, from);
+            if (to == false) this.$router.push({ name: 'Home' });
+        },
+    },
+    computed: {
+        ...mapGetters('auth', ['isAuthenticated']),
+    },
     mounted() {
         new UserWrapper().getById(1).then((user) => (this.demoUser = user));
+    },
+    methods: {
+        ...mapActions('auth', ['logout']),
     },
 };
 </script>

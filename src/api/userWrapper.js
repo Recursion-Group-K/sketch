@@ -3,7 +3,6 @@ import User from '../models/user.js';
 import endpoints from '../api/endpoints';
 const FormData = require('form-data');
 
-
 const superUserAuth = {
     username: process.env.VUE_APP_SUPERUSER_NAME,
     password: process.env.VUE_APP_SUPERUSER_PASSWORD,
@@ -19,10 +18,9 @@ const toParams = ({ id, username, is_active }) => {
     };
 
     return params;
-}
-    
-export default class UserWrapper {
+};
 
+export default class UserWrapper {
     constructor() {}
 
     /* GET current user */
