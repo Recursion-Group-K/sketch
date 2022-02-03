@@ -14,6 +14,7 @@ const endpoints = {
     },
     drawings: {
         list: () => `${root}/api/drawings/`,
+        listFilter: (column, data) => `${root}/api/drawings/?${column}=${data}`,
         create: () => `${root}/api/drawings/`,
         retrieve: (id) => `${root}/api/drawings/${id}/`,
         update: (id) => `${root}/api/drawings/${id}/`,
