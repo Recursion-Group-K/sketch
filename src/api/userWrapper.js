@@ -13,8 +13,7 @@ const superUserAuth = {
 
 const { current, retrieve, create } = endpoints.users;
 
-const toParams = (data) => {
-        const { id, username, is_active } = data;
+const toParams = ({ id, username, is_active }) => {
         const params = {
             id: id,
             name: username,

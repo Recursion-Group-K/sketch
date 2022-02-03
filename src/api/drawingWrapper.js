@@ -2,20 +2,18 @@ import Drawing from '../models/drawing';
 
 const axios = require('axios');
 
-function toParams(drawingData) {
-    // object
-    const {
-        id: drawingId,
-        title,
-        imgUrl,
-        isPublic,
-        data,
-        createdAt,
-        updatedAt,
-        userId,
-    } = drawingData;
+function toParams ({
+    id,
+    title,
+    imgUrl,
+    isPublic,
+    data,
+    createdAt,
+    updatedAt,
+    userId,
+}){
     const params = {
-        id: drawingId,
+        id: id,
         title: title,
         imgUrl: imgUrl,
         isPublic: isPublic,
