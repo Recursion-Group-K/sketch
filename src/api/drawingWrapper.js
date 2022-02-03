@@ -51,9 +51,7 @@ export default class DrawingWapper {
      */
     async getById(id) {
         try {
-            const response = await client.get(retrieve(id), {
-                auth: superUserAuth,
-            });
+            const response = await client.get(retrieve(id));
             const params = ParamsConverter.toClientParams(response.data);
             return new Drawing(params);
         } catch (error) {
@@ -111,9 +109,7 @@ export default class DrawingWapper {
         const requestParams = ParamsConverter.toRequestParams(params);
         try {
             const response = await client.get(create(requestParams));
-            return new Drawing(ParamsConverter.toClientParams(response.data), {
-                auth: superUserAuth,
-            });
+            return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
             console.error(error);
         }
