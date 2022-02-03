@@ -9,6 +9,14 @@ export const SET_TOKEN = 'SET_TOKEN';
 export const REMOVE_TOKEN = 'REMOVE_TOKEN';
 
 /**
+ * Sign Up
+ */
+export const SIGNUP_BEGIN = 'SIGNUP_BEGIN';
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
+export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
+export const SET_TOKEN2 = 'SET_TOKEN';
+
+/**
  * Drawging
  */
 export const CHNAGE_MODE = 'CHNAGE_MODE';
