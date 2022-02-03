@@ -13,7 +13,7 @@ const superUserAuth = {
 
 const { current, retrieve, create } = endpoints.users;
 
-const getParams = (data) => {
+const toParams = (data) => {
         const { id, username, is_active } = data;
         const params = {
             id: id,
@@ -25,9 +25,8 @@ const getParams = (data) => {
 }
     
 export default class UserWrapper {
-    constructor() {}
 
-    
+    constructor() {}
 
     /* GET current user */
     async getCurrent(access_token) {
@@ -38,7 +37,7 @@ export default class UserWrapper {
                 },
             });
 
-            return new User(this.getParams(response.data));
+            return new User(toParams(response.data));
         } catch (error) {
             new Error(error);
         }
@@ -54,7 +53,7 @@ export default class UserWrapper {
                     auth: superUserAuth,
                 }
             );
-            const params = this.getParams(response.data);
+            const params = toParams(response.data);
             console.log(params);
             return new User(params);
         } catch (error) {
@@ -83,7 +82,7 @@ export default class UserWrapper {
                 },
                 auth: superUserAuth,
             });
-            return new User(this.getParams(response.data));
+            return new User(toParams(response.data));
         } catch (error) {
             new Error(error);
         }
