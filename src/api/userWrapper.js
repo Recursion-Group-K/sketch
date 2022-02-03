@@ -14,13 +14,13 @@ const superUserAuth = {
 const { current, retrieve, create } = endpoints.users;
 
 const toParams = ({ id, username, is_active }) => {
-        const params = {
-            id: id,
-            name: username,
-            isActive: is_active,
-        };
+    const params = {
+        id: id,
+        name: username,
+        isActive: is_active,
+    };
 
-        return params;
+    return params;
 }
     
 export default class UserWrapper {
