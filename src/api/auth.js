@@ -1,10 +1,11 @@
 import axios from 'axios';
+import endpoints from './endpoints';
 
 class Auth {
     constructor() {}
 
     login(username, password) {
-        return axios.post('https://sketch-skgl-server-staging.herokuapp.com/api/token-auth/', {
+        return axios.post( endpoints.auth.token(), {
             username,
             password,
         });
