@@ -13,10 +13,7 @@ const superUserAuth = {
 
 const { current, retrieve, create } = endpoints.users;
 
-export default class UserWrapper {
-    constructor() {}
-
-    getParams(data) {
+const getParams = (data) => {
         const { id, username, is_active } = data;
         const params = {
             id: id,
@@ -25,7 +22,12 @@ export default class UserWrapper {
         };
 
         return params;
-    }
+}
+    
+export default class UserWrapper {
+    constructor() {}
+
+    
 
     /* GET current user */
     async getCurrent(access_token) {
