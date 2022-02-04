@@ -104,6 +104,9 @@ export default {
     },
     computed: {
         ...mapState('drawing', [
+            'currentDrawing',
+        ]),
+        ...mapState('drawing/drawingEditter', [
             'color',
             'weight',
             'undoTrigger',
@@ -112,7 +115,6 @@ export default {
             'loadTrigger',
             'stopPointerTrigger',
             'pointerSpeed',
-            'currentDrawing',
         ]),
     },
     watch: {

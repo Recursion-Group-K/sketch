@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
 import DrawingBox from '../components/DrawingBox.vue';
 import DrawingForm from '../components/NewDrawingButton.vue';
 
@@ -39,18 +38,15 @@ export default {
         DrawingForm,
     },
     name: 'Gallery',
+    
     data() {
-        return {};
-    },
-    computed:{
-        ...mapState('drawing',['allDrawings']),
+        return {
+            drawings:[]
+        };
     },
     mounted() {
-        this.getAllDrawings();
+        this.drawings = this.getAllDrawings();
     },
-    methods:{
-        ...mapActions('drawing',['getAllDrawings']),
-    }
 };
 </script>
 
