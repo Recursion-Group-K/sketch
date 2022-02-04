@@ -1,4 +1,9 @@
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.prompt-signup {
+    margin-top: 1em;
+    font-weight: bold;
+}
+</style>
 
 <template>
     <div id="canvas" :style="{ height: '100%', width: '100%' }">
@@ -26,11 +31,14 @@
                 ></v-circle>
             </v-layer>
         </v-stage>
+        <div v-if="!isAuthenticated">
+            <p class="prompt-signup">Please SignUp to use our drawing tools.</p>
+        </div>
     </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 const velocityOfPointer = 2;
 
 export default {
@@ -83,6 +91,11 @@ export default {
 
         window.addEventListener('resize', this.fitCanvas);
         this.load();
+
+        /**
+         * Disable key event for unauthorized user
+         */
+        this.disableKeyEvents();
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
@@ -101,6 +114,7 @@ export default {
             'stopPointerTrigger',
             'pointerSpeed',
         ]),
+        ...mapGetters('auth', ['isAuthenticated']),
     },
     watch: {
         weight() {
@@ -121,6 +135,13 @@ export default {
     },
     methods: {
         ...mapActions('drawing', ['setPointerSpeed']),
+        disableKeyEvents() {
+            if(!this.isAuthenticated) {
+                document.removeEventListener('keydown', this.keyDown);
+                document.removeEventListener('keyup', this.keyUp);
+            }
+            return;
+        },
         stopPointer() {
             Object.keys(this.pointerSpeed).forEach((direction) => {
                 this.setPointerSpeed({ direction: direction, value: false });

@@ -64,6 +64,11 @@ $width__sidebar: 20em;
     border: none;
     border-radius: 50%;
 }
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
 </style>
 
 <template>
@@ -113,7 +118,7 @@ $width__sidebar: 20em;
                 </ul>
                 <p class="menu-label">Share Options</p>
                 <ul class="menu-list">
-                    <li @click="twitterShare">
+                    <li @click="twitterShare" :class="{ 'disabled': !isAuthenticated }">
                         <a>
                             <font-awesome-icon
                                 :icon="['fab', 'twitter']"
@@ -123,7 +128,7 @@ $width__sidebar: 20em;
                             Twitter
                         </a>
                     </li>
-                    <li @click="toggleIsPublic">
+                    <li @click="toggleIsPublic" :class="{ 'disabled': !isAuthenticated }">
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
@@ -137,7 +142,7 @@ $width__sidebar: 20em;
                 </ul>
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
-                    <li>
+                    <li :class="{ 'disabled': !isAuthenticated }">
                         <a @click="save">
                             <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
@@ -166,7 +171,7 @@ $width__sidebar: 20em;
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapGetters, mapActions } from 'vuex';
 import SaveModal from './SaveModal.vue';
 export default {
     name: 'DrawingTools',
@@ -184,7 +189,10 @@ export default {
             selectedWeight: 0,
         };
     },
-    computed: mapState('drawing', ['color', 'weight', 'isPublic']),
+    computed: {
+        ...mapState('drawing', ['color', 'weight', 'isPublic']),
+        ...mapGetters('auth', ['isAuthenticated']),
+    },
     mounted: function () {
         this.selectedColor = this.color;
         this.selectedWeight = this.weight;
