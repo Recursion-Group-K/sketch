@@ -21,7 +21,7 @@ export default {
         error: false,
         token: null,
         isLoading: false,
-        errorMessage: []
+        errorMessage: [],
     },
     getters: {
         isAuthenticated: (state) => !!state.token,
@@ -48,12 +48,13 @@ export default {
         },
         login({ commit }, { username, password }) {
             commit(LOGIN_BEGIN);
-            return new Auth().login(username, password)
-                .then(response => {
+            return new Auth()
+                .login(username, password)
+                .then((response) => {
                     commit(SET_TOKEN, response.data);
                     commit(LOGIN_SUCCESS);
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.log(error.response);
                     commit(LOGIN_FAILURE, error.response.data);
                 });

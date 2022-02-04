@@ -55,10 +55,7 @@
                                 <span v-if="isLoading" class="loader"></span>
                             </div>
                             <!-- Error Message -->
-                            <div
-                                v-if="hasRespError"
-                                class="has-text-danger is-size-4 p-3"
-                            >
+                            <div v-if="hasRespError" class="has-text-danger is-size-4 p-3">
                                 <p class="error-title">Error occured. Try Again.</p>
                             </div>
                             <hr />
@@ -138,12 +135,7 @@ export default {
         };
     },
     computed: {
-        ...mapState('signup', [
-            'isLoading',
-            'hasRespError',
-            'usernameError',
-            'emailError',
-        ]),
+        ...mapState('signup', ['isLoading', 'hasRespError', 'usernameError', 'emailError']),
         ...mapGetters('auth', ['isAuthenticated']),
     },
     methods: {
