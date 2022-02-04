@@ -67,7 +67,7 @@ export default class UserWrapper {
             });
             return new User(toParams(response.data));
         } catch (error) {
-            new Error(error);
+            return error.response;
         }
     }
 }

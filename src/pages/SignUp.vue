@@ -12,8 +12,19 @@
 .logo {
     height: 200px;
 }
-.vertical-align {
-    margin-bottom: auto;
+.vertical-alignment {
+    vertical-align: bottom;
+}
+.error-title {
+    font-weight: bold;
+    color: red;
+}
+.error-message {
+    color: crimson;
+    font-size: 0.8em;
+}
+.btn {
+    margin: 0.8rem 0;
 }
 </style>
 
@@ -22,21 +33,49 @@
         <div class="hero-body">
             <div class="container">
                 <div class="columns is-vcentered">
-                    <div class="column is-6 vertical-align">
+                    <div class="column is-6 vertical-alignment">
                         <img src="../assets/images/logo.svg" class="logo" />
                         <h1 class="page-title title is-1">Welcome to Etch A Sketch</h1>
                         <p class="subtitle">Unlock your imagination</p>
                     </div>
                     <div class="column is-5-tablet is-4-desktop is-4-widescreen">
-                        <form action="" class="box">
+                        <form @submit.prevent="createAccount(inputs)" class="box">
                             <div class="title">
                                 <h1 class="has-text-black has-text-weight-bold">Sign Up</h1>
                             </div>
+                            <div v-if="isLoading">
+                                loading...
+                            </div>
+                            <!-- Error Message -->
+                            <div
+                                v-if="isisAuthenticatedFailed || hasRespError"
+                                class="has-text-danger is-size-4 p-3"
+                            >
+                                Error occured. Try Again.
+                            </div>
                             <hr />
+                            <div class="field">
+                                <label for="" class="label">Name</label>
+                                <div class="control has-icons-left">
+                                    <input
+                                        v-model="inputs.username"
+                                        type="text"
+                                        class="input"
+                                        required
+                                    />
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
+                                </div>
+                                <div v-for="error in usernameError" :key=error.id>
+                                    <p class="error-message">{{ error }}</p>
+                                </div>
+                            </div>
                             <div class="field">
                                 <label for="" class="label">Email</label>
                                 <div class="control has-icons-left">
                                     <input
+                                        v-model="inputs.email"
                                         type="email"
                                         placeholder="e.g. recursionist@gmail.com"
                                         class="input"
@@ -46,11 +85,15 @@
                                         <i class="fa fa-envelope"></i>
                                     </span>
                                 </div>
+                                <div v-for="error in emailError" :key=error.id>
+                                    <p class="error-message">{{ error }}</p>
+                                </div>
                             </div>
                             <div class="field">
                                 <label for="" class="label">Password</label>
                                 <div class="control has-icons-left">
                                     <input
+                                        v-model="inputs.password"
                                         type="password"
                                         placeholder="*******"
                                         class="input"
@@ -62,17 +105,7 @@
                                 </div>
                             </div>
                             <div class="field">
-                                <button class="button is-success">Sign Up</button>
-                            </div>
-                            <hr />
-                            <div class="field">
-                                <!-- router-linkは/loginに後で変更する -->
-                                <p>
-                                    Already have an account?
-                                    <router-link to="/login"
-                                        ><span class="link">Login</span></router-link
-                                    >
-                                </p>
+                                <button class="button is-success btn">Create account</button>
                             </div>
                         </form>
                     </div>
@@ -82,13 +115,42 @@
     </section>
 </template>
 
-<style scoped lang="scss"></style>
-
 <script>
+import { mapState, mapGetters } from 'vuex'
+
 export default {
     name: 'SignUp',
     data() {
-        return {};
+        return {
+            inputs: {
+                username: '',
+                email: '',
+                password: '',
+            },
+        };
     },
+    computed: {
+        ...mapState('signup', [
+            'isLoading',
+            'hasRespError',
+            'usernameError',
+            'emailError',
+        ]),
+        ...mapGetters('auth', ['isAuthenticated', 'isisAuthenticatedFailed']),
+    },
+    methods: {
+        async createAccount({ username, email, password }) {
+            try {
+                console.log(username, email, password)
+                await this.$store.dispatch('signup/createAccount', { username, email, password });
+                await this.$store.dispatch('auth/login', { username, password });
+                if(!this.hasRespError && this.isAuthenticated) {
+                    this.$router.push({ name: 'Gallery' });
+                }
+            } catch(error) {
+                console.log(error);
+            }
+        }
+    }
 };
 </script>
