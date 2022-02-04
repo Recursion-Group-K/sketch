@@ -58,23 +58,20 @@ export default {
         const currentRes = new UserWrapper().getCurrent();
         console.log(currentRes);
 
-        /*
         //test destroy
-        const drawingWrapper2 = new DrawingWapper();
-        console.log("dest");
-        drawingWrapper2.destroy(1);
-        */
-        this.allDrawings = await drawingWrapper.getAll();
+        // memo deleteはバックエンドで未実装なので一旦このままでお願いします！
+        // const  destroyRes = new DrawingWapper().destroy(6);
+        // console.log(destroyRes)
 
         //test create
-        let params = {
-            title: 'test',
-            data: '{}',
-            isPublic: true,
-            userId: 8,
-        };
-        const createRes = new DrawingWapper().create(params);
-        console.log(createRes);
+        // let params = {
+        //     title: 'test',
+        //     data: '{}',
+        //     isPublic: true,
+        //     userId: 8,
+        // };
+        // const createRes = new DrawingWapper().create(params);
+        // console.log(createRes);
     },
 };
 </script>

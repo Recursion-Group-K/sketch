@@ -130,10 +130,10 @@ export default class DrawingWapper {
 
     async destroy(id) {
         try {
-            const response = await client.get(destroy(id));
+            const response = await client.delete(destroy(id));
             return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
-            console.error(error);
+            console.error(error.response);
         }
     }
 }
