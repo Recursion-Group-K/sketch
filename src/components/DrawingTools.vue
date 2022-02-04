@@ -161,13 +161,18 @@ $width__sidebar: 20em;
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="redo" size="lg" />
             </button>
         </div>
+        <SaveModal />
     </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import SaveModal from './SaveModal.vue';
 export default {
     name: 'DrawingTools',
+    components: {
+        SaveModal,
+    },
     data() {
         return {
             isSidebarOpen: false,
