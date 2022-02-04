@@ -1,9 +1,7 @@
+import DrawingWapper from '../api/drawingWrapper';
 import drawingEditter from './drawingEditter';
 import {
     SET_DRAWING,
-    SET_DRAWING_DATA,
-    SET_DRAWINGIMG_URL,
-    SET_UPDATE_DATA,
     DRAWING_SAVE_BEGIN,
     DRAWING_SAVE_SUCCESS,
     DRAWING_SAVE_FAILURE,
@@ -21,38 +19,37 @@ export default {
         isLoading: false,
     },
     actions: {
-        async getAllDrawings(/* { commit, state } */) {
-            //デバッグのため更新をあえて防止している。撤去予定
-            // if (state.allDrawings.length != 0) return;
-            // const all = await drawingWrapper.getAll();
-            // commit(GET_ALL_DRAWINGS, all);
-            // console.log(state.allDrawings);
+        //async getAllDrawings(/* { commit, state } */) {
+        //デバッグのため更新をあえて防止している。撤去予定
+        // if (state.allDrawings.length != 0) return;
+        // const all = await drawingWrapper.getAll();
+        // commit(GET_ALL_DRAWINGS, all);
+        // console.log(state.allDrawings);
+        //},
+        async redirectToDrawingPage({ commit, state, dispatch }, { id }) {
+            console.log('id=' + id);
+            const newDrawing = await new DrawingWapper().getById(id);
+            await commit(SET_DRAWING, newDrawing);
+            console.log(state.drawing);
+            dispatch('drawingEditter/load');
         },
-        async redirectToDrawingPage(/* { commit, state }, { id } */) {
-            // console.log("id="+state.currentDrawingID)
-            // await commit(SET_DRAWING_ID,id);
-            // const curDrawing = state.allDrawings[state.currentDrawingID-1];
-            // await commit(SET_DRAWING,curDrawing);
-            // commit(SET_LOAD_TRIGGER);
+        saveDB({ state, commit }, { itemList, dataURL }) {
+            console.log(itemList);
+            const data = JSON.stringify(itemList);
+            console.log(data);
+            const updateProps = {
+                data: data,
+                img: dataURL,
+                updatedAt: new Date(),
+            };
+            console.log(state.drawing);
+            const updateDrawing = new DrawingWapper().update(state.drawing.id, updateProps);
+            console.log(updateDrawing);
+            commit(SET_DRAWING, updateDrawing);
         },
-        saveDB(/* { state, commit }, { itemList, dataURL } */) {
-            // console.log(itemList);
-            // let data = JSON.stringify(itemList);
-            // console.log(data);
-            // console.log(state.allDrawings[state.currentDrawingID-1]);
-            // //databaseへ送出するように書替予定
-            //     //dataを更新
-            //     commit(SET_DRAWING_DATA, data);
-            //     //imgを更新
-            //     commit(SET_DRAWINGIMG_URL, dataURL);
-            //     //updatedAtを更新
-            //     commit(SET_UPDATE_DATA);
-            // console.log(state.allDrawings[state.currentDrawingID-1]);
-        },
-
-        save({ commit }) {
+        save({ commit, dispatch }) {
             commit(DRAWING_SAVE_BEGIN);
-
+            dispatch('drawingEditter/save');
             // axios の代わり
             // 成功した時
             setTimeout(() => {
@@ -80,17 +77,8 @@ export default {
             state.isLoading = false;
             state.hasError = true;
         },
-        [SET_DRAWING](state, drawing) {
-            state.currentDrawing = drawing;
-        },
-        [SET_DRAWING_DATA](state, data) {
-            state.allDrawings.data = data;
-        },
-        [SET_DRAWINGIMG_URL](state, dataURL) {
-            state.allDrawings.imgUrl = dataURL;
-        },
-        [SET_UPDATE_DATA](state) {
-            state.drawing.updatedAt = new Date();
+        [SET_DRAWING](state, newDrawing) {
+            state.drawing = newDrawing;
         },
         [TOGGLE_IS_PUBLIC](state) {
             state.drawing.isPublic = !state.drawing.isPublic;

@@ -207,9 +207,9 @@ export default {
         getLastPoint() {
             return this.itemList[this.itemList.length - 1].lastPoint;
         },
-        getPointerClone(){
-            const {x, y} = this.pointer
-            return { x , y }
+        getPointerClone() {
+            const { x, y } = this.pointer;
+            return { x, y };
         },
         /**
          * Setters
@@ -271,7 +271,7 @@ export default {
 
             this.checkOverLimit(this.pointer);
 
-            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint. y == this.pointer.y
+            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
             if (isSamePoint) return;
             if (this.newLineFlag) {
                 this.pushNewLine(lastPoint);
@@ -322,12 +322,14 @@ export default {
             this.resetStack();
             this.setNewLine();
             this.setIsAllSaved(true);
+            console.log('loaded');
         },
         save() {
             this.setNewLine();
             let stage = document.getElementById('canvas');
             let canvas = stage.querySelector('canvas');
             let dataURL = canvas.toDataURL();
+            console.log('saving');
             this.saveDB({
                 itemList: this.itemList,
                 dataURL: dataURL,
@@ -337,12 +339,13 @@ export default {
             this.downloadURI(dataURL, 'drawing.png');
         },
         loadDB() {
-            const data = JSON.stringify(this.currentDrawing.data);
+            const data = JSON.stringify(this.drawing.data);
+            console.log(data);
             if (data == '{}') {
                 this.setItemList(JSON.parse('[]'));
                 return;
             }
-            this.setItemList(JSON.parse(JSON.parse(data)));
+            this.setItemList(JSON.parse(data));
         },
         downloadURI(uri, name) {
             const link = document.createElement('a');

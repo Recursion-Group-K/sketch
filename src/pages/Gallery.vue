@@ -29,7 +29,9 @@
                                 </div>
                             </div>
                             <div v-if="!drawings.length">
-                                <h1 class="no-image-message">There are no images available for viewing.</h1>
+                                <h1 class="no-image-message">
+                                    There are no images available for viewing.
+                                </h1>
                             </div>
                             <div
                                 v-else
@@ -98,5 +100,3 @@ export default {
     },
 };
 </script>
-
-
