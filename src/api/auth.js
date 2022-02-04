@@ -16,14 +16,6 @@ class Auth {
             refresh: refreshToken,
         });
     }
-
-    createAccount(username, email, password) {
-        return client.post(endpoints.users.create(), {
-            username,
-            email,
-            password
-        });
-    }
 }
 
 export default Auth;
