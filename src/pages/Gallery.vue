@@ -17,7 +17,7 @@
     <section id="Gallery" class="hero is-primary is-fullheight">
         <div class="hero-body">
             <div class="container is-fluid">
-                <div class="columns is-vcentered is-justify-content-center">
+                <div class="columns is-vcentered is-justify-content-center mt-4">
                     <div class="box column is-four-fifths p-6 mt-6" style="height: 85vh">
                         <div class="columns is-flex-wrap-wrap">
                             <div class="column is-one-third">
