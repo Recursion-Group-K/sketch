@@ -52,6 +52,7 @@ import DrawingWapper from '../api/drawingWrapper';
 import UserWrapper from '../api/userWrapper';
 import DrawingBox from '../components/DrawingBox.vue';
 import DrawingForm from '../components/NewDrawingButton.vue';
+import { mapGetters } from 'vuex';
 
 export default {
     components: {
@@ -64,18 +65,24 @@ export default {
             allDrawings: [],
         };
     },
+    computed: {
+        ...mapGetters('auth', ['isAuthenticated']),
+    },
     async mounted() {
         //test list
-        this.allDrawings = await new DrawingWapper().getAll();
-        console.log(this.allDrawings);
-
+        if(this.isAuthenticated){
+            const current_user = await new UserWrapper().getCurrent();
+            this.allDrawings = await new DrawingWapper().getBy('user', current_user.id);
+        }
+        else this.allDrawings = await new DrawingWapper().getBy('is_public', 'true');
+        
         //test retrieve
-        const id2Drawing = await new DrawingWapper().getById(2);
-        console.log(id2Drawing);
+        // const id2Drawing = await new DrawingWapper().getById(2);
+        // console.log(id2Drawing);
 
-        //test userwrapper getcurrent
-        const currentRes = new UserWrapper().getCurrent();
-        console.log(currentRes);
+        // //test userwrapper getcurrent
+        // const currentRes = new UserWrapper().getCurrent();
+        // console.log(currentRes);
 
         //test destroy
         // const  destroyRes = new DrawingWapper().destroy(8);
