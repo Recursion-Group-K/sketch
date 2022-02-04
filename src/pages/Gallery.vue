@@ -70,30 +70,15 @@ export default {
         */
         this.allDrawings = await drawingWrapper.getAll();
 
-        /*
         //test create
-        let params = 
-        {
-            id: 5, 
-            title: 'test', 
-            image: 'https://res.cloudinary.com/hefkgasfk/image/upload/v1/media/path/to/my/default/image.jpg', 
-            data: {}, 
-            is_public: true, 
-            createdAt: '2022-02-02T16:30:01.008788+09:00',
-            updatedAt: '2022-02-02T16:30:01.008788+09:00',
-            user: {
-                id: 1, 
-                username: 'admin', 
-                email: 'leandro83g.development@gmail.com', 
-                is_active: true, 
-                is_superuser: true, 
-                password: 'pbkdf2_sha256$320000$M3dSgi9YpknPGar2aLP53e$FDdrZcpzOYfIyeJzQ9gXMP4pFkVGokOdB6EqbmVrPnc=',
-            }
-        }
-        drawingWrapper.create(params);
-        */
-        //this.allDrawings = await drawingWrapper.getAll();
-
+        let params = {
+            title: 'test',
+            data: '{}',
+            isPublic: true,
+            userId: 8,
+        };
+        const createRes = new DrawingWapper().create(params);
+        console.log(createRes);
     },
 };
 </script>

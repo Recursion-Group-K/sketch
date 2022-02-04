@@ -5,7 +5,7 @@ import endpoints from '../api/endpoints';
 const { list, listFilter, retrieve, create, update, destroy } = endpoints.drawings;
 
 class ParamsConverter {
-    static toClientParams({ id, title, image, is_public, data, created_at, updated_at, user }) {
+    static toClientParams({ id, title, image, is_public, data, created_at, updated_at, user_id }) {
         const params = {
             id: id,
             title: title,
@@ -14,14 +14,13 @@ class ParamsConverter {
             data: data,
             createdAt: new Date(created_at),
             updatedAt: new Date(updated_at),
-            userId: user.id,
+            userId: user_id,
         };
 
         return params;
     }
 
-    static toRequestParams({ id, title, image, isPublic, data, createdAt, updatedAt, user }) {
-        //console.log({ id, title, image, isPublic, data, createdAt, updatedAt, user })
+    static toRequestParams({ id, title, image, isPublic, data, createdAt, updatedAt, userId }) {
         const params = {
             id: id,
             title: title,
@@ -30,9 +29,18 @@ class ParamsConverter {
             data: data,
             created_at: createdAt,
             updated_at: updatedAt,
-            user_id: user.id,
+            user_id: userId,
         };
         return params;
+    }
+    static toFormDataParams ({ title, image, isPublic, data, userId }) {
+        const formData = new FormData()
+        if(image)formData.append('image', image)
+        if(title)formData.append('title', title)
+        if(isPublic)formData.append('is_public', isPublic)
+        if(data)formData.append('data', data)
+        if(userId)formData.append('user_id', userId)
+        return formData;
     }
 }
 
@@ -101,15 +109,12 @@ export default class DrawingWapper {
      * @returns {Drawing}
      */
     async create(params) {
-        const requestParams = ParamsConverter.toRequestParams(params);
+        const requestParams = ParamsConverter.toFormDataParams(params);
         try {
-            console.log("start create");
-            const response = await client.get(create(requestParams));
-            console.log("end create");
-            console.log(response)
+            const response = await client.post(create(), requestParams);
             return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
-            console.error(error);
+            console.error(error.response);
         }
     }
 
