@@ -1,7 +1,7 @@
 import drawingEditter from './drawingEditter';
 import {
     SET_DRAWING,
-    SET_DRAWING_DATA,
+    SET_DRAWING_DATE,
     SET_DRAWINGIMG_URL,
     SET_UPDATE_DATA,
     DRAWING_SAVE_BEGIN,
@@ -81,16 +81,7 @@ export default {
             state.hasError = true;
         },
         [SET_DRAWING](state, drawing) {
-            state.currentDrawing = drawing;
-        },
-        [SET_DRAWING_DATA](state, data) {
-            state.allDrawings.data = data;
-        },
-        [SET_DRAWINGIMG_URL](state, dataURL) {
-            state.allDrawings.imgUrl = dataURL;
-        },
-        [SET_UPDATE_DATA](state) {
-            state.drawing.updatedAt = new Date();
+            state.drawing = drawing;
         },
         [TOGGLE_IS_PUBLIC](state) {
             state.drawing.isPublic = !state.drawing.isPublic;

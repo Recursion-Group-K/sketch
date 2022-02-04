@@ -9,10 +9,29 @@ import {
     SET_SAVE_TRIGGER,
     SET_LOAD_TRIGGER,
     SET_STOP_POINTER_TRIGGER,
+    SET_NEW_LINE_FLAG,
+    SET_IS_UNDOED,
+    SET_POINTER,
+    SET_IS_ALL_SAVED,
+    SET_IS_ITEM_LIST,
+    SET_ITEM_STACK,
+    SET_LAST_POINT,
 } from './types';
+
 export default {
     namespaced: true,
     state: {
+        //>>>>>>>>>>>>>>>>>>>
+        itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
+        itemStack: [],
+        isUndoed: false,
+        isAllSaved: false,
+        pointer: {
+            x: 0,
+            y: 0,
+        },
+        newLineFlag: true,
+        //<<<<<<<<<<<<<<<<<<<<
         mode: Config.mode.EtchASketch, //
         color: '#000000',
         weight: 3,
@@ -28,8 +47,39 @@ export default {
         loadTrigger: false,
         stopPointerTrigger: false,
     },
-    getters: {},
+    getters: {
+        getLastPoint ({ state }) {
+            const l = state.itemList.length - 1
+            return state.itemList[l].lastPoint;
+        },
+        getPointerClone({state}){
+            const {x, y} = state.pointer
+            return { x , y }
+        },
+    },
     actions: {
+        //>>>>>>>>>>>>>>>>>>>
+        /**
+         * Pointer
+         */
+        stopPointer({state, dispatch}) {
+            Object.keys(state.pointerSpeed).forEach((direction) => {
+                dispatch('setPointerSpeed', {
+                    direction: direction,
+                    value: false
+                });
+            });
+            dispatch('setNewLine');
+        },
+        movePointer(event) {
+            dispatch('setNewLine');
+            let stage = event.target.getStage();
+            let clickPos = stage.getPointerPosition();
+            this.checkOverLimit(clickPos);
+            this.pointer.x = clickPos.x;
+            this.pointer.y = clickPos.y;
+        },
+        //<<<<<<<<<<<<<<<<<<<<
         changeMode({ commit }, { mode }) {
             if (!Config.mode[mode]) return false;
             commit(SET_MODE, mode);
@@ -56,6 +106,31 @@ export default {
         },
     },
     mutations: {
+        //>>>>>>>>>>>>>>>>>>>
+        [SET_NEW_LINE_FLAG](state, bool){
+            state.newLineFlag = bool
+        },
+        [SET_IS_UNDOED](state, bool){
+            state.isUndoed = bool
+        },
+        [SET_IS_ALL_SAVED](state, bool){
+            state.isAllSaved = bool
+        },
+        [SET_POINTER](state, {x, y}){
+            state.pointer.x = x;
+            state.pointer.y = y;
+        },
+        [SET_IS_ITEM_LIST](state, itemList){
+            state.itemList = itemList
+        },
+        [SET_ITEM_STACK](state, itemStack){
+            state.itemStack = itemStack
+        },
+        [ SET_LAST_POINT ] (state, { x, y }) {
+            const l = state.itemList.length - 1
+            state.itemList[l].lastPoint = { x, y };
+        },
+        //<<<<<<<<<<<<<<<<<<<<
         [SET_MODE](state, mode) {
             state.mode = mode;
         },

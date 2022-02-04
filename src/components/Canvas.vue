@@ -46,19 +46,10 @@ export default {
     name: 'Drawing',
     data() {
         return {
-            itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
-            itemStack: [],
-            isUndoed: false,
-            isAllSaved: false,
             configKonva: {
                 width: 100,
                 height: 100,
             },
-            pointer: {
-                x: 0,
-                y: 0,
-            },
-            newLineFlag: true,
             limit: {
                 up: 0,
                 down: 0,
@@ -152,23 +143,7 @@ export default {
             this.checkOverLimit(this.pointer);
         },
 
-        /**
-         * Pointer
-         */
-        stopPointer() {
-            Object.keys(this.pointerSpeed).forEach((direction) => {
-                this.setPointerSpeed({ direction: direction, value: false });
-            });
-            this.setNewLine();
-        },
-        movePointer(event) {
-            this.setNewLine();
-            let stage = event.target.getStage();
-            let clickPos = stage.getPointerPosition();
-            this.checkOverLimit(clickPos);
-            this.pointer.x = clickPos.x;
-            this.pointer.y = clickPos.y;
-        },
+        
 
         /**
          * KeyDown
@@ -204,38 +179,10 @@ export default {
         /**
          * Getters
          */
-        getLastPoint() {
-            return this.itemList[this.itemList.length - 1].lastPoint;
-        },
-        getPointerClone(){
-            const {x, y} = this.pointer
-            return { x , y }
-        },
+        
         /**
          * Setters
          */
-        setNewLineFlag(bool) {
-            this.newLineFlag = bool;
-        },
-        setIsUndoed(bool) {
-            this.isUndoed = bool;
-        },
-        setPointer({ x, y }) {
-            this.pointer.x = x;
-            this.pointer.y = y;
-        },
-        setIsAllSaved(bool) {
-            this.isAllSaved = bool;
-        },
-        setItemList(itemList) {
-            this.itemList = itemList;
-        },
-        setItemStack(itemStack) {
-            this.itemStack = itemStack;
-        },
-        setLastPoint({ x, y }) {
-            this.itemList[this.itemList.length - 1].lastPoint = { x, y };
-        },
         pushNewLine({ x, y }) {
             if (this.isUndoed) this.resetStack();
             this.itemList.push({
@@ -257,7 +204,6 @@ export default {
 
             if (this.itemList.length == 0) return;
             this.setLastPoint(this.pointer);
-            this.setNewLineFlag(true);
         },
         /**
          * Draw
