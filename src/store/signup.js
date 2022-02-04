@@ -1,9 +1,11 @@
 import UserWrapper from '../api/userWrapper';
+import User from '../models/user'
 
 import {
     SIGNUP_BEGIN,
     SIGNUP_FAILURE,
     SIGNUP_SUCCESS,
+    SIGNUP_BAD_REQUEST
 }
 from './types'
 
@@ -12,7 +14,9 @@ export default {
     namespaced: true,
     state: {
         isLoading: false,
-        hasError: false,
+        hasRespError : false,
+        usernameError: [],
+        emailError: [],
     },
     actions: {
         async createAccount({ commit }, { username, email, password }) {
@@ -23,10 +27,12 @@ export default {
                 password: password,
             };
             try {
-                await new UserWrapper().create(userParams);
-                commit(SIGNUP_SUCCESS);
+                const response = await new UserWrapper().create(userParams);
+                console.log(response);
+
+                if(response instanceof User) commit(SIGNUP_SUCCESS);
+                else commit(SIGNUP_BAD_REQUEST, response.data);
             } catch (error) {
-                console.error(error);
                 commit(SIGNUP_FAILURE);
             }
         },
@@ -37,11 +43,26 @@ export default {
         },
         [SIGNUP_SUCCESS](state) {
             state.isLoading = false;
-            state.hasError = false;
+            state.hasRespError = false;
+            state.usernameError = [];
+            state.emailError = [];
         },
         [SIGNUP_FAILURE](state) {
             state.isLoading = false;
-            state.hasError = true;
+            state.hasRespError = true;
         },
+        [SIGNUP_BAD_REQUEST](state, payload) {
+            state.isLoading = false;
+            state.hasRespError = true;
+            let emailString = payload.email.toString();
+            let usernameString = payload.username.toString();
+
+            if(!state.usernameError.includes(usernameString)) {
+                state.usernameError.push(usernameString)
+            }
+            if(!state.emailError.includes(emailString)) {
+                state.emailError.push(emailString)
+            }
+        }
     },
 };
