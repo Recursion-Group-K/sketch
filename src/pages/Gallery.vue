@@ -60,9 +60,8 @@ export default {
         console.log(id2Drawing);
 
         //test userwrapper getcurrent
-        const userWrapper = new UserWrapper();
-        console.log(this.token.access);
-        console.log(userWrapper.getCurrent(this.token.access))
+        const currentRes = new UserWrapper().getCurrent();
+        console.log(currentRes);
 
         /*
         //test destroy

@@ -24,14 +24,9 @@ export default class UserWrapper {
     constructor() {}
 
     /* GET current user */
-    async getCurrent(access_token) {
+    async getCurrent() {
         try {
-            const response = await client.get(current(), {
-                headers: {
-                    Authorization: `Bearer ${access_token}`,
-                },
-            });
-
+            const response = await client.get(current());
             return new User(toParams(response.data));
         } catch (error) {
             new Error(error);
