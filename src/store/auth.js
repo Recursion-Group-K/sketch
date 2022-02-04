@@ -20,6 +20,8 @@ export default {
         authenticating: false,
         error: false,
         token: null,
+        isLoading: false,
+        errorMessage: []
     },
     getters: {
         isAuthenticated: (state) => !!state.token,
@@ -44,16 +46,17 @@ export default {
                 commit(LOGIN_FAILURE);
             }
         },
-        async login({ commit }, { username, password }) {
+        login({ commit }, { username, password }) {
             commit(LOGIN_BEGIN);
-            try {
-                const response = await new Auth().login(username, password);
-                commit(SET_TOKEN, response.data);
-                commit(LOGIN_SUCCESS);
-            } catch (error) {
-                console.error(error);
-                commit(LOGIN_FAILURE);
-            }
+            return new Auth().login(username, password)
+                .then(response => {
+                    commit(SET_TOKEN, response.data);
+                    commit(LOGIN_SUCCESS);
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    commit(LOGIN_FAILURE, error.response.data);
+                });
         },
         logout({ commit }) {
             commit(LOGOUT);
@@ -64,18 +67,23 @@ export default {
         [LOGIN_BEGIN](state) {
             state.authenticating = true;
             state.error = false;
+            state.isLoading = true;
         },
-        [LOGIN_FAILURE](state) {
+        [LOGIN_FAILURE](state, payload) {
             state.authenticating = false;
             state.error = true;
+            state.isLoading = false;
+            state.errorMessage.push(payload.detail);
         },
         [LOGIN_SUCCESS](state) {
             state.authenticating = false;
             state.error = false;
+            state.isLoading = false;
         },
         [LOGOUT](state) {
             state.authenticating = false;
             state.error = false;
+            state.isLoading = false;
         },
         [SET_TOKEN](state, token) {
             Cookies.set(ACCESS_TOKEN_STORAGE_KEY, token.access);

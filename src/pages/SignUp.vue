@@ -16,7 +16,7 @@
     vertical-align: bottom;
 }
 .error-title {
-    font-weight: bold;
+    font-size: 1em;
     color: red;
 }
 .error-message {
@@ -26,6 +26,13 @@
 .btn {
     margin: 0.8rem 0;
 }
+.loading {
+    display: flex;
+    justify-content: center;
+}
+</style>
+<style module>
+@import '../assets/loading.css';
 </style>
 
 <template>
@@ -43,13 +50,16 @@
                             <div class="title">
                                 <h1 class="has-text-black has-text-weight-bold">Sign Up</h1>
                             </div>
-                            <div v-if="isLoading">loading...</div>
+                            <!-- Loader -->
+                            <div class="loading">
+                                <span v-if="isLoading" class="loader"></span>
+                            </div>
                             <!-- Error Message -->
                             <div
-                                v-if="isisAuthenticatedFailed || hasRespError"
+                                v-if="hasRespError"
                                 class="has-text-danger is-size-4 p-3"
                             >
-                                Error occured. Try Again.
+                                <p class="error-title">Error occured. Try Again.</p>
                             </div>
                             <hr />
                             <div class="field">
@@ -128,8 +138,13 @@ export default {
         };
     },
     computed: {
-        ...mapState('signup', ['isLoading', 'hasRespError', 'usernameError', 'emailError']),
-        ...mapGetters('auth', ['isAuthenticated', 'isisAuthenticatedFailed']),
+        ...mapState('signup', [
+            'isLoading',
+            'hasRespError',
+            'usernameError',
+            'emailError',
+        ]),
+        ...mapGetters('auth', ['isAuthenticated']),
     },
     methods: {
         async createAccount({ username, email, password }) {
