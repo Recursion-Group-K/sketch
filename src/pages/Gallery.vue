@@ -1,3 +1,18 @@
+<style scoped lang="scss">
+.box {
+    box-shadow: $shadow;
+    overflow: scroll;
+}
+
+.border {
+    border: solid;
+}
+
+.no-image-message {
+    color: crimson;
+}
+</style>
+
 <template>
     <section id="Gallery" class="hero is-primary is-fullheight">
         <div class="hero-body">
@@ -13,7 +28,11 @@
                                     <DrawingForm />
                                 </div>
                             </div>
+                            <div v-if="!allDrawings.length">
+                                <h1 class="no-image-message">There are no images available for viewing.</h1>
+                            </div>
                             <div
+                                v-else
                                 v-for="drawing in allDrawings"
                                 :key="drawing.id"
                                 class="column is-one-third"
@@ -51,13 +70,4 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.box {
-    box-shadow: $shadow;
-    overflow: scroll;
-}
 
-.border {
-    border: solid;
-}
-</style>
