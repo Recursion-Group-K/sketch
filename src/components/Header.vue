@@ -8,6 +8,9 @@ header {
     top: 0;
     box-shadow: $shadow;
 }
+.register-buttons {
+    margin-right: 1.2em;
+}
 </style>
 
 <template>
@@ -43,7 +46,7 @@ header {
                     <div v-if="isAuthenticated" :class="{ buttons: !isOpenMenu }">
                         <button to="/" @click="logout" class="button navbar-item">Logout</button>
                     </div>
-                    <div v-else :class="{ buttons: !isOpenMenu }">
+                    <div v-else :class="{ buttons: !isOpenMenu }" class="register-buttons">
                         <router-link to="/signup" class="button is-primary navbar-item">
                             Signup
                         </router-link>

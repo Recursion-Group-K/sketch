@@ -9,6 +9,13 @@ export const SET_TOKEN = 'SET_TOKEN';
 export const REMOVE_TOKEN = 'REMOVE_TOKEN';
 
 /**
+ * Sign Up
+ */
+export const SIGNUP_BEGIN = 'SIGNUP_BEGIN';
+export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
+export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
+export const SIGNUP_BAD_REQUEST = 'SIGNUP_BAD_REQUEST';
+/**
  * Drawging
  */
 export const DRAWING_SAVE_BEGIN = 'DRAWING_SAVE_BEGIN';
