@@ -18,6 +18,16 @@
 .btn {
     margin: 0.8rem 0;
 }
+.error-message {
+    font-size: 1em;
+}
+.loading {
+    display: flex;
+    justify-content: center;
+}
+</style>
+<style module>
+@import '../assets/loading.css';
 </style>
 
 <template>
@@ -32,16 +42,19 @@
                     </div>
                     <div class="column is-5-tablet is-4-desktop is-4-widescreen">
                         <form @submit.prevent="login(inputs)" class="box">
+                            <div class="title">
+                                <h1 class="has-text-black has-text-weight-bold">Login</h1>
+                            </div>
+                            <!-- Loader -->
+                            <div class="loading">
+                                <span v-if="isLoading" class="loader"></span>
+                            </div>
                             <!-- Error Message -->
                             <div
                                 v-if="isisAuthenticatedFailed"
                                 class="has-text-danger is-size-4 p-3"
                             >
-                                {{ errorMessage }}
-                            </div>
-
-                            <div class="title">
-                                <h1 class="has-text-black has-text-weight-bold">Login</h1>
+                                <p class="error-message">{{ errorMessage[0] }}</p>
                             </div>
                             <hr />
                             <div class="field">
@@ -87,8 +100,7 @@
 <style scoped lang="scss"></style>
 
 <script>
-import UserWrapper from '../api/userWrapper';
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 export default {
     name: 'Login',
     data() {
@@ -97,10 +109,10 @@ export default {
                 username: '',
                 password: '',
             },
-            errorMessage: 'Login failed. Try again.',
         };
     },
     computed: {
+        ...mapState('auth', ['errorMessage', 'isLoading']),
         ...mapGetters('auth', ['isAuthenticated', 'isisAuthenticatedFailed']),
     },
     methods: {
@@ -112,15 +124,6 @@ export default {
             } catch (error) {
                 this.errors.push(error);
             }
-        },
-        async createUser() {
-            const userPrams = {
-                name: `ggggggg`,
-                email: `ggggggg@gmail.com`,
-                password: `ggggggg`,
-            };
-            const user = await new UserWrapper().create(userPrams);
-            console.log(user);
         },
     },
 };
