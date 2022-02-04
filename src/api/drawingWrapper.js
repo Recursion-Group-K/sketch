@@ -58,7 +58,7 @@ export default class DrawingWapper {
             const params = ParamsConverter.toClientParams(response.data);
             return new Drawing(params);
         } catch (error) {
-            console.error(error);
+            return error.response
         }
     }
 
@@ -80,7 +80,7 @@ export default class DrawingWapper {
             }
             return drawings;
         } catch (error) {
-            console.error(error);
+            return error.response
         }
     }
 
@@ -100,7 +100,7 @@ export default class DrawingWapper {
             }
             return drawings;
         } catch (error) {
-            console.error(error);
+            return error.response
         }
     }
 
@@ -114,7 +114,7 @@ export default class DrawingWapper {
             const response = await client.post(create(), requestParams);
             return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
-            console.error(error.response);
+            return error.response
         }
     }
 
@@ -131,9 +131,9 @@ export default class DrawingWapper {
     async destroy(id) {
         try {
             const response = await client.delete(destroy(id));
-            return new Drawing(ParamsConverter.toClientParams(response.data));
+            return response
         } catch (error) {
-            console.error(error.response);
+            return error.response
         }
     }
 }

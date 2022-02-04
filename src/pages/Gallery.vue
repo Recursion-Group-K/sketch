@@ -59,8 +59,7 @@ export default {
         console.log(currentRes);
 
         //test destroy
-        // memo deleteはバックエンドで未実装なので一旦このままでお願いします！
-        // const  destroyRes = new DrawingWapper().destroy(6);
+        // const  destroyRes = new DrawingWapper().destroy(8);
         // console.log(destroyRes)
 
         //test create
