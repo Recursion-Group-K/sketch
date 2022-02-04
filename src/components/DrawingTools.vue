@@ -159,10 +159,10 @@ $width__sidebar: 20em;
             <button class="button m-1" @click="toggleSideBar">
                 <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
             </button>
-            <button class="button m-1" @click="undo">
+            <button class="button m-1" @click="undo" :disabled="!isAuthenticated">
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="undo" size="lg" />
             </button>
-            <button class="button m-1" @click="redo">
+            <button class="button m-1" @click="redo" :disabled="!isAuthenticated">
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="redo" size="lg" />
             </button>
         </div>
