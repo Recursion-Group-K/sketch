@@ -48,16 +48,9 @@ export default {
     name: 'Drawing',
     data() {
         return {
-            itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
-            itemStack: [],
-            isAllSaved: false,
             configKonva: {
                 width: 100,
                 height: 100,
-            },
-            pointer: {
-                x: 0,
-                y: 0,
             },
             limit: {
                 up: 0,
