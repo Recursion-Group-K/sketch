@@ -11,6 +11,10 @@ export const REMOVE_TOKEN = 'REMOVE_TOKEN';
 /**
  * Drawging
  */
+export const DRAWING_SAVE_BEGIN = 'DRAWING_SAVE_BEGIN';
+export const DRAWING_SAVE_SUCCESS = 'DRAWING_SAVE_SUCCESS';
+export const DRAWING_SAVE_FAILURE = 'DRAWING_SAVE_FAILURE';
+
 export const CHNAGE_MODE = 'CHNAGE_MODE';
 export const CHANGE_COLOR = 'CHANGE_COLOR';
 export const CHANGE_WEIGHT = 'CHANGE_WEIGHT';

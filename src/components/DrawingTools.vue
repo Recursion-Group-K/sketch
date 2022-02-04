@@ -138,12 +138,7 @@ $width__sidebar: 20em;
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
                     <li>
-                        <a
-                            @click="
-                                save;
-                                handleSaveConfirmationModal(true);
-                            "
-                        >
+                        <a @click="save">
                             <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
                                 icon="hdd"
@@ -166,11 +161,7 @@ $width__sidebar: 20em;
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="redo" size="lg" />
             </button>
         </div>
-
-        <SaveModal
-            @handleSaveConfirmationModal="isOpenSaveConfirmationModal = $event"
-            :isOpenSaveConfirmationModal="isOpenSaveConfirmationModal"
-        ></SaveModal>
+        <SaveModal />
     </div>
 </template>
 
@@ -191,7 +182,6 @@ export default {
             },
             selectedColor: '',
             selectedWeight: 0,
-            isOpenSaveConfirmationModal: false,
         };
     },
     computed: mapState('drawing', ['color', 'weight', 'isPublic']),
@@ -212,9 +202,6 @@ export default {
         ]),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
-        },
-        handleSaveConfirmationModal(bool) {
-            this.isOpenSaveConfirmationModal = bool;
         },
     },
 };
