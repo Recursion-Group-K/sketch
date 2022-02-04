@@ -28,17 +28,25 @@
                         <p class="subtitle">Unlock your imagination</p>
                     </div>
                     <div class="column is-5-tablet is-4-desktop is-4-widescreen">
-                        <form action="" class="box">
+                        <form @submit.prevent="login(inputs)" class="box">
+                            <!-- Error Message -->
+                            <div
+                                v-if="isisAuthenticatedFailed"
+                                class="has-text-danger is-size-4 p-3"
+                            >
+                                {{ errorMessage }}
+                            </div>
+
                             <div class="title">
                                 <h1 class="has-text-black has-text-weight-bold">Login</h1>
                             </div>
                             <hr />
                             <div class="field">
-                                <label for="" class="label">Email</label>
+                                <label for="" class="label">Name</label>
                                 <div class="control has-icons-left">
                                     <input
-                                        type="email"
-                                        placeholder="e.g. recursionist@gmail.com"
+                                        v-model="inputs.username"
+                                        type="text"
                                         class="input"
                                         required
                                     />
@@ -51,6 +59,7 @@
                                 <label for="" class="label">Password</label>
                                 <div class="control has-icons-left">
                                     <input
+                                        v-model="inputs.password"
                                         type="password"
                                         placeholder="*******"
                                         class="input"
@@ -69,9 +78,9 @@
                                 <!-- router-linkは/signupに後で変更する -->
                                 <p>
                                     Not Registered?
-                                    <router-link to="/signup"
-                                        ><span class="link">Sign Up</span></router-link
-                                    >
+                                    <router-link to="/signup">
+                                        <span class="link">Sign Up</span>
+                                    </router-link>
                                 </p>
                             </div>
                         </form>
@@ -85,10 +94,41 @@
 <style scoped lang="scss"></style>
 
 <script>
+import UserWrapper from '../api/userWrapper';
+import { mapGetters } from 'vuex';
 export default {
     name: 'Login',
     data() {
-        return {};
+        return {
+            inputs: {
+                username: '',
+                password: '',
+            },
+            errorMessage: 'Login failed. Try again.',
+        };
+    },
+    computed: {
+        ...mapGetters('auth', ['isAuthenticated', 'isisAuthenticatedFailed']),
+    },
+    methods: {
+        async login({ username, password }) {
+            this.errors = [];
+            try {
+                await this.$store.dispatch('auth/login', { username, password });
+                if (this.isAuthenticated) this.$router.push({ name: 'Gallery' });
+            } catch (error) {
+                this.errors.push(error);
+            }
+        },
+        async createUser() {
+            const userPrams = {
+                name: `ggggggg`,
+                email: `ggggggg@gmail.com`,
+                password: `ggggggg`,
+            };
+            const user = await new UserWrapper().create(userPrams);
+            console.log(user);
+        },
     },
 };
 </script>

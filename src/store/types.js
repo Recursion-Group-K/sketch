@@ -1,6 +1,20 @@
 /**
+ * Auth
+ */
+export const LOGIN_BEGIN = 'LOGIN_BEGIN';
+export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+export const LOGOUT = 'LOGOUT';
+export const SET_TOKEN = 'SET_TOKEN';
+export const REMOVE_TOKEN = 'REMOVE_TOKEN';
+
+/**
  * Drawging
  */
+export const DRAWING_SAVE_BEGIN = 'DRAWING_SAVE_BEGIN';
+export const DRAWING_SAVE_SUCCESS = 'DRAWING_SAVE_SUCCESS';
+export const DRAWING_SAVE_FAILURE = 'DRAWING_SAVE_FAILURE';
+
 export const CHNAGE_MODE = 'CHNAGE_MODE';
 export const GET_ALLDRAWINGS = 'GET_ALLDRAWINGS';
 export const SET_DRAWINGID = 'SET_DRAWINGID';

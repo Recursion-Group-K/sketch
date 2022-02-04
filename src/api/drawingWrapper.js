@@ -1,57 +1,72 @@
+import client from './client';
 import Drawing from '../models/drawing';
+import endpoints from '../api/endpoints';
 
-const axios = require('axios');
+const { list, listFilter, retrieve, create, update, destroy } = endpoints.drawings;
 
-function toParams(drawingData) {
-    // object
-    const {
-        id: drawingId,
-        title,
-        imgUrl,
-        isPublic,
-        data,
-        createdAt,
-        updatedAt,
-        userId,
-    } = drawingData;
-    const params = {
-        id: drawingId,
-        title: title,
-        imgUrl: imgUrl,
-        isPublic: isPublic,
-        data: data,
-        createdAt: new Date(createdAt),
-        updatedAt: new Date(updatedAt),
-        userId: userId,
-    };
+class ParamsConverter {
+    toClientParams({ id, title, image, is_public, data, created_at, updated_at, user_id }) {
+        const params = {
+            id: id,
+            title: title,
+            image: image,
+            isPublic: is_public,
+            data: data,
+            createdAt: new Date(created_at),
+            updatedAt: new Date(updated_at),
+            userId: user_id,
+        };
 
-    return params;
+        return params;
+    }
+
+    toRequestParams({ id, title, image, isPublic, data, createdAt, updatedAt, userId }) {
+        const params = {
+            id: id,
+            title: title,
+            image: image,
+            is_public: isPublic,
+            data: data,
+            created_at: createdAt,
+            updated_at: updatedAt,
+            user_id: userId,
+        };
+
+        return params;
+    }
 }
 
 export default class DrawingWapper {
-    constructor() {
-        this.url = 'http://localhost:3000/drawings';
-    }
+    constructor() {}
 
+    /**
+     *
+     * @param {integer} id
+     * @returns {Drawing}
+     */
     async getById(id) {
-        // return Drawing
         try {
-            const response = await axios.get(`${this.url}/${id}`);
-            const params = toParams(response.data);
+            const response = await client.get(retrieve(id));
+            const params = ParamsConverter.toClientParams(response.data);
             return new Drawing(params);
         } catch (error) {
             console.error(error);
         }
     }
 
+    /**
+     *
+     * @param {string} column
+     * @param {string} data
+     * @returns {Array<Drawing>}
+     */
     async getBy(column, data) {
-        // return array<Drawing>
         try {
-            const response = await axios.get(`${this.url}?${column}=${data}`);
+            const response = await client.get(listFilter(column, data));
             const drawingsArray = response.data;
             let drawings = [];
             for (const drawing of drawingsArray) {
-                const params = toParams(drawing);
+                const params = ParamsConverter.toClientParams(drawing);
                 const newDrawing = new Drawing(params);
                 drawings.push(newDrawing);
             }
@@ -61,18 +76,54 @@ export default class DrawingWapper {
         }
     }
 
+    /**
+     *
+     * @returns {Array<Drawing>}
+     */
     async getAll() {
-        // return array<Drawing>
         try {
-            const response = await axios.get(this.url);
+            const response = await client.get(list());
             const drawingsArray = response.data;
             let drawings = [];
             for (const drawing of drawingsArray) {
-                const params = toParams(drawing);
+                const params = ParamsConverter.toClientParams(drawing);
                 const newDrawing = new Drawing(params);
                 drawings.push(newDrawing);
             }
             return drawings;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    /**
+     *
+     * @returns {Drawing}
+     */
+    async create(params) {
+        const requestParams = ParamsConverter.toRequestParams(params);
+        try {
+            const response = await client.get(create(requestParams));
+            return new Drawing(ParamsConverter.toClientParams(response.data));
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async update(params) {
+        const requestParams = ParamsConverter.toRequestParams(params);
+        try {
+            const response = await client.get(update(requestParams.id), requestParams);
+            return new Drawing(ParamsConverter.toClientParams(response.data));
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async destroy(id) {
+        try {
+            const response = await client.get(destroy(id));
+            return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
             console.error(error);
         }

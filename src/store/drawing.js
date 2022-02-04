@@ -14,10 +14,12 @@ import {
     SET_LOADTRIGGER,
     SET_STOPPOINTERTRIGGER,
     TOGGLE_ISPUBLIC,
-
     SET_DRAWINGDATA,
     SET_DRAWINGIMGURL,
-    SET_UPDATEDAT
+    SET_UPDATEDAT,
+    DRAWING_SAVE_BEGIN,
+    DRAWING_SAVE_SUCCESS,
+    DRAWING_SAVE_FAILURE,
 } from './types';
 
 const drawingWrapper = new DrawingWapper();
@@ -36,6 +38,9 @@ export default {
             right: { keys: ['k'], value: false },
             left: { keys: ['j'], value: false },
         },
+
+        hasError: false,
+        isLoading: false,
         isPublic: false,
         undoTrigger: false,
         redoTrigger: false,
@@ -98,7 +103,17 @@ export default {
             commit(SET_POINTERSPEED, { direction: direction, value: value });
         },
         save({ commit }) {
-            commit(SET_SAVETRIGGER);
+            commit(DRAWING_SAVE_BEGIN);
+
+            // axios の代わり
+            // 成功した時
+            setTimeout(() => {
+                commit(DRAWING_SAVE_SUCCESS);
+            }, 3000);
+            // 失敗した時
+            // setTimeout(() => {
+            //     commit(DRAWING_SAVE_FAILURE)
+            // },3000)
         },
         stopPointer({ commit, state }) {
             commit(SET_STOPPOINTERTRIGGER);
@@ -112,6 +127,17 @@ export default {
         },
     },
     mutations: {
+        [DRAWING_SAVE_BEGIN](state) {
+            state.isLoading = true;
+        },
+        [DRAWING_SAVE_SUCCESS](state) {
+            state.isLoading = false;
+            state.hasError = false;
+        },
+        [DRAWING_SAVE_FAILURE](state) {
+            state.isLoading = false;
+            state.hasError = true;
+        },
         [GET_ALLDRAWINGS](state, all){
             state.allDrawings = all;
         },
