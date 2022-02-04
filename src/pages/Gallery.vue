@@ -55,7 +55,7 @@ export default {
         console.log(this.allDrawings);
 
         //test retrieve
-        const id2Drawing = await drawingWrapper.getById(2);
+        const id2Drawing = await new DrawingWapper().getById(2);
         console.log(id2Drawing);
 
         //test userwrapper getcurrent
