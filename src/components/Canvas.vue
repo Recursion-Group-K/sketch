@@ -69,7 +69,7 @@ export default {
         };
     },
     mounted: function () {
-        this.itemList = [];
+        this.setItemList([]);
         const parent = document.querySelector('#canvas');
         const { clientWidth, clientHeight } = parent;
 
@@ -140,7 +140,7 @@ export default {
         ...mapActions('drawing/drawingEditter', ['setPointerSpeed']),
 
         /**
-         * 
+         *
          */
         fitCanvas() {
             const parent = document.querySelector('#canvas');
@@ -201,41 +201,42 @@ export default {
             );
             if (areAllKeyUp) this.setNewLine();
         },
-
+        /**
+         * Getters
+         */
+        getLastPoint() {
+            return this.itemList[this.itemList.length - 1].lastPoint;
+        },
+        getPointerClone(){
+            const {x, y} = this.pointer
+            return { x , y }
+        },
         /**
          * Setters
          */
-        setNewLineFlag(bool){
+        setNewLineFlag(bool) {
             this.newLineFlag = bool;
         },
-        /**
-         * Draw
-         */
-        draw() {
-            let lastPoint = { x: this.pointer.x, y: this.pointer.y };
-            if (this.pointerSpeed['up'].value) this.pointer.y -= velocityOfPointer;
-            if (this.pointerSpeed['down'].value) this.pointer.y += velocityOfPointer;
-            if (this.pointerSpeed['right'].value) this.pointer.x += velocityOfPointer;
-            if (this.pointerSpeed['left'].value) this.pointer.x -= velocityOfPointer;
-
-            this.checkOverLimit(this.pointer);
-
-            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
-            if (isSamePoint) {
-                return;
-            }
-
-            if (this.newLineFlag) {
-                this.pushNewLine(lastPoint.x, lastPoint.y);
-                this.isAllSaved = false;
-            }
-            
-            this.itemList[this.itemList.length - 1].line.points.push(
-                this.pointer.x,
-                this.pointer.y
-            );
+        setIsUndoed(bool) {
+            this.isUndoed = bool;
         },
-        pushNewLine(x, y) {
+        setPointer({ x, y }) {
+            this.pointer.x = x;
+            this.pointer.y = y;
+        },
+        setIsAllSaved(bool) {
+            this.isAllSaved = bool;
+        },
+        setItemList(itemList) {
+            this.itemList = itemList;
+        },
+        setItemStack(itemStack) {
+            this.itemStack = itemStack;
+        },
+        setLastPoint({ x, y }) {
+            this.itemList[this.itemList.length - 1].lastPoint = { x, y };
+        },
+        pushNewLine({ x, y }) {
             if (this.isUndoed) this.resetStack();
             this.itemList.push({
                 line: {
@@ -247,18 +248,39 @@ export default {
             });
             this.setNewLineFlag(false);
         },
+        pushNewPoint({ x, y }) {
+            this.itemList[this.itemList.length - 1].line.points.push(x, y);
+        },
         setNewLine() {
-
             if (this.newLineFlag) return;
             this.setNewLineFlag(true);
 
             if (this.itemList.length == 0) return;
-            this.itemList[this.itemList.length - 1].lastPoint = {
-                x: this.pointer.x,
-                y: this.pointer.y,
-            };
-            console.log(this.itemList[this.itemList.length - 1]);
+            this.setLastPoint(this.pointer);
             this.setNewLineFlag(true);
+        },
+        /**
+         * Draw
+         */
+        draw() {
+            const lastPoint = this.getPointerClone();
+            if (this.pointerSpeed['up'].value) this.pointer.y -= velocityOfPointer;
+            if (this.pointerSpeed['down'].value) this.pointer.y += velocityOfPointer;
+            if (this.pointerSpeed['right'].value) this.pointer.x += velocityOfPointer;
+            if (this.pointerSpeed['left'].value) this.pointer.x -= velocityOfPointer;
+
+            this.checkOverLimit(this.pointer);
+
+            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint. y == this.pointer.y;
+            console.log('hey')
+            if (isSamePoint) return;
+            console.log('hey')
+            if (this.newLineFlag) {
+                this.pushNewLine(lastPoint);
+                this.setIsAllSaved(false);
+            }
+            console.log('hey')
+            this.pushNewPoint(this.pointer);
         },
         checkOverLimit(point) {
             if (point.x < this.limit.left) point.x = this.limit.left;
@@ -271,69 +293,62 @@ export default {
             if (this.itemList.length == 0) return;
             this.itemStack.push(this.itemList.pop());
             if (this.itemList.length == 0) return;
-            const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
-            this.pointer.x = newPoint.x;
-            this.pointer.y = newPoint.y;
-            this.isUndoed = true;
+            const newPoint = this.getLastPoint();
+            this.setPointer(newPoint);
+            this.setIsUndoed(true);
         },
         redo() {
             this.setNewLine();
             if (this.itemStack.length == 0) return;
             this.itemList.push(this.itemStack.pop());
-            const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
-            this.pointer.x = newPoint.x;
-            this.pointer.y = newPoint.y;
+            const newPoint = this.getLastPoint();
+            this.setPointer(newPoint);
         },
         resetStack() {
-            this.itemStack = [];
-            this.isUndoed = false;
+            this.setItemStack([]);
+            this.setIsUndoed(false);
         },
+        reset() {
+            this.setItemList([]);
+            localStorage.setItem('storage', JSON.stringify(this.itemList));
+        },
+        /**
+         * load&save
+         */
         load() {
             console.log('loading');
             this.loadDB();
             if (this.itemList.length >= 1) {
-                const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
-                this.pointer.x = newPoint.x;
-                this.pointer.y = newPoint.y;
+                const newPoint = this.getLastPoint();
+                this.setPointer(newPoint);
             }
             this.resetStack();
             this.setNewLine();
-            this.isAllSaved = true;
+            this.setIsAllSaved(true);
         },
         save() {
-            console.log('saving');
             this.setNewLine();
-
             let stage = document.getElementById('canvas');
             let canvas = stage.querySelector('canvas');
             let dataURL = canvas.toDataURL();
-            this.saveDB({ itemList: this.itemList, dataURL: dataURL });
-
-            this.isAllSaved = true;
-            console.log(dataURL);
-            console.log('saved');
-
+            this.saveDB({
+                itemList: this.itemList,
+                dataURL: dataURL,
+            });
+            this.setIsAllSaved(true);
             //画像download
             this.downloadURI(dataURL, 'stage.png');
         },
         loadDB() {
-            console.log('fire');
-            console.log(this.currentDrawing.data);
             const data = JSON.stringify(this.currentDrawing.data);
             if (data == '{}') {
-                this.itemList = JSON.parse('[]');
+                this.setItemList(JSON.parse('[]'));
                 return;
             }
-            console.log(data);
-            this.itemList = JSON.parse(JSON.parse(data));
-            console.log(this.itemList);
-        },
-        reset() {
-            this.itemList = [];
-            localStorage.setItem('storage', JSON.stringify(this.itemList));
+            this.setItemList(JSON.parse(JSON.parse(data)));
         },
         downloadURI(uri, name) {
-            var link = document.createElement('a');
+            const link = document.createElement('a');
             link.download = name;
             link.href = uri;
             document.body.appendChild(link);

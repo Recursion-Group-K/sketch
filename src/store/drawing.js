@@ -66,9 +66,7 @@ export default {
         twitterShare() {
             console.log('gggg');
         },
-        toggleIsPublic () {
-            
-        }
+        toggleIsPublic() {},
     },
     mutations: {
         [DRAWING_SAVE_BEGIN](state) {
