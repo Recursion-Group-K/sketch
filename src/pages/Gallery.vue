@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import DrawingWapper from '../api/drawingWrapper';
 import UserWrapper from '../api/userWrapper';
 import DrawingBox from '../components/DrawingBox.vue';
@@ -45,9 +44,6 @@ export default {
         return {
             allDrawings: [],
         };
-    },
-    computed:{
-        ...mapState('auth',['token']),
     },
     async mounted() {
         //test list
