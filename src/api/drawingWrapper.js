@@ -5,7 +5,7 @@ import endpoints from '../api/endpoints';
 const { list, listFilter, retrieve, create, update, destroy } = endpoints.drawings;
 
 class ParamsConverter {
-    toClientParams({ id, title, image, is_public, data, created_at, updated_at, user_id }) {
+    static toClientParams({ id, title, image, is_public, data, created_at, updated_at, user }) {
         const params = {
             id: id,
             title: title,
@@ -14,13 +14,14 @@ class ParamsConverter {
             data: data,
             createdAt: new Date(created_at),
             updatedAt: new Date(updated_at),
-            userId: user_id,
+            userId: user.id,
         };
 
         return params;
     }
 
-    toRequestParams({ id, title, image, isPublic, data, createdAt, updatedAt, userId }) {
+    static toRequestParams({ id, title, image, isPublic, data, createdAt, updatedAt, user }) {
+        //console.log({ id, title, image, isPublic, data, createdAt, updatedAt, user })
         const params = {
             id: id,
             title: title,
@@ -29,9 +30,8 @@ class ParamsConverter {
             data: data,
             created_at: createdAt,
             updated_at: updatedAt,
-            user_id: userId,
+            user_id: user.id,
         };
-
         return params;
     }
 }
@@ -103,7 +103,10 @@ export default class DrawingWapper {
     async create(params) {
         const requestParams = ParamsConverter.toRequestParams(params);
         try {
+            console.log("start create");
             const response = await client.get(create(requestParams));
+            console.log("end create");
+            console.log(response)
             return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
             console.error(error);

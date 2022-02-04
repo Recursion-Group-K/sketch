@@ -29,7 +29,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import DrawingWapper from '../api/drawingWrapper';
+import UserWrapper from '../api/userWrapper';
 import DrawingBox from '../components/DrawingBox.vue';
 import DrawingForm from '../components/NewDrawingButton.vue';
 
@@ -44,9 +46,56 @@ export default {
             allDrawings: [],
         };
     },
+    computed:{
+        ...mapState('auth',['token']),
+    },
     async mounted() {
+        //test list
         const drawingWrapper = new DrawingWapper();
         this.allDrawings = await drawingWrapper.getAll();
+        console.log(this.allDrawings);
+
+        //test retrieve
+        const id2Drawing = await drawingWrapper.getById(2);
+        console.log(id2Drawing);
+
+        //test userwrapper getcurrent
+        const userWrapper = new UserWrapper();
+        console.log(this.token.access);
+        console.log(userWrapper.getCurrent(this.token.access))
+
+        /*
+        //test destroy
+        const drawingWrapper2 = new DrawingWapper();
+        console.log("dest");
+        drawingWrapper2.destroy(1);
+        */
+        this.allDrawings = await drawingWrapper.getAll();
+
+        /*
+        //test create
+        let params = 
+        {
+            id: 5, 
+            title: 'test', 
+            image: 'https://res.cloudinary.com/hefkgasfk/image/upload/v1/media/path/to/my/default/image.jpg', 
+            data: {}, 
+            is_public: true, 
+            createdAt: '2022-02-02T16:30:01.008788+09:00',
+            updatedAt: '2022-02-02T16:30:01.008788+09:00',
+            user: {
+                id: 1, 
+                username: 'admin', 
+                email: 'leandro83g.development@gmail.com', 
+                is_active: true, 
+                is_superuser: true, 
+                password: 'pbkdf2_sha256$320000$M3dSgi9YpknPGar2aLP53e$FDdrZcpzOYfIyeJzQ9gXMP4pFkVGokOdB6EqbmVrPnc=',
+            }
+        }
+        drawingWrapper.create(params);
+        */
+        //this.allDrawings = await drawingWrapper.getAll();
+
     },
 };
 </script>
