@@ -71,6 +71,10 @@ export default {
         // };
         // const createRes = new DrawingWapper().create(params);
         // console.log(createRes);
+
+        //test update
+        // const updateRes = new DrawingWapper().update(id2Drawing.id, {title:'id2-updated-2'});
+        // console.log(updateRes);
     },
 };
 </script>

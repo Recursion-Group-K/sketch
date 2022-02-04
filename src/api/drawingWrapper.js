@@ -20,19 +20,6 @@ class ParamsConverter {
         return params;
     }
 
-    static toRequestParams({ id, title, image, isPublic, data, createdAt, updatedAt, userId }) {
-        const params = {
-            id: id,
-            title: title,
-            image: image,
-            is_public: isPublic,
-            data: data,
-            created_at: createdAt,
-            updated_at: updatedAt,
-            user_id: userId,
-        };
-        return params;
-    }
     static toFormDataParams ({ title, image, isPublic, data, userId }) {
         const formData = new FormData()
         if(image)formData.append('image', image)
@@ -109,22 +96,22 @@ export default class DrawingWapper {
      * @returns {Drawing}
      */
     async create(params) {
-        const requestParams = ParamsConverter.toFormDataParams(params);
+        const formData = ParamsConverter.toFormDataParams(params);
         try {
-            const response = await client.post(create(), requestParams);
+            const response = await client.post(create(), formData);
             return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
             return error.response
         }
     }
 
-    async update(params) {
-        const requestParams = ParamsConverter.toRequestParams(params);
+    async update(id, params) {
+        const formData = ParamsConverter.toFormDataParams(params);
         try {
-            const response = await client.get(update(requestParams.id), requestParams);
+            const response = await client.patch(update(id), formData);
             return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
-            console.error(error);
+            return error.response
         }
     }
 
