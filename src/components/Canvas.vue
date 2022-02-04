@@ -103,7 +103,7 @@ export default {
         clearInterval(this.timer);
     },
     computed: {
-        ...mapState('drawing', ['currentDrawing']),
+        ...mapState('drawing', ['drawing']),
         ...mapState('drawing/drawingEditter', [
             'color',
             'weight',

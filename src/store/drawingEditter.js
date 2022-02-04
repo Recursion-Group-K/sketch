@@ -1,8 +1,8 @@
 import Config from '../config';
 import {
-    CHNAGE_MODE,
-    CHANGE_COLOR,
-    CHANGE_WEIGHT,
+    SET_MODE,
+    SET_COLOR,
+    SET_WEIGHT,
     SET_UNDO_TRIGGER,
     SET_REDO_TRIGGER,
     SET_POINTER_SPEED,
@@ -32,14 +32,14 @@ export default {
     actions: {
         changeMode({ commit }, { mode }) {
             if (!Config.mode[mode]) return false;
-            commit(CHNAGE_MODE, mode);
+            commit(SET_MODE, mode);
             return true;
         },
         changeColor({ commit }, { newColor }) {
-            commit(CHANGE_COLOR, newColor);
+            commit(SET_COLOR, newColor);
         },
         changeWeight({ commit }, { newWeight }) {
-            commit(CHANGE_WEIGHT, newWeight);
+            commit(SET_WEIGHT, newWeight);
         },
         undo({ commit }) {
             commit(SET_UNDO_TRIGGER);
@@ -56,13 +56,13 @@ export default {
         },
     },
     mutations: {
-        [CHNAGE_MODE](state, mode) {
+        [SET_MODE](state, mode) {
             state.mode = mode;
         },
-        [CHANGE_COLOR](state, color) {
+        [SET_COLOR](state, color) {
             state.color = color;
         },
-        [CHANGE_WEIGHT](state, weight) {
+        [SET_WEIGHT](state, weight) {
             state.weight = Number(weight);
         },
         [SET_UNDO_TRIGGER](state) {
