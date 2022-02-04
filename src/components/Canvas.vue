@@ -138,12 +138,10 @@ export default {
     methods: {
         ...mapActions('drawing', ['saveDB']),
         ...mapActions('drawing/drawingEditter', ['setPointerSpeed']),
-        stopPointer() {
-            Object.keys(this.pointerSpeed).forEach((direction) => {
-                this.setPointerSpeed({ direction: direction, value: false });
-            });
-            this.setNewLine();
-        },
+
+        /**
+         * 
+         */
         fitCanvas() {
             const parent = document.querySelector('#canvas');
             const { clientWidth, clientHeight } = parent;
@@ -153,12 +151,28 @@ export default {
             this.limit.right = clientWidth;
             this.checkOverLimit(this.pointer);
         },
-        checkOverLimit(point) {
-            if (point.x < this.limit.left) point.x = this.limit.left;
-            if (point.x > this.limit.right) point.x = this.limit.right;
-            if (point.y < this.limit.up) point.y = this.limit.up;
-            if (point.y > this.limit.down) point.y = this.limit.down;
+
+        /**
+         * Pointer
+         */
+        stopPointer() {
+            Object.keys(this.pointerSpeed).forEach((direction) => {
+                this.setPointerSpeed({ direction: direction, value: false });
+            });
+            this.setNewLine();
         },
+        movePointer(event) {
+            this.setNewLine();
+            let stage = event.target.getStage();
+            let clickPos = stage.getPointerPosition();
+            this.checkOverLimit(clickPos);
+            this.pointer.x = clickPos.x;
+            this.pointer.y = clickPos.y;
+        },
+
+        /**
+         * KeyDown
+         */
         keyEvent(event, boolean) {
             let key = event.key;
             Object.keys(this.pointerSpeed).forEach((direction) => {
@@ -187,6 +201,40 @@ export default {
             );
             if (areAllKeyUp) this.setNewLine();
         },
+
+        /**
+         * Setters
+         */
+        setNewLineFlag(bool){
+            this.newLineFlag = bool;
+        },
+        /**
+         * Draw
+         */
+        draw() {
+            let lastPoint = { x: this.pointer.x, y: this.pointer.y };
+            if (this.pointerSpeed['up'].value) this.pointer.y -= velocityOfPointer;
+            if (this.pointerSpeed['down'].value) this.pointer.y += velocityOfPointer;
+            if (this.pointerSpeed['right'].value) this.pointer.x += velocityOfPointer;
+            if (this.pointerSpeed['left'].value) this.pointer.x -= velocityOfPointer;
+
+            this.checkOverLimit(this.pointer);
+
+            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
+            if (isSamePoint) {
+                return;
+            }
+
+            if (this.newLineFlag) {
+                this.pushNewLine(lastPoint.x, lastPoint.y);
+                this.isAllSaved = false;
+            }
+            
+            this.itemList[this.itemList.length - 1].line.points.push(
+                this.pointer.x,
+                this.pointer.y
+            );
+        },
         pushNewLine(x, y) {
             if (this.isUndoed) this.resetStack();
             this.itemList.push({
@@ -197,38 +245,26 @@ export default {
                 },
                 lastPoint: {},
             });
-            this.newLineFlag = false;
+            this.setNewLineFlag(false);
         },
         setNewLine() {
+
             if (this.newLineFlag) return;
-            this.newLineFlag = true;
+            this.setNewLineFlag(true);
+
             if (this.itemList.length == 0) return;
             this.itemList[this.itemList.length - 1].lastPoint = {
                 x: this.pointer.x,
                 y: this.pointer.y,
             };
             console.log(this.itemList[this.itemList.length - 1]);
-            this.newLineFlag = true;
+            this.setNewLineFlag(true);
         },
-        draw() {
-            let lastPoint = { x: this.pointer.x, y: this.pointer.y };
-            if (this.pointerSpeed['up'].value) this.pointer.y -= velocityOfPointer;
-            if (this.pointerSpeed['down'].value) this.pointer.y += velocityOfPointer;
-            if (this.pointerSpeed['right'].value) this.pointer.x += velocityOfPointer;
-            if (this.pointerSpeed['left'].value) this.pointer.x -= velocityOfPointer;
-            this.checkOverLimit(this.pointer);
-            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
-            if (isSamePoint) {
-                return;
-            }
-            if (this.newLineFlag) {
-                this.pushNewLine(lastPoint.x, lastPoint.y);
-                this.isAllSaved = false;
-            }
-            this.itemList[this.itemList.length - 1].line.points.push(
-                this.pointer.x,
-                this.pointer.y
-            );
+        checkOverLimit(point) {
+            if (point.x < this.limit.left) point.x = this.limit.left;
+            if (point.x > this.limit.right) point.x = this.limit.right;
+            if (point.y < this.limit.up) point.y = this.limit.up;
+            if (point.y > this.limit.down) point.y = this.limit.down;
         },
         undo() {
             this.setNewLine();
@@ -251,14 +287,6 @@ export default {
         resetStack() {
             this.itemStack = [];
             this.isUndoed = false;
-        },
-        movePointer(event) {
-            this.setNewLine();
-            let stage = event.target.getStage();
-            let clickPos = stage.getPointerPosition();
-            this.checkOverLimit(clickPos);
-            this.pointer.x = clickPos.x;
-            this.pointer.y = clickPos.y;
         },
         load() {
             console.log('loading');
