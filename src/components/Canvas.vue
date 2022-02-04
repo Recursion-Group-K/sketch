@@ -271,15 +271,12 @@ export default {
 
             this.checkOverLimit(this.pointer);
 
-            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint. y == this.pointer.y;
-            console.log('hey')
+            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint. y == this.pointer.y
             if (isSamePoint) return;
-            console.log('hey')
             if (this.newLineFlag) {
                 this.pushNewLine(lastPoint);
                 this.setIsAllSaved(false);
             }
-            console.log('hey')
             this.pushNewPoint(this.pointer);
         },
         checkOverLimit(point) {
@@ -337,7 +334,7 @@ export default {
             });
             this.setIsAllSaved(true);
             //画像download
-            this.downloadURI(dataURL, 'stage.png');
+            this.downloadURI(dataURL, 'drawing.png');
         },
         loadDB() {
             const data = JSON.stringify(this.currentDrawing.data);
