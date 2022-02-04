@@ -51,8 +51,7 @@ export default {
     },
     async mounted() {
         //test list
-        const drawingWrapper = new DrawingWapper();
-        this.allDrawings = await drawingWrapper.getAll();
+        this.allDrawings = await new DrawingWapper().getAll();
         console.log(this.allDrawings);
 
         //test retrieve
