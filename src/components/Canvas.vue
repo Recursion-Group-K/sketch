@@ -6,11 +6,11 @@
             <v-layer>
                 <v-rect
                     :config="{
-                        x:0,
-                        y:0,
-                        width:configKonva.width,
-                        height:configKonva.height,
-                        fill:'white',
+                        x: 0,
+                        y: 0,
+                        width: configKonva.width,
+                        height: configKonva.height,
+                        fill: 'white',
                     }"
                 ></v-rect>
                 <v-line
@@ -93,7 +93,7 @@ export default {
 
         window.addEventListener('resize', this.fitCanvas);
     },
-    beforeDestroy: function(){
+    beforeDestroy: function () {
         if (this.isAllSaved) return;
         if (window.confirm('変更をセーブしますか？')) this.save();
     },
@@ -103,9 +103,7 @@ export default {
         clearInterval(this.timer);
     },
     computed: {
-        ...mapState('drawing', [
-            'currentDrawing',
-        ]),
+        ...mapState('drawing', ['currentDrawing']),
         ...mapState('drawing/drawingEditter', [
             'color',
             'weight',
@@ -138,7 +136,8 @@ export default {
         },
     },
     methods: {
-        ...mapActions('drawing', ['setPointerSpeed','saveDB']),
+        ...mapActions('drawing', ['saveDB']),
+        ...mapActions('drawing/drawingEditter', ['setPointerSpeed']),
         stopPointer() {
             Object.keys(this.pointerSpeed).forEach((direction) => {
                 this.setPointerSpeed({ direction: direction, value: false });
@@ -262,7 +261,7 @@ export default {
             this.pointer.y = clickPos.y;
         },
         load() {
-            console.log("loading");
+            console.log('loading');
             this.loadDB();
             if (this.itemList.length >= 1) {
                 const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
@@ -274,14 +273,14 @@ export default {
             this.isAllSaved = true;
         },
         save() {
-            console.log("saving");
+            console.log('saving');
             this.setNewLine();
 
-            let stage=document.getElementById("canvas");
-            let canvas=stage.querySelector("canvas");
+            let stage = document.getElementById('canvas');
+            let canvas = stage.querySelector('canvas');
             let dataURL = canvas.toDataURL();
-            this.saveDB({itemList:this.itemList,dataURL:dataURL});
-            
+            this.saveDB({ itemList: this.itemList, dataURL: dataURL });
+
             this.isAllSaved = true;
             console.log(dataURL);
             console.log('saved');
@@ -290,11 +289,11 @@ export default {
             this.downloadURI(dataURL, 'stage.png');
         },
         loadDB() {
-            console.log("fire");
+            console.log('fire');
             console.log(this.currentDrawing.data);
             const data = JSON.stringify(this.currentDrawing.data);
-            if(data=="{}"){
-                this.itemList = JSON.parse("[]");
+            if (data == '{}') {
+                this.itemList = JSON.parse('[]');
                 return;
             }
             console.log(data);

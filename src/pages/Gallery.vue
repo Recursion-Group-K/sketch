@@ -38,10 +38,10 @@ export default {
         DrawingForm,
     },
     name: 'Gallery',
-    
+
     data() {
         return {
-            drawings:[]
+            drawings: [],
         };
     },
     mounted() {

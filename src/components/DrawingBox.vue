@@ -68,9 +68,9 @@ export default {
             isOpenDeleteConfirmationModal: false,
         };
     },
-    computed: mapGetters('drawing', ['isEtchASketchMode']),
+    computed: mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
     methods: {
-        ...mapActions('drawing',['redirectToDrawingPage']),
+        ...mapActions('drawing', ['redirectToDrawingPage']),
         toggleIsPublic() {
             this.isPublic = !this.isPublic;
         },

@@ -1,9 +1,19 @@
 import Config from '../config';
-
+import {
+    CHNAGE_MODE,
+    CHANGE_COLOR,
+    CHANGE_WEIGHT,
+    SET_UNDO_TRIGGER,
+    SET_REDO_TRIGGER,
+    SET_POINTER_SPEED,
+    SET_SAVE_TRIGGER,
+    SET_LOAD_TRIGGER,
+    SET_STOP_POINTER_TRIGGER,
+} from './types';
 export default {
     namespaced: true,
     state: {
-        mode: Config.mode.EtchASketch,//
+        mode: Config.mode.EtchASketch, //
         color: '#000000',
         weight: 3,
         pointerSpeed: {
@@ -18,9 +28,7 @@ export default {
         loadTrigger: false,
         stopPointerTrigger: false,
     },
-    getters: {
-        
-    },
+    getters: {},
     actions: {
         changeMode({ commit }, { mode }) {
             if (!Config.mode[mode]) return false;
@@ -46,7 +54,6 @@ export default {
             commit(SET_STOP_POINTER_TRIGGER);
             console.log(state.stopPointerTrigger);
         },
-        
     },
     mutations: {
         [CHNAGE_MODE](state, mode) {
@@ -76,7 +83,5 @@ export default {
         [SET_STOP_POINTER_TRIGGER](state) {
             state.stopPointerTrigger = !state.stopPointerTrigger;
         },
-    }
-    
-    
-}
+    },
+};

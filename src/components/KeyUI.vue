@@ -61,6 +61,6 @@ export default {
     data() {
         return {};
     },
-    computed: mapState('drawing', ['pointerSpeed']),
+    computed: mapState('drawing/drawingEditter', ['pointerSpeed']),
 };
 </script>
