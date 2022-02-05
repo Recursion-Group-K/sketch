@@ -56,9 +56,6 @@ export default {
                 width: 100,
                 height: 100,
             },
-            itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
-            itemStack: [],
-            isAllSaved: false,
             pointer: {
                 x: 0,
                 y: 0,
@@ -75,9 +72,9 @@ export default {
         };
     },
     mounted() {
-
-        this.setDrawingById(this.$route.params['id'])
-        .then(() => this.setItemList(this.drawing.data));
+        this.setDrawingById(this.$route.params['id']).then(() =>
+            this.setItemList(this.drawing.data)
+        );
 
         const parent = document.querySelector('#canvas');
         const { clientWidth, clientHeight } = parent;
