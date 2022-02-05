@@ -41,7 +41,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import {dataURItoBlob} from '../utils'
+import { dataURItoBlob } from '../utils';
 const velocityOfPointer = 2;
 
 export default {
@@ -51,7 +51,7 @@ export default {
             itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
             itemStack: [],
             isUndoed: false,
-            isAllSaved: false,
+            isAllSaved: true,
             configKonva: {
                 width: 100,
                 height: 100,
@@ -73,8 +73,8 @@ export default {
         };
     },
     mounted: function () {
-        this.setItemList([]);
         this.setDrawingById(this.$route.params['id']);
+        this.setItemList(this.drawing.data);
         const parent = document.querySelector('#canvas');
         const { clientWidth, clientHeight } = parent;
 
@@ -99,8 +99,9 @@ export default {
         window.addEventListener('resize', this.fitCanvas);
     },
     beforeDestroy: function () {
-        if (this.isAllSaved) return;
-        this.save();
+        if (!this.isAllSaved) {
+            this.save();
+        }
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
