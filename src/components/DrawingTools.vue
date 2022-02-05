@@ -135,7 +135,7 @@ $width__sidebar: 20em;
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
-                                :class="{ 'has-text-success': isPublic }"
+                                :class="{ 'has-text-success': drawing.isPublic }"
                                 class="mx-1 awesome-icon"
                                 size="lg"
                             />
@@ -193,7 +193,7 @@ export default {
         };
     },
     computed: {
-        ...mapState('drawing/drawingEditter', ['color', 'weight', 'isPublic']),
+        ...mapState('drawing/drawingEditter', ['color', 'weight']),
         ...mapState('drawing', ['drawing']),
         ...mapGetters('auth', ['isAuthenticated']),
     },
