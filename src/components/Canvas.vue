@@ -1,4 +1,9 @@
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.prompt-signup {
+    margin-top: 1em;
+    font-weight: bold;
+}
+</style>
 
 <template>
     <div id="canvas" :style="{ height: '100%', width: '100%' }">
@@ -35,11 +40,14 @@
                 ></v-circle>
             </v-layer>
         </v-stage>
+        <div v-if="!isAuthenticated">
+            <p class="prompt-signup">Please SignUp to use our drawing tools.</p>
+        </div>
     </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 const velocityOfPointer = 2;
 
 export default {
@@ -93,6 +101,12 @@ export default {
          */
 
         window.addEventListener('resize', this.fitCanvas);
+        this.load();
+
+        /**
+         * Disable key event for unauthorized user
+         */
+        this.disableKeyEvents();
     },
     beforeDestroy: function () {
         // this.save();
@@ -114,6 +128,7 @@ export default {
             'stopPointerTrigger',
             'pointerSpeed',
         ]),
+        ...mapGetters('auth', ['isAuthenticated']),
     },
     watch: {
         weight() {
