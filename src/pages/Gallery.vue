@@ -52,7 +52,7 @@
                                 :key="drawing.id"
                                 class="column is-one-third"
                             >
-                                <DrawingBox :drawing="drawing"></DrawingBox>
+                                <DrawingBox :drawing="drawing" @reload="reloadDrawings"></DrawingBox>
                             </div>
                         </div>
                     </div>
@@ -83,16 +83,23 @@ export default {
         ...mapGetters('auth', ['isAuthenticated']),
     },
     async mounted() {
-        try {
-            if (this.isAuthenticated) {
-                const current_user = await new UserWrapper().getCurrent();
-                await this.$store.dispatch('gallery/setUserGallery', current_user);
-            } else {
-                await this.$store.dispatch('gallery/setPublicGallery');
-            }
-        } catch (error) {
-            console.log(error);
-        }
+        this.reloadDrawings();
     },
+    methods:{
+        reloadDrawings: async function(){
+            try {
+                console.log("start:"+this.isAuthenticated);
+                if (this.isAuthenticated) {
+                    const current_user = await new UserWrapper().getCurrent();
+                    await this.$store.dispatch('gallery/setUserGallery', current_user);
+                } else {
+                    await this.$store.dispatch('gallery/setPublicGallery');
+                }
+                console.log("end:"+ this.isAuthenticated);
+            } catch (error) {
+                console.log(error);
+            }
+        }
+    }
 };
 </script>

@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import DrawingWapper from '../api/drawingWrapper';
 import { mapActions, mapGetters } from 'vuex';
 export default {
     props: ['drawing'],
@@ -79,8 +80,13 @@ export default {
         handleDeleteConfirmationModal(bool) {
             this.isOpenDeleteConfirmationModal = bool;
         },
-        deleteDrawing() {
-            console.log('gggg');
+        async deleteDrawing() {
+            const responce = await new DrawingWapper().destroy(this.drawing.id);
+            console.log("deleted");
+            console.log(responce);
+
+            //再ロード
+            this.$emit('reload');
             this.handleDeleteConfirmationModal(false);
         },
     },
