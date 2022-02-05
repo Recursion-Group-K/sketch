@@ -76,7 +76,17 @@ $width__sidebar: 20em;
         <div class="sidebar has-text-dark" :class="{ 'is-closed': !isSidebarOpen }">
             <aside class="menu p-5">
                 <div class="level-item is-hidden-mobile has-text-weight-bold is-size-4 pr-5">
-                    title of work
+                    <div v-if="!isInputTitle" @click="openInputTitle">
+                        {{ drawing.title }}
+                        <font-awesome-icon icon="edit" class="awesome-icon ml-2" />
+                    </div>
+                    <input
+                        type="text"
+                        v-if="isInputTitle"
+                        v-model="renameTitle"
+                        @blur="closeInputTitle"
+                        class="input"
+                    />
                 </div>
                 <p class="menu-label">Color</p>
                 <ul class="menu-list is-align-content-start">
@@ -118,7 +128,10 @@ $width__sidebar: 20em;
                 </ul>
                 <p class="menu-label">Share Options</p>
                 <ul class="menu-list">
-                    <li @click="twitterShare" :class="{ 'disabled': !isAuthenticated }">
+                    <li
+                        @click="twitterShare({ id: drawing.id })"
+                        :class="{ disabled: !isAuthenticated }"
+                    >
                         <a>
                             <font-awesome-icon
                                 :icon="['fab', 'twitter']"
@@ -128,7 +141,7 @@ $width__sidebar: 20em;
                             Twitter
                         </a>
                     </li>
-                    <li @click="toggleIsPublic" :class="{ 'disabled': !isAuthenticated }">
+                    <li @click="toggleIsPublic" :class="{ disabled: !isAuthenticated }">
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
@@ -142,7 +155,7 @@ $width__sidebar: 20em;
                 </ul>
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
-                    <li :class="{ 'disabled': !isAuthenticated }">
+                    <li :class="{ disabled: !isAuthenticated }">
                         <a @click="save">
                             <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
@@ -187,10 +200,13 @@ export default {
             },
             selectedColor: '',
             selectedWeight: 0,
+            renameTitle: '',
+            isInputTitle: false,
         };
     },
     computed: {
-        ...mapState('drawing', ['color', 'weight', 'isPublic']),
+        ...mapState('drawing/drawingEditter', ['color', 'weight', 'isPublic']),
+        ...mapState('drawing', ['drawing']),
         ...mapGetters('auth', ['isAuthenticated']),
     },
     mounted: function () {
@@ -205,10 +221,27 @@ export default {
             'undo',
             'stopPointer',
             'toggleIsPublic',
+            'save',
         ]),
-        ...mapActions('drawing', ['save', 'twitterShare']),
+        ...mapActions('drawing', ['twitterShare', 'setDrawingTitle']),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
+        },
+        openInputTitle() {
+            this.renameTitle = this.drawing.title;
+            this.isInputTitle = true;
+            console.log(this.renameTitle);
+            //title変更中はkeyイベントを発火させない
+            //document.removeEventListener('keydown', this.keyDown);
+            //document.removeEventListener('keyup', this.keyUp);
+        },
+        closeInputTitle() {
+            this.isInputTitle = false;
+            //keyイベントを再発火
+
+            if (this.renameTitle == this.drawing.title) return;
+            //タイトルが変わったら
+            this.setDrawingTitle({ newTitle: this.renameTitle });
         },
     },
 };

@@ -7,7 +7,6 @@ import {
     SET_REDO_TRIGGER,
     SET_POINTER_SPEED,
     SET_SAVE_TRIGGER,
-    SET_LOAD_TRIGGER,
     SET_STOP_POINTER_TRIGGER,
 } from './types';
 
@@ -28,16 +27,6 @@ export default {
         saveTrigger: false,
         loadTrigger: false,
         stopPointerTrigger: false,
-    },
-    getters: {
-        getLastPoint({ state }) {
-            const l = state.itemList.length - 1;
-            return state.itemList[l].lastPoint;
-        },
-        getPointerClone({ state }) {
-            const { x, y } = state.pointer;
-            return { x, y };
-        },
     },
     actions: {
         changeMode({ commit }, { mode }) {
@@ -67,9 +56,6 @@ export default {
         save({ commit }) {
             commit(SET_SAVE_TRIGGER);
         },
-        load({ commit }) {
-            commit(SET_LOAD_TRIGGER);
-        },
     },
     mutations: {
         [SET_MODE](state, mode) {
@@ -92,9 +78,6 @@ export default {
         },
         [SET_SAVE_TRIGGER](state) {
             state.saveTrigger = !state.saveTrigger;
-        },
-        [SET_LOAD_TRIGGER](state) {
-            state.loadTrigger = !state.loadTrigger;
         },
         [SET_STOP_POINTER_TRIGGER](state) {
             state.stopPointerTrigger = !state.stopPointerTrigger;

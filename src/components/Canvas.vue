@@ -40,7 +40,6 @@
                 ></v-circle>
             </v-layer>
         </v-stage>
-        <button @click="save()">test</button>
         <div v-if="!isAuthenticated">
             <p class="prompt-signup">Please SignUp to use our drawing tools.</p>
         </div>
@@ -81,7 +80,7 @@ export default {
     },
     mounted() {
         this.setDrawingById(this.$route.params['id']).then(() =>
-            this.setItemList(this.drawing.data)
+            this.setItemList([...this.drawing.data])
         );
 
         const parent = document.querySelector('#canvas');
@@ -110,7 +109,6 @@ export default {
          * resize canvas
          */
         window.addEventListener('resize', this.fitCanvas);
-        this.load();
     },
     beforeDestroy: function () {
         if (!this.isAllSaved) {
@@ -131,7 +129,6 @@ export default {
             'undoTrigger',
             'redoTrigger',
             'saveTrigger',
-            'loadTrigger',
             'stopPointerTrigger',
             'pointerSpeed',
         ]),
@@ -149,9 +146,6 @@ export default {
         },
         saveTrigger() {
             this.save();
-        },
-        loadTrigger() {
-            this.load();
         },
         stopPointerTrigger() {
             this.stopPointer();
@@ -206,10 +200,6 @@ export default {
                 }
             });
 
-            if (key == 'x') {
-                console.log('loaded');
-                this.load();
-            }
             if (key == 'c') {
                 console.log('reset');
                 this.reset();
@@ -310,21 +300,6 @@ export default {
             this.setItemList([]);
             localStorage.setItem('storage', JSON.stringify(this.itemList));
         },
-        /**
-         * load&save
-         */
-        load() {
-            console.log('loading');
-            this.loadDB();
-            if (this.itemList.length >= 1) {
-                const newPoint = this.getLastPoint();
-                this.setPointer(newPoint);
-            }
-            this.resetStack();
-            this.pushNewLine(this.pointer);
-            this.setIsAllSaved(true);
-            console.log('loaded');
-        },
         save() {
             var f = dataURItoBlob(this.dataURL);
             const file = new File([f], 'drawing.png', {
@@ -335,15 +310,6 @@ export default {
                 dataURL: file,
             });
             this.setIsAllSaved(true);
-        },
-        loadDB() {
-            const data = JSON.stringify(this.drawing.data);
-            console.log(data);
-            if (data == '{}') {
-                this.setItemList(JSON.parse('[]'));
-                return;
-            }
-            this.setItemList(JSON.parse(data));
         },
         downloadURI(name) {
             const link = document.createElement('a');
