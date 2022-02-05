@@ -88,10 +88,12 @@ export default {
                 // get form data
                 const params = {
                     title: this.title,
+                    data: '[]'
                 };
                 const responce = await this.$store.dispatch('drawing/createDrawing', params);
-                if (!this.createError)
+                if (!this.createError){
                     this.$router.push({ name: 'Drawing', params: { id: responce.id } });
+                }
             } catch (error) {
                 console.log(error.responce);
             }

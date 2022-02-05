@@ -52,7 +52,7 @@
                                 :key="drawing.id"
                                 class="column is-one-third"
                             >
-                                <DrawingBox :drawing="drawing"></DrawingBox>
+                                <DrawingBox :drawing="drawing" @reload="reloadDrawings"></DrawingBox>
                             </div>
                         </div>
                     </div>
@@ -84,15 +84,20 @@ export default {
     },
     async mounted() {
         try {
+            await this.$store.dispatch('gallery/setPublicGallery');
             if (this.isAuthenticated) {
                 const current_user = await new UserWrapper().getCurrent();
                 await this.$store.dispatch('gallery/setUserGallery', current_user);
-            } else {
-                await this.$store.dispatch('gallery/setPublicGallery');
             }
         } catch (error) {
             console.log(error.response);
         }
     },
-};
+    methods:{
+        reloadDrawings: function(){
+            console.log("reload")
+            this.$router.go({path: this.$router.currentRoute.path, force: true})
+        },
+    }
+}
 </script>
