@@ -1,4 +1,4 @@
-import DrawingWapper from '../api/drawingWrapper';
+import DrawingWrapper from '../api/drawingWrapper';
 import Drawing from '../models/drawing';
 import drawingEditter from './drawingEditter';
 import {
@@ -7,6 +7,9 @@ import {
     DRAWING_REQUEST_SUCCESS,
     DRAWING_REQUEST_FAILURE,
     TOGGLE_IS_PUBLIC,
+    CREATE_BEGIN,
+    CREATE_SUCCESS,
+    CREATE_FAILURE,
 } from './types';
 
 export default {
@@ -18,6 +21,8 @@ export default {
         drawing: {},
         hasError: false,
         isLoading: false,
+        createLoading: false,
+        createError: false,
     },
     actions: {
         //async getAllDrawings(/* { commit, state } */) {
@@ -27,10 +32,32 @@ export default {
         // commit(GET_ALL_DRAWINGS, all);
         // console.log(state.allDrawings);
         //},
-        async setDrawingById({ commit }, id) {
-            console.log(id);
+        // async setDrawingByUserId({ commit }) {
+        //     try {
+        //         const current_user = await new UserWrapper().getCurrent();
+        //         const response = await new DrawingWapper().getBy('user', current_user.id);
+        //         console.log(response);
+        //         if (response instanceof Drawing) {
+        //             commit(USER_DRAWING_RE)
+        //         }
+        //     } catch {
+
+        //     }
+        // },
+        async createDrawing({ commit }, payload) {
             try {
-                const response = await new DrawingWapper().getById(id);
+                commit(CREATE_BEGIN);
+                const response = await new DrawingWrapper().create(payload);
+                console.log(response);
+                if (response instanceof Drawing) commit(CREATE_SUCCESS);
+                else commit(CREATE_FAILURE);
+            } catch {
+                commit(CREATE_FAILURE);
+            }
+        },
+        async setDrawingById({ commit }, id) {
+            try {
+                const response = await new DrawingWrapper().getById(id);
                 console.log(response);
                 if (response instanceof Drawing) {
                     commit(DRAWING_REQUEST_SUCCESS);
@@ -49,7 +76,7 @@ export default {
             console.log(state.drawing);
             commit(DRAWING_REQUEST_BEGIN);
             try {
-                const response = await new DrawingWapper().update(state.drawing.id, updateProps);
+                const response = await new DrawingWrapper().update(state.drawing.id, updateProps);
                 console.log(response);
                 if (response instanceof Drawing) commit(DRAWING_REQUEST_SUCCESS);
                 else commit(DRAWING_REQUEST_FAILURE, response.data);
@@ -64,6 +91,17 @@ export default {
         toggleIsPublic() {},
     },
     mutations: {
+        [CREATE_BEGIN](state) {
+            state.createLoading = true;
+        },
+        [CREATE_SUCCESS](state) {
+            state.createLoading = false;
+            state.createError = false;
+        },
+        [CREATE_FAILURE](state) {
+            state.createLoading = false;
+            state.createError = true;
+        },
         [DRAWING_REQUEST_BEGIN](state) {
             state.isLoading = true;
         },
