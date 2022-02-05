@@ -73,12 +73,11 @@ export default {
     },
     async mounted() {
         //test list
-        if(this.isAuthenticated){
+        if (this.isAuthenticated) {
             const current_user = await new UserWrapper().getCurrent();
             this.drawings = await new DrawingWapper().getBy('user', current_user.id);
-        }
-        else this.drawings = await new DrawingWapper().getBy('is_public', 'true');
-        
+        } else this.drawings = await new DrawingWapper().getBy('is_public', 'true');
+
         //test retrieve
         // const id2Drawing = await new DrawingWapper().getById(2);
         // console.log(id2Drawing);
