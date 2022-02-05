@@ -56,11 +56,13 @@ export default {
                 width: 100,
                 height: 100,
             },
+            itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
+            itemStack: [],
+            isAllSaved: false,
             pointer: {
                 x: 0,
                 y: 0,
             },
-            newLineFlag: true,
             limit: {
                 up: 0,
                 down: 0,
@@ -81,11 +83,15 @@ export default {
         const { clientWidth, clientHeight } = parent;
 
         /**
-         * Init Konva Config
+         * Init
          */
         this.fitCanvas();
         this.pointer.x = clientWidth / 2;
         this.pointer.y = clientHeight / 2;
+        this.pushNewLine(this.pointer);
+        this.limit.down = clientHeight;
+        this.limit.right = clientWidth;
+        this.checkOverLimit(this.pointer);
 
         /**
          * Drawing setting
@@ -102,7 +108,7 @@ export default {
     },
     beforeDestroy: function () {
         if (!this.isAllSaved) {
-            this.save();
+            //this.save();
         }
     },
     destroyed: function () {
@@ -126,7 +132,7 @@ export default {
     },
     watch: {
         weight() {
-            this.setNewLine();
+            this.pushNewLine(this.pointer);
         },
         undoTrigger() {
             this.undo();
@@ -156,9 +162,6 @@ export default {
             const { clientWidth, clientHeight } = parent;
             this.configKonva.width = clientWidth;
             this.configKonva.height = clientHeight;
-            this.limit.down = clientHeight;
-            this.limit.right = clientWidth;
-            this.checkOverLimit(this.pointer);
         },
         setDataURL() {
             let stage = document.getElementById('canvas');
@@ -173,15 +176,14 @@ export default {
             Object.keys(this.pointerSpeed).forEach((direction) => {
                 this.setPointerSpeed({ direction: direction, value: false });
             });
-            this.setNewLine();
+            this.pushNewLine(this.pointer);
         },
         movePointer(event) {
-            this.setNewLine();
-            let stage = event.target.getStage();
-            let clickPos = stage.getPointerPosition();
+            const stage = event.target.getStage();
+            const clickPos = stage.getPointerPosition();
             this.checkOverLimit(clickPos);
-            this.pointer.x = clickPos.x;
-            this.pointer.y = clickPos.y;
+            this.setPointer(clickPos);
+            this.pushNewLine(this.pointer);
         },
 
         /**
@@ -206,14 +208,12 @@ export default {
             }
         },
         keyDown(event) {
+            const areAllKeyUp = Object.values(this.pointerSpeed).every((element) => !element.value);
+            if (areAllKeyUp) this.pushNewLine(this.pointer);
             this.keyEvent(event, true);
         },
         keyUp(event) {
             this.keyEvent(event, false);
-            const areAllKeyUp = Object.values(this.pointerSpeed).every(
-                (element) => element.value == false
-            );
-            if (areAllKeyUp) this.setNewLine();
         },
         /**
          * Getters
@@ -228,12 +228,6 @@ export default {
         /**
          * Setters
          */
-        setNewLineFlag(bool) {
-            this.newLineFlag = bool;
-        },
-        setIsUndoed(bool) {
-            this.isUndoed = bool;
-        },
         setPointer({ x, y }) {
             this.pointer.x = x;
             this.pointer.y = y;
@@ -247,31 +241,21 @@ export default {
         setItemStack(itemStack) {
             this.itemStack = itemStack;
         },
-        setLastPoint({ x, y }) {
-            this.itemList[this.itemList.length - 1].lastPoint = { x, y };
-        },
         pushNewLine({ x, y }) {
-            if (this.isUndoed) this.resetStack();
             this.itemList.push({
                 line: {
                     points: [x, y],
                     stroke: this.color,
                     strokeWidth: this.weight,
                 },
-                lastPoint: {},
+                lastPoint: { x, y },
             });
-            this.setNewLineFlag(false);
         },
-        pushNewPoint({ x, y }) {
-            this.itemList[this.itemList.length - 1].line.points.push(x, y);
-        },
-        setNewLine() {
-            if (this.newLineFlag) return;
-            this.setNewLineFlag(true);
-
-            if (this.itemList.length == 0) return;
-            this.setLastPoint(this.pointer);
-            this.setNewLineFlag(true);
+        updateLine({ x, y }) {
+            if (this.itemList.length == 0) this.pushNewLine(this.pointer);
+            const l = this.itemList.length;
+            this.itemList[l - 1].line.points.push(x, y);
+            this.itemList[l - 1].lastPoint = { x, y };
         },
         /**
          * Draw
@@ -287,11 +271,7 @@ export default {
 
             const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
             if (isSamePoint) return;
-            if (this.newLineFlag) {
-                this.pushNewLine(lastPoint);
-                this.setIsAllSaved(false);
-            }
-            this.pushNewPoint(this.pointer);
+            this.updateLine(this.pointer);
         },
         checkOverLimit(point) {
             if (point.x < this.limit.left) point.x = this.limit.left;
@@ -300,24 +280,23 @@ export default {
             if (point.y > this.limit.down) point.y = this.limit.down;
         },
         undo() {
-            this.setNewLine();
-            if (this.itemList.length == 0) return;
+            const l = this.itemList.length;
+            if (l == 0) return;
             this.itemStack.push(this.itemList.pop());
-            if (this.itemList.length == 0) return;
-            const newPoint = this.getLastPoint();
-            this.setPointer(newPoint);
-            this.setIsUndoed(true);
+
+            if (l - 1 <= 0) return;
+            this.setPointer(this.getLastPoint());
         },
         redo() {
-            this.setNewLine();
-            if (this.itemStack.length == 0) return;
+            const l = this.itemStack.length;
+            if (l == 0) return;
             this.itemList.push(this.itemStack.pop());
-            const newPoint = this.getLastPoint();
-            this.setPointer(newPoint);
+
+            if (l - 1 <= 0) return;
+            this.setPointer(this.getLastPoint());
         },
         resetStack() {
             this.setItemStack([]);
-            this.setIsUndoed(false);
         },
         reset() {
             this.setItemList([]);
@@ -334,7 +313,7 @@ export default {
                 this.setPointer(newPoint);
             }
             this.resetStack();
-            this.setNewLine();
+            this.pushNewLine(this.pointer);
             this.setIsAllSaved(true);
             console.log('loaded');
         },
