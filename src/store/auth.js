@@ -37,25 +37,25 @@ export default {
                 dispatch('refreshToken', refresh);
             }
         },
-        async refreshToken({ commit }, refreshToken) {
+        async refreshToken({ commit, dispatch }, refreshToken) {
             commit(LOGIN_BEGIN);
             try {
                 const response = await new Auth().refreshToken(refreshToken);
 
                 commit(SET_TOKEN, { access: response.data.access, refresh: refreshToken });
+                dispatch('setCurrentUser')
                 commit(LOGIN_SUCCESS);
             } catch (error) {
                 console.error(error);
                 commit(LOGIN_FAILURE);
             }
         },
-        async login({ commit }, { username, password }) {
+        async login({ commit, dispatch }, { username, password }) {
             commit(LOGIN_BEGIN);
             try {
                 const response = await new Auth().login(username, password);
                 commit(SET_TOKEN, response.data);
-                const currentUser = await new UserWrapper().getCurrent()
-                commit(SET_CURRENT_USER, currentUser);
+                dispatch('setCurrentUser')
                 commit(LOGIN_SUCCESS);
             } catch (error) {
                 console.log(error.response);
@@ -65,7 +65,12 @@ export default {
         logout({ commit }) {
             commit(LOGOUT);
             commit(REMOVE_TOKEN);
+            commit(SET_CURRENT_USER, {})
         },
+        async setCurrentUser ({commit}) {
+            const currentUser = await new UserWrapper().getCurrent()
+            commit(SET_CURRENT_USER, currentUser);
+        }
     },
     mutations: {
         [LOGIN_BEGIN](state) {

@@ -82,6 +82,7 @@ export default {
         const id = this.$route.params['id']
         await this.setDrawingById(id)
         this.setItemList([...this.drawing.data])
+
         if(!this.drawing.isPublic && !this.isEditable){
             this.$router.push({name: 'Gallery'});
         }
