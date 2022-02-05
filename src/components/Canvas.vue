@@ -81,7 +81,7 @@ export default {
     },
     mounted() {
         this.setDrawingById(this.$route.params['id']).then(() =>
-            this.setItemList(this.drawing.data)
+            this.setItemList([...this.drawing.data])
         );
 
         const parent = document.querySelector('#canvas');

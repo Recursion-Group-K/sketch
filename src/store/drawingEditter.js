@@ -29,16 +29,6 @@ export default {
         loadTrigger: false,
         stopPointerTrigger: false,
     },
-    getters: {
-        getLastPoint({ state }) {
-            const l = state.itemList.length - 1;
-            return state.itemList[l].lastPoint;
-        },
-        getPointerClone({ state }) {
-            const { x, y } = state.pointer;
-            return { x, y };
-        },
-    },
     actions: {
         changeMode({ commit }, { mode }) {
             if (!Config.mode[mode]) return false;
