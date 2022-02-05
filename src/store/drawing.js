@@ -1,4 +1,5 @@
 import DrawingWapper from '../api/drawingWrapper';
+import UserWrapper from '../api/userWrapper';
 import Drawing from '../models/drawing';
 import drawingEditter from './drawingEditter';
 import {
@@ -58,8 +59,38 @@ export default {
                 commit(DRAWING_REQUEST_FAILURE);
             }
         },
-        twitterShare() {
-            console.log('gggg');
+        async twitterShare(_, { id }) {
+            console.log('DrawingID:' + id);
+            const shareDrawing = await new DrawingWapper().getById(id);
+
+            //publicでないなら何もしない
+            if (!shareDrawing.isPublic) return;
+
+            //閲覧しているユーザーと作品の作者が一緒かどうかで文章を変える
+            const currentUser = await new UserWrapper().getCurrent();
+            console.log('auther:' + shareDrawing.userId);
+            console.log('current:' + currentUser.id);
+            const isAuther = currentUser.id == shareDrawing.userId;
+            let text = '';
+            if (isAuther) text = 'を描きました!';
+            else text = 'を閲覧しました!';
+
+            //aタグを作成してクリック
+            const drawingUrl = process.env.VUE_APP_SERVER_URL + '/Drawing/' + id;
+            const href = `http://twitter.com/share?text=「${shareDrawing.title}」${text}&url=${drawingUrl}`;
+            const link = document.createElement('a');
+            link.addEventListener('click', function () {
+                window.open(
+                    encodeURI(decodeURI(href)),
+                    'tweetwindow',
+                    'width=650, height=470, personalbar=0, toolbar=0, scrollbars=1, sizable=1'
+                );
+                return false;
+            });
+            link.rel = 'nofollow';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         },
         toggleIsPublic() {},
     },
