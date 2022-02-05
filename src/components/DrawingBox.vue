@@ -63,7 +63,7 @@
 
 <script>
 import DrawingWapper from '../api/drawingWrapper';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState} from 'vuex';
 export default {
     props: ['drawing'],
     data() {
