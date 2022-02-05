@@ -60,9 +60,10 @@ export default {
         DrawingForm,
     },
     name: 'Gallery',
+
     data() {
         return {
-            allDrawings: [],
+            drawings: [],
         };
     },
     computed: {

@@ -18,7 +18,7 @@
                 :class="{ 'has-text-success': isPublic }"
                 class="mx-1 awesome-icon"
                 size="lg"
-                @click="toggoleIsPublic"
+                @click="toggleIsPublic"
             />
             <font-awesome-icon
                 :icon="['fab', 'twitter']"
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
     props: ['drawing'],
     data() {
@@ -68,9 +68,10 @@ export default {
             isOpenDeleteConfirmationModal: false,
         };
     },
-    computed: mapGetters('drawing', ['isEtchASketchMode']),
+    computed: mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
     methods: {
-        toggoleIsPublic() {
+        ...mapActions('drawing', ['redirectToDrawingPage']),
+        toggleIsPublic() {
             this.isPublic = !this.isPublic;
         },
         twitterShare() {
