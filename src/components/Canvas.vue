@@ -47,6 +47,7 @@
 </template>
 
 <script>
+import UserWrapper from '../api/userWrapper'
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { dataURItoBlob } from '../utils';
 const velocityOfPointer = 2;
@@ -78,10 +79,17 @@ export default {
             dataURLTimer: undefined,
         };
     },
+    async created(){
+        const id = this.$route.params['id']
+        await this.setDrawingById(id)
+        this.setItemList([...this.drawing.data])
+        const currentUser = await new UserWrapper().getCurrent();
+        const isOwner = currentUser.id == this.drawing.userId
+        if(!this.drawing.isPublic && !isOwner){
+            this.$router.push({name: 'Gallery'});
+        }
+    },
     mounted() {
-        this.setDrawingById(this.$route.params['id']).then(() =>
-            this.setItemList([...this.drawing.data])
-        );
 
         const parent = document.querySelector('#canvas');
         const { clientWidth, clientHeight } = parent;
