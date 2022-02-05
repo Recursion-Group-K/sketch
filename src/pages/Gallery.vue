@@ -17,7 +17,7 @@
     <section id="Gallery" class="hero is-primary is-fullheight">
         <div class="hero-body">
             <div class="container is-fluid">
-                <div class="columns is-vcentered is-justify-content-center">
+                <div class="columns is-vcentered is-justify-content-center mt-4">
                     <div class="box column is-four-fifths p-6 mt-6" style="height: 85vh">
                         <div class="columns is-flex-wrap-wrap">
                             <div class="column is-one-third">
@@ -54,6 +54,7 @@ import DrawingWapper from '../api/drawingWrapper';
 import UserWrapper from '../api/userWrapper';
 import DrawingBox from '../components/DrawingBox.vue';
 import DrawingForm from '../components/NewDrawingButton.vue';
+import { mapGetters } from 'vuex';
 
 export default {
     components: {
@@ -67,18 +68,24 @@ export default {
             drawings: [],
         };
     },
+    computed: {
+        ...mapGetters('auth', ['isAuthenticated']),
+    },
     async mounted() {
         //test list
-        this.drawings = await new DrawingWapper().getAll();
-        console.log(this.drawings);
-
+        if(this.isAuthenticated){
+            const current_user = await new UserWrapper().getCurrent();
+            this.allDrawings = await new DrawingWapper().getBy('user', current_user.id);
+        }
+        else this.allDrawings = await new DrawingWapper().getBy('is_public', 'true');
+        
         //test retrieve
-        const id2Drawing = await new DrawingWapper().getById(2);
-        console.log(id2Drawing);
+        // const id2Drawing = await new DrawingWapper().getById(2);
+        // console.log(id2Drawing);
 
-        //test userwrapper getcurrent
-        const currentRes = new UserWrapper().getCurrent();
-        console.log(currentRes);
+        // //test userwrapper getcurrent
+        // const currentRes = new UserWrapper().getCurrent();
+        // console.log(currentRes);
 
         //test destroy
         // const  destroyRes = new DrawingWapper().destroy(8);
