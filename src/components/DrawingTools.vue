@@ -64,6 +64,11 @@ $width__sidebar: 20em;
     border: none;
     border-radius: 50%;
 }
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
 </style>
 
 <template>
@@ -71,7 +76,17 @@ $width__sidebar: 20em;
         <div class="sidebar has-text-dark" :class="{ 'is-closed': !isSidebarOpen }">
             <aside class="menu p-5">
                 <div class="level-item is-hidden-mobile has-text-weight-bold is-size-4 pr-5">
-                    title of work
+                    <div v-if="!isInputTitle" @click="openInputTitle">
+                        {{ drawing.title }}
+                        <font-awesome-icon icon="edit" class="awesome-icon ml-2" />
+                    </div>
+                    <input
+                        type="text"
+                        v-if="isInputTitle"
+                        v-model="renameTitle"
+                        @blur="closeInputTitle"
+                        class="input"
+                    />
                 </div>
                 <p class="menu-label">Color</p>
                 <ul class="menu-list is-align-content-start">
@@ -81,10 +96,10 @@ $width__sidebar: 20em;
                                 <div class="column">
                                     <input
                                         type="color"
-                                        v-model="color"
+                                        v-model="selectedColor"
                                         class="color-picker"
-                                        @click="$emit('click-color-picker')"
-                                        @change="$emit('change-color', color)"
+                                        @click="stopPointer"
+                                        @change="changeColor({ newColor: selectedColor })"
                                     />
                                     <span :style="{ backgroundColor: color }"></span>
                                 </div>
@@ -104,8 +119,8 @@ $width__sidebar: 20em;
                                 type="range"
                                 min="1"
                                 max="20"
-                                v-model="weight"
-                                @change="$emit('change-weight', weight)"
+                                v-model="selectedWeight"
+                                @change="changeWeight({ newWeight: selectedWeight })"
                             />
                             {{ weight }} px
                         </a>
@@ -113,7 +128,10 @@ $width__sidebar: 20em;
                 </ul>
                 <p class="menu-label">Share Options</p>
                 <ul class="menu-list">
-                    <li @click="twitterShare">
+                    <li
+                        @click="twitterShare({ id: drawing.id })"
+                        :class="{ disabled: !isAuthenticated }"
+                    >
                         <a>
                             <font-awesome-icon
                                 :icon="['fab', 'twitter']"
@@ -123,11 +141,11 @@ $width__sidebar: 20em;
                             Twitter
                         </a>
                     </li>
-                    <li @click="toggoleIsPublic">
+                    <li @click="toggleIsPublic(drawing)" :class="{ disabled: !isAuthenticated }">
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
-                                :class="{ 'has-text-success': isPublic }"
+                                :class="{ 'has-text-success': drawing.isPublic }"
                                 class="mx-1 awesome-icon"
                                 size="lg"
                             />
@@ -137,8 +155,8 @@ $width__sidebar: 20em;
                 </ul>
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
-                    <li>
-                        <a @click="$emit('save')">
+                    <li :class="{ disabled: !isAuthenticated }">
+                        <a @click="save">
                             <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
                                 icon="hdd"
@@ -151,40 +169,28 @@ $width__sidebar: 20em;
             </aside>
         </div>
         <div class="sidebar-group" :class="{ 'is-closed': !isSidebarOpen }">
-            <button 
-                class="button m-1"
-                @click="toggleSideBar"
-            >
+            <button class="button m-1" @click="toggleSideBar">
                 <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
             </button>
-            <button
-                class="button m-1"
-                @click="$emit('undo')"
-            >
-                <font-awesome-icon
-                    class="awesome-icon has-text-primary"
-                    icon="undo"
-                    size="lg"
-                />
+            <button class="button m-1" @click="undo" :disabled="!isAuthenticated">
+                <font-awesome-icon class="awesome-icon has-text-primary" icon="undo" size="lg" />
             </button>
-            <button
-                class="button m-1"
-                @click="$emit('redo')"
-            >
-                <font-awesome-icon
-                    class="awesome-icon has-text-primary"
-                    icon="redo"
-                    size="lg"
-                />
+            <button class="button m-1" @click="redo" :disabled="!isAuthenticated">
+                <font-awesome-icon class="awesome-icon has-text-primary" icon="redo" size="lg" />
             </button>
-            
         </div>
+        <SaveModal />
     </div>
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex';
+import SaveModal from './SaveModal.vue';
 export default {
     name: 'DrawingTools',
+    components: {
+        SaveModal,
+    },
     data() {
         return {
             isSidebarOpen: false,
@@ -192,20 +198,48 @@ export default {
                 weight: false,
                 others: false,
             },
-            color: '#000000',
-            weight: 3,
-            isPublic: false,
+            selectedColor: '',
+            selectedWeight: 0,
+            renameTitle: '',
+            isInputTitle: false,
         };
     },
+    computed: {
+        ...mapState('drawing/drawingEditter', ['color', 'weight']),
+        ...mapState('drawing', ['drawing']),
+        ...mapGetters('auth', ['isAuthenticated']),
+    },
+    mounted: function () {
+        this.selectedColor = this.color;
+        this.selectedWeight = this.weight;
+    },
     methods: {
+        ...mapActions('drawing/drawingEditter', [
+            'changeColor',
+            'changeWeight',
+            'redo',
+            'undo',
+            'stopPointer',
+            'save',
+        ]),
+        ...mapActions('drawing', ['toggleIsPublic', 'twitterShare', 'setDrawingTitle']),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
         },
-        toggoleIsPublic() {
-            this.isPublic = !this.isPublic;
+        openInputTitle() {
+            this.renameTitle = this.drawing.title;
+            this.isInputTitle = true;
+            //title変更中はkeyイベントを発火させない
+            //document.removeEventListener('keydown', this.keyDown);
+            //document.removeEventListener('keyup', this.keyUp);
         },
-        twitterShare() {
-            console.log('gggg');
+        closeInputTitle() {
+            this.isInputTitle = false;
+            //keyイベントを再発火
+
+            if (this.renameTitle == this.drawing.title) return;
+            //タイトルが変わったら
+            this.setDrawingTitle({ newTitle: this.renameTitle });
         },
     },
 };

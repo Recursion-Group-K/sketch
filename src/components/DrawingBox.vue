@@ -5,26 +5,29 @@
 </style>
 
 <template>
-    <div class="box container is-fluid" >
+    <div class="box container is-fluid">
         <router-link :to="`/drawing/${drawing.id}`">
-            <figure class="image is-4by3 mb-2" @click="redirectToDrawingPage" >
-                <img :src="drawing.imgUrl" />
+            <figure class="image is-4by3 mb-2">
+                <img :src="drawing.image" />
             </figure>
         </router-link>
         <p class="title is-5 has-text-dark">{{ drawing.title }}</p>
-        <div class="column is-one-fifths is-flex is-justify-content-flex-end">
+        <div
+            v-if="isAuthenticated"
+            class="column is-one-fifths is-flex is-justify-content-flex-end"
+        >
             <font-awesome-icon
                 icon="globe-asia"
-                :class="{ 'has-text-success': isPublic }"
+                :class="{ 'has-text-success': drawing.isPublic }"
                 class="mx-1 awesome-icon"
                 size="lg"
-                @click="toggoleIsPublic"
+                @click="toggleIsPublic(drawing)"
             />
             <font-awesome-icon
                 :icon="['fab', 'twitter']"
                 class="mx-1 awesome-icon has-text-info"
                 size="lg"
-                @click="twitterShare"
+                @click="twitterShare({ id: drawing.id })"
             />
             <font-awesome-icon
                 icon="trash"
@@ -59,28 +62,24 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
     props: ['drawing'],
     data() {
         return {
-            isPublic: false,
             isOpenDeleteConfirmationModal: false,
         };
     },
-    computed: mapGetters('drawing', ['isEtchASketchMode']),
+    computed: {
+        ...mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
+        ...mapGetters('auth', ['isAuthenticated']),
+    },
     methods: {
-        toggoleIsPublic() {
-            this.isPublic = !this.isPublic;
-        },
-        twitterShare() {
-            console.log('gggg');
-        },
+        ...mapActions('drawing', ['twitterShare', 'toggleIsPublic']),
         handleDeleteConfirmationModal(bool) {
             this.isOpenDeleteConfirmationModal = bool;
         },
         deleteDrawing() {
-            console.log('gggg');
             this.handleDeleteConfirmationModal(false);
         },
     },

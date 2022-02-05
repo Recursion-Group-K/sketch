@@ -5,6 +5,7 @@ import createLogger from 'vuex/dist/logger';
 import drawing from './drawing';
 import auth from './auth';
 import signup from './signup';
+import gallery from './gallery';
 
 const debug = process.env.NODE_ENV !== 'production';
 
@@ -15,6 +16,7 @@ export default new Vuex.Store({
         auth,
         drawing,
         signup,
+        gallery,
     },
     strict: debug,
     plugins: debug ? [createLogger()] : [],

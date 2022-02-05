@@ -1,9 +1,23 @@
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.prompt-signup {
+    margin-top: 1em;
+    font-weight: bold;
+}
+</style>
 
 <template>
     <div id="canvas" :style="{ height: '100%', width: '100%' }">
         <v-stage :config="configKonva" class="has-background-white" @click="movePointer">
             <v-layer>
+                <v-rect
+                    :config="{
+                        x: 0,
+                        y: 0,
+                        width: configKonva.width,
+                        height: configKonva.height,
+                        fill: 'white',
+                    }"
+                ></v-rect>
                 <v-line
                     v-for="item in itemList"
                     :key="item.id"
@@ -14,30 +28,37 @@
                         strokeWidth: item.line.strokeWidth,
                     }"
                 ></v-line>
-                <v-circle :config="pointer"></v-circle>
+                <v-circle
+                    :config="{
+                        x: pointer.x,
+                        y: pointer.y,
+                        radius: weight / 2,
+                        fill: 'white',
+                        stroke: color,
+                        strokeWidth: 4,
+                    }"
+                ></v-circle>
             </v-layer>
         </v-stage>
+        <div v-if="!isAuthenticated">
+            <p class="prompt-signup">Please SignUp to use our drawing tools.</p>
+        </div>
     </div>
 </template>
 
 <script>
+import { mapActions, mapGetters, mapState } from 'vuex';
+import { dataURItoBlob } from '../utils';
 const velocityOfPointer = 2;
-const keyMap = {
-    d: 'up',
-    f: 'down',
-    k: 'right',
-    j: 'left',
-};
 
 export default {
     name: 'Drawing',
-    props: ['newWeight', 'newColor'],
     data() {
         return {
             itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
             itemStack: [],
             isUndoed: false,
-            isAllSaved: false,
+            isAllSaved: true,
             configKonva: {
                 width: 100,
                 height: 100,
@@ -45,21 +66,6 @@ export default {
             pointer: {
                 x: 0,
                 y: 0,
-                radius: 3,
-                fill: 'black',
-                stroke: 'gray',
-                strokeWidth: 4,
-            },
-            lineConfig: {
-                color: 'black',
-                weight: 3,
-                newLineFlag: true,
-            },
-            direction: {
-                up: false,
-                down: false,
-                right: false,
-                left: false,
             },
             limit: {
                 up: 0,
@@ -68,18 +74,28 @@ export default {
                 left: 0,
             },
             timer: undefined,
+            dataURL: undefined,
+            dataURLTimer: undefined,
         };
     },
-    mounted: function () {
+    mounted() {
+        this.setDrawingById(this.$route.params['id']).then(() =>
+            this.setItemList([...this.drawing.data])
+        );
+
         const parent = document.querySelector('#canvas');
         const { clientWidth, clientHeight } = parent;
 
         /**
-         * Init Konva Config
+         * Init
          */
         this.fitCanvas();
         this.pointer.x = clientWidth / 2;
         this.pointer.y = clientHeight / 2;
+        this.pushNewLine(this.pointer);
+        this.limit.down = clientHeight;
+        this.limit.right = clientWidth;
+        this.checkOverLimit(this.pointer);
 
         /**
          * Drawing setting
@@ -87,50 +103,172 @@ export default {
         document.addEventListener('keydown', this.keyDown);
         document.addEventListener('keyup', this.keyUp);
         this.timer = setInterval(this.draw, 15);
+        this.dataURLTimer = setInterval(this.setDataURL, 5000);
 
         /**
          * resize canvas
          */
-
         window.addEventListener('resize', this.fitCanvas);
-        this.load();
+    },
+    beforeDestroy: function () {
+        if (!this.isAllSaved) {
+            //this.save();
+        }
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
         document.removeEventListener('keyup', this.keyUp);
         clearInterval(this.timer);
-        if (this.isAllSaved) return;
-        if (window.confirm('変更をセーブしますか？')) this.save();
+        clearInterval(this.dataURLTimer);
+    },
+    computed: {
+        ...mapState('drawing', ['drawing']),
+        ...mapState('drawing/drawingEditter', [
+            'color',
+            'weight',
+            'undoTrigger',
+            'redoTrigger',
+            'saveTrigger',
+            'stopPointerTrigger',
+            'pointerSpeed',
+        ]),
+        ...mapGetters('auth', ['isAuthenticated']),
     },
     watch: {
-        newWeight: function () {
-            let newWeight = Number(this.newWeight);
-            this.lineConfig.weight = newWeight;
-            this.pointer.radius = newWeight / 2;
-            this.lineConfig.newLineFlag = true;
+        weight() {
+            this.pushNewLine(this.pointer);
         },
-        newColor: function () {
-            this.lineConfig.color = this.newColor;
-            this.pointer.fill = this.newColor;
-            this.lineConfig.newLineFlag = true;
+        undoTrigger() {
+            this.undo();
+        },
+        redoTrigger() {
+            this.redo();
+        },
+        saveTrigger() {
+            this.save();
+        },
+        stopPointerTrigger() {
+            this.stopPointer();
         },
     },
     methods: {
-        stopPointer() {
-            this.direction.up = false;
-            this.direction.down = false;
-            this.direction.right = false;
-            this.direction.left = false;
-        },
+        ...mapActions('drawing', ['saveDB', 'setDrawingById']),
+        ...mapActions('drawing/drawingEditter', ['setPointerSpeed']),
+
+        /**
+         *
+         */
         fitCanvas() {
             const parent = document.querySelector('#canvas');
             const { clientWidth, clientHeight } = parent;
-            //console.log(clientWidth, clientHeight);
             this.configKonva.width = clientWidth;
             this.configKonva.height = clientHeight;
-            this.limit.down = clientHeight;
-            this.limit.right = clientWidth;
+        },
+        setDataURL() {
+            let stage = document.getElementById('canvas');
+            let canvas = stage.querySelector('canvas');
+            this.dataURL = canvas.toDataURL();
+        },
+
+        /**
+         * Pointer
+         */
+        stopPointer() {
+            Object.keys(this.pointerSpeed).forEach((direction) => {
+                this.setPointerSpeed({ direction: direction, value: false });
+            });
+            this.pushNewLine(this.pointer);
+        },
+        movePointer(event) {
+            const stage = event.target.getStage();
+            const clickPos = stage.getPointerPosition();
+            this.checkOverLimit(clickPos);
+            this.setPointer(clickPos);
+            this.pushNewLine(this.pointer);
+        },
+
+        /**
+         * KeyDown
+         */
+        keyEvent(event, boolean) {
+            if (!this.isAuthenticated) return;
+            let key = event.key;
+            Object.keys(this.pointerSpeed).forEach((direction) => {
+                const keyIncludes = this.pointerSpeed[direction].keys.includes(key);
+                if (keyIncludes) {
+                    this.setPointerSpeed({ direction: direction, value: boolean });
+                }
+            });
+
+            if (key == 'c') {
+                this.reset();
+            }
+        },
+        keyDown(event) {
+            const areAllKeyUp = Object.values(this.pointerSpeed).every((element) => !element.value);
+            if (areAllKeyUp) this.pushNewLine(this.pointer);
+            this.keyEvent(event, true);
+        },
+        keyUp(event) {
+            this.keyEvent(event, false);
+        },
+        /**
+         * Getters
+         */
+        getLastPoint() {
+            return this.itemList[this.itemList.length - 1].lastPoint;
+        },
+        getPointerClone() {
+            const { x, y } = this.pointer;
+            return { x, y };
+        },
+        /**
+         * Setters
+         */
+        setPointer({ x, y }) {
+            this.pointer.x = x;
+            this.pointer.y = y;
+        },
+        setIsAllSaved(bool) {
+            this.isAllSaved = bool;
+        },
+        setItemList(itemList) {
+            this.itemList = itemList;
+        },
+        setItemStack(itemStack) {
+            this.itemStack = itemStack;
+        },
+        pushNewLine({ x, y }) {
+            this.itemList.push({
+                line: {
+                    points: [x, y],
+                    stroke: this.color,
+                    strokeWidth: this.weight,
+                },
+                lastPoint: { x, y },
+            });
+        },
+        updateLine({ x, y }) {
+            if (this.itemList.length == 0) this.pushNewLine(this.pointer);
+            const l = this.itemList.length;
+            this.itemList[l - 1].line.points.push(x, y);
+            this.itemList[l - 1].lastPoint = { x, y };
+        },
+        /**
+         * Draw
+         */
+        draw() {
+            const lastPoint = this.getPointerClone();
+            if (this.pointerSpeed['up'].value) this.pointer.y -= velocityOfPointer;
+            if (this.pointerSpeed['down'].value) this.pointer.y += velocityOfPointer;
+            if (this.pointerSpeed['right'].value) this.pointer.x += velocityOfPointer;
+            if (this.pointerSpeed['left'].value) this.pointer.x -= velocityOfPointer;
+
             this.checkOverLimit(this.pointer);
+
+            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
+            if (isSamePoint) return;
+            this.updateLine(this.pointer);
         },
         checkOverLimit(point) {
             if (point.x < this.limit.left) point.x = this.limit.left;
@@ -138,126 +276,47 @@ export default {
             if (point.y < this.limit.up) point.y = this.limit.up;
             if (point.y > this.limit.down) point.y = this.limit.down;
         },
-        keyEvent(event, boolean) {
-            let key = event.key;
-            if (key in keyMap) {
-                this.direction[keyMap[key]] = boolean;
-            }
-            if (key == 'x') {
-                console.log('loaded');
-                this.load();
-            }
-            if(key == 'c'){
-                console.log('reset');
-                this.reset();
-            }
-        },
-        keyDown(event) {
-            this.keyEvent(event, true);
-        },
-        keyUp(event) {
-            this.keyEvent(event, false);
-            const areAllKeyUp = Object.values(this.direction).every((bool) => bool == false);
-            if (areAllKeyUp) this.setNewLine();
-        },
-        pushNewLine(x, y) {
-            if (this.isUndoed) this.resetStack();
-            this.itemList.push({
-                line: {
-                    points: [x, y],
-                    stroke: this.lineConfig.color,
-                    strokeWidth: this.lineConfig.weight,
-                },
-                lastPoint: {},
-            });
-            this.lineConfig.newLineFlag = false;
-        },
-        setNewLine() {
-            if (this.lineConfig.newLineFlag) return;
-            this.lineConfig.newLineFlag = true;
-            if (this.itemList.length == 0) return;
-            this.itemList[this.itemList.length - 1].lastPoint = {
-                x: this.pointer.x,
-                y: this.pointer.y,
-            };
-            console.log(this.itemList[this.itemList.length - 1]);
-        },
-        draw() {
-            let lastPoint = { x: this.pointer.x, y: this.pointer.y };
-            if (this.direction['up']) this.pointer.y -= velocityOfPointer;
-            if (this.direction['down']) this.pointer.y += velocityOfPointer;
-            if (this.direction['right']) this.pointer.x += velocityOfPointer;
-            if (this.direction['left']) this.pointer.x -= velocityOfPointer;
-            this.checkOverLimit(this.pointer);
-            const isSamePoint = lastPoint.x == this.pointer.x && lastPoint.y == this.pointer.y;
-            if (isSamePoint) {
-                return;
-            }
-            if (this.lineConfig.newLineFlag) {
-                this.pushNewLine(lastPoint.x, lastPoint.y);
-                this.isAllSaved = false;
-            }
-            this.itemList[this.itemList.length - 1].line.points.push(
-                this.pointer.x,
-                this.pointer.y
-            );
-        },
         undo() {
-            this.setNewLine();
-            if (this.itemList.length == 0) return;
+            const l = this.itemList.length;
+            if (l == 0) return;
             this.itemStack.push(this.itemList.pop());
-            if (this.itemList.length == 0) return;
-            const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
-            this.pointer.x = newPoint.x;
-            this.pointer.y = newPoint.y;
-            this.isUndoed = true;
+
+            if (l - 1 <= 0) return;
+            this.setPointer(this.getLastPoint());
         },
         redo() {
-            this.setNewLine();
-            if (this.itemStack.length == 0) return;
+            const l = this.itemStack.length;
+            if (l == 0) return;
             this.itemList.push(this.itemStack.pop());
-            const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
-            this.pointer.x = newPoint.x;
-            this.pointer.y = newPoint.y;
+
+            if (l - 1 <= 0) return;
+            this.setPointer(this.getLastPoint());
         },
         resetStack() {
-            this.itemStack = [];
-            this.isUndoed = false;
-        },
-        movePointer(event) {
-            this.setNewLine();
-            let stage = event.target.getStage();
-            let clickPos = stage.getPointerPosition();
-            this.checkOverLimit(clickPos);
-            this.pointer.x = clickPos.x;
-            this.pointer.y = clickPos.y;
-        },
-        load() {
-            this.loadDB();
-            if(this.itemList.length >= 1){
-                const newPoint = this.itemList[this.itemList.length - 1].lastPoint;
-                this.pointer.x = newPoint.x;
-                this.pointer.y = newPoint.y;
-            }
-            this.resetStack();
-            this.setNewLine();
-            this.isAllSaved = true;
-        },
-        save() {
-            this.setNewLine();
-            this.saveDB();
-            this.isAllSaved = true;
-        },
-        loadDB(){
-            const data = localStorage.getItem('storage') || '[]';
-            this.itemList = JSON.parse(data);
-        },
-        saveDB() {
-            localStorage.setItem('storage', JSON.stringify(this.itemList));
+            this.setItemStack([]);
         },
         reset() {
-            this.itemList = [];
+            this.setItemList([]);
             localStorage.setItem('storage', JSON.stringify(this.itemList));
+        },
+        save() {
+            var f = dataURItoBlob(this.dataURL);
+            const file = new File([f], 'drawing.png', {
+                type: 'image/png',
+            });
+            this.saveDB({
+                itemList: this.itemList,
+                dataURL: file,
+            });
+            this.setIsAllSaved(true);
+        },
+        downloadURI(name) {
+            const link = document.createElement('a');
+            link.download = name;
+            link.href = this.data;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         },
     },
 };

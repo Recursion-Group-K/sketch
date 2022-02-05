@@ -8,6 +8,9 @@ header {
     top: 0;
     box-shadow: $shadow;
 }
+.register-buttons {
+    margin-right: 1.2em;
+}
 </style>
 
 <template>
@@ -35,15 +38,14 @@ header {
 
             <div id="header-nav-items" class="navbar-menu" :class="{ 'is-active': isOpenMenu }">
                 <div class="navbar-start">
-                    <router-link to="/drawing/1" class="navbar-item sub-title">Drawing</router-link>
                     <router-link to="/gallery" class="navbar-item sub-title">Gallery</router-link>
                 </div>
 
                 <div class="navbar-end">
-                    <div v-if="doesUserSignedIn" :class="{ buttons: !isOpenMenu }">
-                        <a to="/" class="button navbar-item">Logout</a>
+                    <div v-if="isAuthenticated" :class="{ buttons: !isOpenMenu }">
+                        <button to="/" @click="logout" class="button navbar-item">Logout</button>
                     </div>
-                    <div v-else :class="{ buttons: !isOpenMenu }">
+                    <div v-else :class="{ buttons: !isOpenMenu }" class="register-buttons">
                         <router-link to="/signup" class="button is-primary navbar-item">
                             Signup
                         </router-link>
@@ -52,7 +54,6 @@ header {
                         </router-link>
                     </div>
                 </div>
-                <button @click="doesUserSignedIn = !doesUserSignedIn">Toggle</button>
             </div>
         </nav>
     </header>
@@ -60,18 +61,28 @@ header {
 
 <script>
 import UserWrapper from '../api/userWrapper';
-
+import { mapActions, mapGetters } from 'vuex';
 export default {
     name: 'Header',
     data() {
         return {
             isOpenMenu: false,
-            doesUserSignedIn: false,
             demoUser: null,
         };
     },
+    watch: {
+        isAuthenticated(to) {
+            if (to == false) this.$router.push({ name: 'Home' });
+        },
+    },
+    computed: {
+        ...mapGetters('auth', ['isAuthenticated']),
+    },
     mounted() {
         new UserWrapper().getById(1).then((user) => (this.demoUser = user));
+    },
+    methods: {
+        ...mapActions('auth', ['logout']),
     },
 };
 </script>
