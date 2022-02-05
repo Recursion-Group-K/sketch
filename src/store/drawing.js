@@ -1,4 +1,4 @@
-import DrawingWapper from '../api/drawingWrapper';
+import DrawingWrapper from '../api/drawingWrapper';
 import UserWrapper from '../api/userWrapper';
 import Drawing from '../models/drawing';
 import drawingEditter from './drawingEditter';
@@ -9,6 +9,9 @@ import {
     DRAWING_REQUEST_SUCCESS,
     DRAWING_REQUEST_FAILURE,
     TOGGLE_IS_PUBLIC,
+    CREATE_BEGIN,
+    CREATE_SUCCESS,
+    CREATE_FAILURE,
 } from './types';
 
 export default {
@@ -20,6 +23,8 @@ export default {
         drawing: {},
         hasError: false,
         isLoading: false,
+        createLoading: false,
+        createError: false,
     },
     actions: {
         async toggleIsPublic({ commit }, drawing) {
@@ -28,7 +33,7 @@ export default {
             };
             commit(DRAWING_REQUEST_BEGIN);
             try {
-                const response = await new DrawingWapper().update(drawing.id, updateProps);
+                const response = await new DrawingWrapper().update(drawing.id, updateProps);
                 console.log(response);
                 if (response instanceof Drawing) commit(DRAWING_REQUEST_SUCCESS);
                 else commit(DRAWING_REQUEST_FAILURE, response.data);
@@ -37,9 +42,20 @@ export default {
                 commit(DRAWING_REQUEST_FAILURE);
             }
         },
+        async createDrawing({ commit }, payload) {
+            try {
+                commit(CREATE_BEGIN);
+                const response = await new DrawingWrapper().create(payload);
+                console.log(response);
+                if (response instanceof Drawing) commit(CREATE_SUCCESS);
+                else commit(CREATE_FAILURE);
+            } catch {
+                commit(CREATE_FAILURE);
+            }
+        },
         async setDrawingById({ commit }, id) {
             try {
-                const response = await new DrawingWapper().getById(id);
+                const response = await new DrawingWrapper().getById(id);
                 console.log(response);
                 if (response instanceof Drawing) {
                     commit(DRAWING_REQUEST_SUCCESS);
@@ -58,7 +74,7 @@ export default {
             };
             commit(DRAWING_REQUEST_BEGIN);
             try {
-                const response = await new DrawingWapper().update(state.drawing.id, updateProps);
+                const response = await new DrawingWrapper().update(state.drawing.id, updateProps);
                 console.log(response);
                 if (response instanceof Drawing) commit(DRAWING_REQUEST_SUCCESS);
                 else commit(DRAWING_REQUEST_FAILURE, response.data);
@@ -69,7 +85,7 @@ export default {
         },
         async twitterShare(_, { id }) {
             console.log('DrawingID:' + id);
-            const shareDrawing = await new DrawingWapper().getById(id);
+            const shareDrawing = await new DrawingWrapper().getById(id);
 
             //publicでないなら何もしない
             if (!shareDrawing.isPublic) return;
@@ -103,6 +119,17 @@ export default {
         },
     },
     mutations: {
+        [CREATE_BEGIN](state) {
+            state.createLoading = true;
+        },
+        [CREATE_SUCCESS](state) {
+            state.createLoading = false;
+            state.createError = false;
+        },
+        [CREATE_FAILURE](state) {
+            state.createLoading = false;
+            state.createError = true;
+        },
         [DRAWING_REQUEST_BEGIN](state) {
             state.isLoading = true;
         },

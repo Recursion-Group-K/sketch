@@ -109,11 +109,6 @@ export default {
          * resize canvas
          */
         window.addEventListener('resize', this.fitCanvas);
-
-        /**
-         * Disable key event for unauthorized user
-         */
-        // this.disableKeyEvents();
     },
     beforeDestroy: function () {
         if (!this.isAllSaved) {
@@ -196,6 +191,7 @@ export default {
          * KeyDown
          */
         keyEvent(event, boolean) {
+            if (!this.isAuthenticated) return;
             let key = event.key;
             Object.keys(this.pointerSpeed).forEach((direction) => {
                 const keyIncludes = this.pointerSpeed[direction].keys.includes(key);

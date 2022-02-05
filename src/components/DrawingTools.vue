@@ -222,11 +222,7 @@ export default {
             'stopPointer',
             'save',
         ]),
-        ...mapActions('drawing', [
-            'toggleIsPublic',
-            'twitterShare',
-            'setDrawingTitle'
-        ]),
+        ...mapActions('drawing', ['toggleIsPublic', 'twitterShare', 'setDrawingTitle']),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
         },

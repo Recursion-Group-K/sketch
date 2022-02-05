@@ -12,7 +12,10 @@
             </figure>
         </router-link>
         <p class="title is-5 has-text-dark">{{ drawing.title }}</p>
-        <div class="column is-one-fifths is-flex is-justify-content-flex-end">
+        <div
+            v-if="isAuthenticated"
+            class="column is-one-fifths is-flex is-justify-content-flex-end"
+        >
             <font-awesome-icon
                 icon="globe-asia"
                 :class="{ 'has-text-success': drawing.isPublic }"
@@ -67,9 +70,12 @@ export default {
             isOpenDeleteConfirmationModal: false,
         };
     },
-    computed: mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
+    computed: {
+        ...mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
+        ...mapGetters('auth', ['isAuthenticated']),
+    },
     methods: {
-        ...mapActions('drawing', ['twitterShare','toggleIsPublic']),
+        ...mapActions('drawing', ['twitterShare', 'toggleIsPublic']),
         handleDeleteConfirmationModal(bool) {
             this.isOpenDeleteConfirmationModal = bool;
         },

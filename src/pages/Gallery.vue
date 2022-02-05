@@ -11,6 +11,15 @@
 .no-image-message {
     color: crimson;
 }
+
+.loading {
+    display: flex;
+    justify-content: center;
+}
+</style>
+
+<style module>
+@import '../assets/loading.css';
 </style>
 
 <template>
@@ -20,7 +29,7 @@
                 <div class="columns is-vcentered is-justify-content-center mt-4">
                     <div class="box column is-four-fifths p-6 mt-6" style="height: 85vh">
                         <div class="columns is-flex-wrap-wrap">
-                            <div class="column is-one-third">
+                            <div v-if="isAuthenticated" class="column is-one-third">
                                 <div
                                     class="columns is-vcentered is-flex is-justify-content-center"
                                     style="height: 100%"
@@ -28,7 +37,11 @@
                                     <DrawingForm />
                                 </div>
                             </div>
-                            <div v-if="!drawings.length">
+                            <!-- Loader -->
+                            <div v-if="isLoading" class="loading">
+                                <span class="loader"></span>
+                            </div>
+                            <div v-else-if="hasError">
                                 <h1 class="no-image-message">
                                     There are no images available for viewing.
                                 </h1>
@@ -50,11 +63,10 @@
 </template>
 
 <script>
-import DrawingWapper from '../api/drawingWrapper';
 import UserWrapper from '../api/userWrapper';
 import DrawingBox from '../components/DrawingBox.vue';
 import DrawingForm from '../components/NewDrawingButton.vue';
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
     components: {
@@ -64,19 +76,23 @@ export default {
     name: 'Gallery',
 
     data() {
-        return {
-            drawings: [],
-        };
+        return {};
     },
     computed: {
+        ...mapState('gallery', ['isLoading', 'hasError', 'drawings']),
         ...mapGetters('auth', ['isAuthenticated']),
     },
     async mounted() {
-        //test list
-        if (this.isAuthenticated) {
-            const current_user = await new UserWrapper().getCurrent();
-            this.drawings = await new DrawingWapper().getBy('user', current_user.id);
-        } else this.drawings = await new DrawingWapper().getBy('is_public', 'true');
+        try {
+            if (this.isAuthenticated) {
+                const current_user = await new UserWrapper().getCurrent();
+                await this.$store.dispatch('gallery/setUserGallery', current_user);
+            } else {
+                await this.$store.dispatch('gallery/setPublicGallery');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     },
 };
 </script>
