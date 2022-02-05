@@ -7,7 +7,7 @@
 <template>
     <div class="box container is-fluid">
         <router-link :to="`/drawing/${drawing.id}`">
-            <figure class="image is-4by3 mb-2" @click="redirectToDrawingPage({ id: drawing.id })">
+            <figure class="image is-4by3 mb-2">
                 <img :src="drawing.image" />
             </figure>
         </router-link>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
     props: ['drawing'],
     data() {
@@ -70,7 +70,6 @@ export default {
     },
     computed: mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
     methods: {
-        ...mapActions('drawing', ['redirectToDrawingPage']),
         toggleIsPublic() {
             this.isPublic = !this.isPublic;
         },

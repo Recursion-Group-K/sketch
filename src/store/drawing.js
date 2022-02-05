@@ -1,10 +1,11 @@
 import DrawingWapper from '../api/drawingWrapper';
+import Drawing from '../models/drawing';
 import drawingEditter from './drawingEditter';
 import {
     SET_DRAWING,
-    DRAWING_SAVE_BEGIN,
-    DRAWING_SAVE_SUCCESS,
-    DRAWING_SAVE_FAILURE,
+    DRAWING_REQUEST_BEGIN,
+    DRAWING_REQUEST_SUCCESS,
+    DRAWING_REQUEST_FAILURE,
     TOGGLE_IS_PUBLIC,
 } from './types';
 
@@ -26,39 +27,36 @@ export default {
         // commit(GET_ALL_DRAWINGS, all);
         // console.log(state.allDrawings);
         //},
-        async redirectToDrawingPage({ commit, state, dispatch }, { id }) {
-            console.log('id=' + id);
-            const newDrawing = await new DrawingWapper().getById(id);
-            await commit(SET_DRAWING, newDrawing);
-            console.log(state.drawing);
-            dispatch('drawingEditter/load');
+        async setDrawingById({ commit }, id) {
+            console.log(id);
+            try {
+                const response = await new DrawingWapper().getById(id);
+                console.log(response);
+                if (response instanceof Drawing) {
+                    commit(DRAWING_REQUEST_SUCCESS);
+                    commit(SET_DRAWING, response);
+                } else commit(DRAWING_REQUEST_FAILURE, response.data);
+            } catch {
+                commit(DRAWING_REQUEST_FAILURE);
+            }
         },
-        saveDB({ state, commit }, { itemList, dataURL }) {
-            console.log(itemList);
+        async saveDB({ state, commit }, { itemList, dataURL }) {
             const data = JSON.stringify(itemList);
-            console.log(data);
             const updateProps = {
                 data: data,
-                img: dataURL,
-                updatedAt: new Date(),
+                image: dataURL,
             };
             console.log(state.drawing);
-            const updateDrawing = new DrawingWapper().update(state.drawing.id, updateProps);
-            console.log(updateDrawing);
-            commit(SET_DRAWING, updateDrawing);
-        },
-        save({ commit, dispatch }) {
-            commit(DRAWING_SAVE_BEGIN);
-            dispatch('drawingEditter/save');
-            // axios の代わり
-            // 成功した時
-            setTimeout(() => {
-                commit(DRAWING_SAVE_SUCCESS);
-            }, 3000);
-            // 失敗した時
-            // setTimeout(() => {
-            //     commit(DRAWING_SAVE_FAILURE)
-            // },3000)
+            commit(DRAWING_REQUEST_BEGIN);
+            try {
+                const response = await new DrawingWapper().update(state.drawing.id, updateProps);
+                console.log(response);
+                if (response instanceof Drawing) commit(DRAWING_REQUEST_SUCCESS);
+                else commit(DRAWING_REQUEST_FAILURE, response.data);
+            } catch (error) {
+                console.log(error.response);
+                commit(DRAWING_REQUEST_FAILURE);
+            }
         },
         twitterShare() {
             console.log('gggg');
@@ -66,14 +64,14 @@ export default {
         toggleIsPublic() {},
     },
     mutations: {
-        [DRAWING_SAVE_BEGIN](state) {
+        [DRAWING_REQUEST_BEGIN](state) {
             state.isLoading = true;
         },
-        [DRAWING_SAVE_SUCCESS](state) {
+        [DRAWING_REQUEST_SUCCESS](state) {
             state.isLoading = false;
             state.hasError = false;
         },
-        [DRAWING_SAVE_FAILURE](state) {
+        [DRAWING_REQUEST_FAILURE](state) {
             state.isLoading = false;
             state.hasError = true;
         },
