@@ -8,7 +8,7 @@
     <div class="box container is-fluid">
         <router-link :to="`/drawing/${drawing.id}`">
             <figure class="image is-4by3 mb-2">
-                <img :src="drawing.imgUrl" />
+                <img :src="drawing.image" />
             </figure>
         </router-link>
         <p class="title is-5 has-text-dark">{{ drawing.title }}</p>

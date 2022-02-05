@@ -1,3 +1,18 @@
+<style scoped lang="scss">
+.box {
+    box-shadow: $shadow;
+    overflow: scroll;
+}
+
+.border {
+    border: solid;
+}
+
+.no-image-message {
+    color: crimson;
+}
+</style>
+
 <template>
     <section id="Gallery" class="hero is-primary is-fullheight">
         <div class="hero-body">
@@ -13,7 +28,11 @@
                                     <DrawingForm />
                                 </div>
                             </div>
+                            <div v-if="!allDrawings.length">
+                                <h1 class="no-image-message">There are no images available for viewing.</h1>
+                            </div>
                             <div
+                                v-else
                                 v-for="drawing in allDrawings"
                                 :key="drawing.id"
                                 class="column is-one-third"
@@ -29,6 +48,8 @@
 </template>
 
 <script>
+import DrawingWapper from '../api/drawingWrapper';
+import UserWrapper from '../api/userWrapper';
 import DrawingBox from '../components/DrawingBox.vue';
 import DrawingForm from '../components/NewDrawingButton.vue';
 
@@ -44,19 +65,38 @@ export default {
             drawings: [],
         };
     },
-    mounted() {
-        this.drawings = this.getAllDrawings();
+    async mounted() {
+        //test list
+        this.drawings = await new DrawingWapper().getAll();
+        console.log(this.allDrawings);
+
+        //test retrieve
+        const id2Drawing = await new DrawingWapper().getById(2);
+        console.log(id2Drawing);
+
+        //test userwrapper getcurrent
+        const currentRes = new UserWrapper().getCurrent();
+        console.log(currentRes);
+
+        //test destroy
+        // const  destroyRes = new DrawingWapper().destroy(8);
+        // console.log(destroyRes)
+
+        //test create
+        // let params = {
+        //     title: 'test',
+        //     data: '{}',
+        //     isPublic: true,
+        //     userId: 8,
+        // };
+        // const createRes = new DrawingWapper().create(params);
+        // console.log(createRes);
+
+        //test update
+        // const updateRes = new DrawingWapper().update(id2Drawing.id, {title:'id2-updated-2'});
+        // console.log(updateRes);
     },
 };
 </script>
 
-<style scoped lang="scss">
-.box {
-    box-shadow: $shadow;
-    overflow: scroll;
-}
 
-.border {
-    border: solid;
-}
-</style>

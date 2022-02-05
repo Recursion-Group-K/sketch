@@ -5,7 +5,7 @@ import endpoints from '../api/endpoints';
 const { list, listFilter, retrieve, create, update, destroy } = endpoints.drawings;
 
 class ParamsConverter {
-    toClientParams({ id, title, image, is_public, data, created_at, updated_at, user_id }) {
+    static toClientParams({ id, title, image, is_public, data, created_at, updated_at, user_id }) {
         const params = {
             id: id,
             title: title,
@@ -20,19 +20,14 @@ class ParamsConverter {
         return params;
     }
 
-    toRequestParams({ id, title, image, isPublic, data, createdAt, updatedAt, userId }) {
-        const params = {
-            id: id,
-            title: title,
-            image: image,
-            is_public: isPublic,
-            data: data,
-            created_at: createdAt,
-            updated_at: updatedAt,
-            user_id: userId,
-        };
-
-        return params;
+    static toFormDataParams ({ title, image, isPublic, data, userId }) {
+        const formData = new FormData()
+        if(image)formData.append('image', image)
+        if(title)formData.append('title', title)
+        if(isPublic)formData.append('is_public', isPublic)
+        if(data)formData.append('data', data)
+        if(userId)formData.append('user_id', userId)
+        return formData;
     }
 }
 
@@ -50,7 +45,7 @@ export default class DrawingWapper {
             const params = ParamsConverter.toClientParams(response.data);
             return new Drawing(params);
         } catch (error) {
-            console.error(error);
+            return error.response
         }
     }
 
@@ -72,7 +67,7 @@ export default class DrawingWapper {
             }
             return drawings;
         } catch (error) {
-            console.error(error);
+            return error.response
         }
     }
 
@@ -92,7 +87,7 @@ export default class DrawingWapper {
             }
             return drawings;
         } catch (error) {
-            console.error(error);
+            return error.response
         }
     }
 
@@ -101,31 +96,31 @@ export default class DrawingWapper {
      * @returns {Drawing}
      */
     async create(params) {
-        const requestParams = ParamsConverter.toRequestParams(params);
+        const formData = ParamsConverter.toFormDataParams(params);
         try {
-            const response = await client.get(create(requestParams));
+            const response = await client.post(create(), formData);
             return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
-            console.error(error);
+            return error.response
         }
     }
 
-    async update(params) {
-        const requestParams = ParamsConverter.toRequestParams(params);
+    async update(id, params) {
+        const formData = ParamsConverter.toFormDataParams(params);
         try {
-            const response = await client.get(update(requestParams.id), requestParams);
+            const response = await client.patch(update(id), formData);
             return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
-            console.error(error);
+            return error.response
         }
     }
 
     async destroy(id) {
         try {
-            const response = await client.get(destroy(id));
-            return new Drawing(ParamsConverter.toClientParams(response.data));
+            const response = await client.delete(destroy(id));
+            return response
         } catch (error) {
-            console.error(error);
+            return error.response
         }
     }
 }
