@@ -13,7 +13,6 @@
         </router-link>
         <p class="title is-5 has-text-dark">{{ drawing.title }}</p>
         <div
-            v-if="isEditable"
             class="column is-one-fifths is-flex is-justify-content-flex-end"
         >
             <font-awesome-icon
@@ -30,6 +29,7 @@
                 @click="twitterShare({ id: drawing.id })"
             />
             <font-awesome-icon
+                v-if="isEditable"
                 icon="trash"
                 class="mx-1 awesome-icon has-text-danger"
                 size="lg"
@@ -102,6 +102,7 @@ export default {
             this.handleDeleteConfirmationModal(false);
         },
         switchIsPublic(){
+            if(this.isEditable)return;
             this.toggleIsPublic(this.drawing);
             this.is_Public=!this.is_Public;
             this.$emit('reload');
