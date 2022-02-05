@@ -1,20 +1,13 @@
 import UserWrapper from '../api/userWrapper';
-import User from '../models/user'
+import User from '../models/user';
 
-import {
-    SIGNUP_BEGIN,
-    SIGNUP_FAILURE,
-    SIGNUP_SUCCESS,
-    SIGNUP_BAD_REQUEST
-}
-from './types'
-
+import { SIGNUP_BEGIN, SIGNUP_FAILURE, SIGNUP_SUCCESS, SIGNUP_BAD_REQUEST } from './types';
 
 export default {
     namespaced: true,
     state: {
         isLoading: false,
-        hasRespError : false,
+        hasRespError: false,
         usernameError: [],
         emailError: [],
     },
@@ -30,7 +23,7 @@ export default {
                 const response = await new UserWrapper().create(userParams);
                 console.log(response);
 
-                if(response instanceof User) commit(SIGNUP_SUCCESS);
+                if (response instanceof User) commit(SIGNUP_SUCCESS);
                 else commit(SIGNUP_BAD_REQUEST, response.data);
             } catch (error) {
                 commit(SIGNUP_FAILURE);
@@ -57,12 +50,12 @@ export default {
             let emailString = payload.email.toString();
             let usernameString = payload.username.toString();
 
-            if(!state.usernameError.includes(usernameString)) {
-                state.usernameError.push(usernameString)
+            if (!state.usernameError.includes(usernameString)) {
+                state.usernameError.push(usernameString);
             }
-            if(!state.emailError.includes(emailString)) {
-                state.emailError.push(emailString)
+            if (!state.emailError.includes(emailString)) {
+                state.emailError.push(emailString);
             }
-        }
+        },
     },
 };

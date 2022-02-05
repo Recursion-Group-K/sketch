@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 export default {
     props: ['drawing'],
     data() {
@@ -70,7 +70,6 @@ export default {
     },
     computed: mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
     methods: {
-        ...mapActions('drawing', ['redirectToDrawingPage']),
         toggleIsPublic() {
             this.isPublic = !this.isPublic;
         },

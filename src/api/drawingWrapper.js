@@ -20,13 +20,13 @@ class ParamsConverter {
         return params;
     }
 
-    static toFormDataParams ({ title, image, isPublic, data, userId }) {
-        const formData = new FormData()
-        if(image)formData.append('image', image)
-        if(title)formData.append('title', title)
-        if(isPublic)formData.append('is_public', isPublic)
-        if(data)formData.append('data', data)
-        if(userId)formData.append('user_id', userId)
+    static toFormDataParams({ title, image, isPublic, data = '[]', userId }) {
+        const formData = new FormData();
+        if (image) formData.append('image', image);
+        if (title) formData.append('title', title);
+        if (isPublic) formData.append('is_public', isPublic);
+        if (data) formData.append('data', data);
+        if (userId) formData.append('user_id', userId);
         return formData;
     }
 }
@@ -45,7 +45,7 @@ export default class DrawingWapper {
             const params = ParamsConverter.toClientParams(response.data);
             return new Drawing(params);
         } catch (error) {
-            return error.response
+            return error.response;
         }
     }
 
@@ -67,7 +67,7 @@ export default class DrawingWapper {
             }
             return drawings;
         } catch (error) {
-            return error.response
+            return error.response;
         }
     }
 
@@ -87,7 +87,7 @@ export default class DrawingWapper {
             }
             return drawings;
         } catch (error) {
-            return error.response
+            return error.response;
         }
     }
 
@@ -101,7 +101,7 @@ export default class DrawingWapper {
             const response = await client.post(create(), formData);
             return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
-            return error.response
+            return error.response;
         }
     }
 
@@ -111,16 +111,16 @@ export default class DrawingWapper {
             const response = await client.patch(update(id), formData);
             return new Drawing(ParamsConverter.toClientParams(response.data));
         } catch (error) {
-            return error.response
+            return error.response;
         }
     }
 
     async destroy(id) {
         try {
             const response = await client.delete(destroy(id));
-            return response
+            return response;
         } catch (error) {
-            return error.response
+            return error.response;
         }
     }
 }

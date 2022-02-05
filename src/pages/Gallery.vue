@@ -28,12 +28,14 @@
                                     <DrawingForm />
                                 </div>
                             </div>
-                            <div v-if="!allDrawings.length">
-                                <h1 class="no-image-message">There are no images available for viewing.</h1>
+                            <div v-if="!drawings.length">
+                                <h1 class="no-image-message">
+                                    There are no images available for viewing.
+                                </h1>
                             </div>
                             <div
                                 v-else
-                                v-for="drawing in allDrawings"
+                                v-for="drawing in drawings"
                                 :key="drawing.id"
                                 class="column is-one-third"
                             >
@@ -105,5 +107,3 @@ export default {
     },
 };
 </script>
-
-

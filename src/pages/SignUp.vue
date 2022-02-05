@@ -55,10 +55,7 @@
                                 <span v-if="isLoading" class="loader"></span>
                             </div>
                             <!-- Error Message -->
-                            <div
-                                v-if="hasRespError"
-                                class="has-text-danger is-size-4 p-3"
-                            >
+                            <div v-if="hasRespError" class="has-text-danger is-size-4 p-3">
                                 <p class="error-title">Error occured. Try Again.</p>
                             </div>
                             <hr />
@@ -75,7 +72,7 @@
                                         <i class="fa fa-envelope"></i>
                                     </span>
                                 </div>
-                                <div v-for="error in usernameError" :key=error.id>
+                                <div v-for="error in usernameError" :key="error.id">
                                     <p class="error-message">{{ error }}</p>
                                 </div>
                             </div>
@@ -93,7 +90,7 @@
                                         <i class="fa fa-envelope"></i>
                                     </span>
                                 </div>
-                                <div v-for="error in emailError" :key=error.id>
+                                <div v-for="error in emailError" :key="error.id">
                                     <p class="error-message">{{ error }}</p>
                                 </div>
                             </div>
@@ -124,7 +121,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex';
 
 export default {
     name: 'SignUp',
@@ -138,27 +135,22 @@ export default {
         };
     },
     computed: {
-        ...mapState('signup', [
-            'isLoading',
-            'hasRespError',
-            'usernameError',
-            'emailError',
-        ]),
+        ...mapState('signup', ['isLoading', 'hasRespError', 'usernameError', 'emailError']),
         ...mapGetters('auth', ['isAuthenticated']),
     },
     methods: {
         async createAccount({ username, email, password }) {
             try {
-                console.log(username, email, password)
+                console.log(username, email, password);
                 await this.$store.dispatch('signup/createAccount', { username, email, password });
                 await this.$store.dispatch('auth/login', { username, password });
-                if(!this.hasRespError && this.isAuthenticated) {
+                if (!this.hasRespError && this.isAuthenticated) {
                     this.$router.push({ name: 'Gallery' });
                 }
-            } catch(error) {
+            } catch (error) {
                 console.log(error);
             }
-        }
-    }
+        },
+    },
 };
 </script>
