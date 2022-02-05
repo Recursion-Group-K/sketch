@@ -1,9 +1,6 @@
 import drawingEditter from './drawingEditter';
 import {
     SET_DRAWING,
-    SET_DRAWING_DATE,
-    SET_DRAWINGIMG_URL,
-    SET_UPDATE_DATA,
     DRAWING_SAVE_BEGIN,
     DRAWING_SAVE_SUCCESS,
     DRAWING_SAVE_FAILURE,

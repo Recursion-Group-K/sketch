@@ -35,8 +35,6 @@
                 ></v-circle>
             </v-layer>
         </v-stage>
-        <button @click="undo">undo</button>
-        <button @click="redo">redo</button>
     </div>
 </template>
 
@@ -52,6 +50,13 @@ export default {
                 width: 100,
                 height: 100,
             },
+            itemList: [], //{line: ラインオブジェクト, lastPoint: ライン最後の座標}
+            itemStack: [],
+            isAllSaved: false,
+            pointer: {
+                x: 0,
+                y: 0,
+            },
             limit: {
                 up: 0,
                 down: 0,
@@ -66,12 +71,15 @@ export default {
         const { clientWidth, clientHeight } = parent;
 
         /**
-         * Init Konva Config
+         * Init
          */
         this.fitCanvas();
         this.pointer.x = clientWidth / 2;
         this.pointer.y = clientHeight / 2;
-        this.pushNewLine(this.pointer)
+        this.pushNewLine(this.pointer);
+        this.limit.down = clientHeight;
+        this.limit.right = clientWidth;
+        this.checkOverLimit(this.pointer);
 
         /**
          * Drawing setting
@@ -139,9 +147,6 @@ export default {
             const { clientWidth, clientHeight } = parent;
             this.configKonva.width = clientWidth;
             this.configKonva.height = clientHeight;
-            this.limit.down = clientHeight;
-            this.limit.right = clientWidth;
-            this.checkOverLimit(this.pointer);
         },
 
         /**
@@ -183,9 +188,7 @@ export default {
             }
         },
         keyDown(event) {
-            const areAllKeyUp = Object.values(this.pointerSpeed).every(
-                (element) => !element.value
-            );
+            const areAllKeyUp = Object.values(this.pointerSpeed).every((element) => !element.value);
             if (areAllKeyUp) this.pushNewLine(this.pointer);
             this.keyEvent(event, true);
         },
@@ -225,11 +228,11 @@ export default {
                     stroke: this.color,
                     strokeWidth: this.weight,
                 },
-                lastPoint: {x,y},
+                lastPoint: { x, y },
             });
         },
         updateLine({ x, y }) {
-            if (this.itemList.length == 0) this.pushNewLine(this.pointer)
+            if (this.itemList.length == 0) this.pushNewLine(this.pointer);
             const l = this.itemList.length;
             this.itemList[l - 1].line.points.push(x, y);
             this.itemList[l - 1].lastPoint = { x, y };
@@ -259,9 +262,9 @@ export default {
         undo() {
             const l = this.itemList.length;
             if (l == 0) return;
-            this.itemStack.push(this.itemList.pop())
+            this.itemStack.push(this.itemList.pop());
 
-            if (l-1 <= 0) return;
+            if (l - 1 <= 0) return;
             this.setPointer(this.getLastPoint());
         },
         redo() {
@@ -269,7 +272,7 @@ export default {
             if (l == 0) return;
             this.itemList.push(this.itemStack.pop());
 
-            if (l-1 <= 0) return;
+            if (l - 1 <= 0) return;
             this.setPointer(this.getLastPoint());
         },
         resetStack() {
