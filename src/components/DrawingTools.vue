@@ -184,22 +184,21 @@ export default {
             selectedWeight: 0,
         };
     },
-    computed: mapState('drawing', ['color', 'weight', 'isPublic']),
+    computed: mapState('drawing/drawingEditter', ['color', 'weight', 'isPublic']),
     mounted: function () {
         this.selectedColor = this.color;
         this.selectedWeight = this.weight;
     },
     methods: {
-        ...mapActions('drawing', [
+        ...mapActions('drawing/drawingEditter', [
             'changeColor',
             'changeWeight',
             'redo',
             'undo',
-            'save',
             'stopPointer',
             'toggleIsPublic',
-            'twitterShare',
         ]),
+        ...mapActions('drawing', ['save', 'twitterShare']),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
         },

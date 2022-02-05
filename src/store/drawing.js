@@ -1,64 +1,52 @@
-import Config from '../config';
+import drawingEditter from './drawingEditter';
 import {
-    CHNAGE_MODE,
-    CHANGE_COLOR,
-    CHANGE_WEIGHT,
-    SET_UNDOTRIGGER,
-    SET_REDOTRIGGER,
-    SET_POINTERSPEED,
-    SET_SAVETRIGGER,
-    SET_STOPPOINTERTRIGGER,
-    TOGGLE_ISPUBLIC,
+    SET_DRAWING,
     DRAWING_SAVE_BEGIN,
     DRAWING_SAVE_SUCCESS,
     DRAWING_SAVE_FAILURE,
+    TOGGLE_IS_PUBLIC,
 } from './types';
 
 export default {
     namespaced: true,
+    modules: {
+        drawingEditter,
+    },
     state: {
-        mode: Config.mode.EtchASketch,
-        color: '#000000',
-        weight: 3,
-        pointerSpeed: {
-            up: { keys: ['d'], value: false },
-            down: { keys: ['f'], value: false },
-            right: { keys: ['k'], value: false },
-            left: { keys: ['j'], value: false },
-        },
-
+        drawing: {},
         hasError: false,
         isLoading: false,
-        isPublic: false,
-        undoTrigger: false,
-        redoTrigger: false,
-        saveTrigger: false,
-        stopPointerTrigger: false,
-    },
-    getters: {
-        isEtchASketchMode: (state) => state.mode == Config.mode.EtchASketch,
     },
     actions: {
-        changeMode({ commit }, { mode }) {
-            if (!Config.mode[mode]) return false;
-            commit(CHNAGE_MODE, mode);
-            return true;
+        async getAllDrawings(/* { commit, state } */) {
+            //デバッグのため更新をあえて防止している。撤去予定
+            // if (state.allDrawings.length != 0) return;
+            // const all = await drawingWrapper.getAll();
+            // commit(GET_ALL_DRAWINGS, all);
+            // console.log(state.allDrawings);
         },
-        changeColor({ commit }, { newColor }) {
-            commit(CHANGE_COLOR, newColor);
+        async redirectToDrawingPage(/* { commit, state }, { id } */) {
+            // console.log("id="+state.currentDrawingID)
+            // await commit(SET_DRAWING_ID,id);
+            // const curDrawing = state.allDrawings[state.currentDrawingID-1];
+            // await commit(SET_DRAWING,curDrawing);
+            // commit(SET_LOAD_TRIGGER);
         },
-        changeWeight({ commit }, { newWeight }) {
-            commit(CHANGE_WEIGHT, newWeight);
+        saveDB(/* { state, commit }, { itemList, dataURL } */) {
+            // console.log(itemList);
+            // let data = JSON.stringify(itemList);
+            // console.log(data);
+            // console.log(state.allDrawings[state.currentDrawingID-1]);
+            // //databaseへ送出するように書替予定
+            //     //dataを更新
+            //     commit(SET_DRAWING_DATA, data);
+            //     //imgを更新
+            //     commit(SET_DRAWINGIMG_URL, dataURL);
+            //     //updatedAtを更新
+            //     commit(SET_UPDATE_DATA);
+            // console.log(state.allDrawings[state.currentDrawingID-1]);
         },
-        undo({ commit }) {
-            commit(SET_UNDOTRIGGER);
-        },
-        redo({ commit }) {
-            commit(SET_REDOTRIGGER);
-        },
-        setPointerSpeed({ commit }, { direction, value }) {
-            commit(SET_POINTERSPEED, { direction: direction, value: value });
-        },
+
         save({ commit }) {
             commit(DRAWING_SAVE_BEGIN);
 
@@ -72,16 +60,10 @@ export default {
             //     commit(DRAWING_SAVE_FAILURE)
             // },3000)
         },
-        stopPointer({ commit, state }) {
-            commit(SET_STOPPOINTERTRIGGER);
-            console.log(state.stopPointerTrigger);
-        },
-        toggleIsPublic({ commit }) {
-            commit(TOGGLE_ISPUBLIC);
-        },
         twitterShare() {
             console.log('gggg');
         },
+        toggleIsPublic() {},
     },
     mutations: {
         [DRAWING_SAVE_BEGIN](state) {
@@ -95,32 +77,11 @@ export default {
             state.isLoading = false;
             state.hasError = true;
         },
-        [CHNAGE_MODE](state, mode) {
-            state.mode = mode;
+        [SET_DRAWING](state, drawing) {
+            state.drawing = drawing;
         },
-        [CHANGE_COLOR](state, color) {
-            state.color = color;
-        },
-        [CHANGE_WEIGHT](state, weight) {
-            state.weight = Number(weight);
-        },
-        [SET_UNDOTRIGGER](state) {
-            state.undoTrigger = !state.undoTrigger;
-        },
-        [SET_REDOTRIGGER](state) {
-            state.redoTrigger = !state.redoTrigger;
-        },
-        [SET_POINTERSPEED](state, payload) {
-            state.pointerSpeed[payload.direction].value = payload.value;
-        },
-        [SET_SAVETRIGGER](state) {
-            state.saveTrigger = !state.saveTrigger;
-        },
-        [SET_STOPPOINTERTRIGGER](state) {
-            state.stopPointerTrigger = !state.stopPointerTrigger;
-        },
-        [TOGGLE_ISPUBLIC](state) {
-            state.isPublic = !state.isPublic;
+        [TOGGLE_IS_PUBLIC](state) {
+            state.drawing.isPublic = !state.drawing.isPublic;
         },
     },
 };

@@ -59,14 +59,15 @@ export default {
         DrawingForm,
     },
     name: 'Gallery',
+
     data() {
         return {
-            allDrawings: [],
+            drawings: [],
         };
     },
     async mounted() {
         //test list
-        this.allDrawings = await new DrawingWapper().getAll();
+        this.drawings = await new DrawingWapper().getAll();
         console.log(this.allDrawings);
 
         //test retrieve
