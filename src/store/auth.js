@@ -1,5 +1,6 @@
 import client from '../api/client';
 import Auth from '../api/auth';
+import UserWrapper from '../api/userWrapper';
 import {
     LOGIN_BEGIN,
     LOGIN_FAILURE,
@@ -7,6 +8,7 @@ import {
     LOGOUT,
     REMOVE_TOKEN,
     SET_TOKEN,
+    SET_CURRENT_USER
 } from './types';
 import Cookies from 'js-cookie';
 
@@ -17,6 +19,7 @@ const REFRESH_TOKEN_STORAGE_KEY = 'REFRESH_STORAGE_KEY';
 export default {
     namespaced: true,
     state: {
+        currentUser: {},
         authenticating: false,
         error: false,
         token: null,
@@ -34,35 +37,40 @@ export default {
                 dispatch('refreshToken', refresh);
             }
         },
-        async refreshToken({ commit }, refreshToken) {
+        async refreshToken({ commit, dispatch }, refreshToken) {
             commit(LOGIN_BEGIN);
             try {
                 const response = await new Auth().refreshToken(refreshToken);
 
                 commit(SET_TOKEN, { access: response.data.access, refresh: refreshToken });
+                dispatch('setCurrentUser')
                 commit(LOGIN_SUCCESS);
             } catch (error) {
                 console.error(error);
                 commit(LOGIN_FAILURE);
             }
         },
-        login({ commit }, { username, password }) {
+        async login({ commit, dispatch }, { username, password }) {
             commit(LOGIN_BEGIN);
-            return new Auth()
-                .login(username, password)
-                .then((response) => {
-                    commit(SET_TOKEN, response.data);
-                    commit(LOGIN_SUCCESS);
-                })
-                .catch((error) => {
-                    console.log(error.response);
-                    commit(LOGIN_FAILURE, error.response.data);
-                });
+            try {
+                const response = await new Auth().login(username, password);
+                commit(SET_TOKEN, response.data);
+                dispatch('setCurrentUser')
+                commit(LOGIN_SUCCESS);
+            } catch (error) {
+                console.log(error.response);
+                commit(LOGIN_FAILURE, error.response.data);
+            }
         },
         logout({ commit }) {
             commit(LOGOUT);
             commit(REMOVE_TOKEN);
+            commit(SET_CURRENT_USER, {})
         },
+        async setCurrentUser ({commit}) {
+            const currentUser = await new UserWrapper().getCurrent()
+            commit(SET_CURRENT_USER, currentUser);
+        }
     },
     mutations: {
         [LOGIN_BEGIN](state) {
@@ -98,5 +106,8 @@ export default {
             delete client.defaults.headers.Authorization;
             state.token = null;
         },
+        [ SET_CURRENT_USER ] (state, user) {
+            state.currentUser = user;
+        }
     },
 };

@@ -78,10 +78,16 @@ export default {
             dataURLTimer: undefined,
         };
     },
+    async created(){
+        const id = this.$route.params['id']
+        await this.setDrawingById(id)
+        this.setItemList([...this.drawing.data])
+
+        if(!this.drawing.isPublic && !this.isEditable){
+            this.$router.push({name: 'Gallery'});
+        }
+    },
     mounted() {
-        this.setDrawingById(this.$route.params['id']).then(() =>
-            this.setItemList([...this.drawing.data])
-        );
 
         const parent = document.querySelector('#canvas');
         const { clientWidth, clientHeight } = parent;
@@ -132,7 +138,15 @@ export default {
             'stopPointerTrigger',
             'pointerSpeed',
         ]),
+        ...mapState('auth',['currentUser']),
         ...mapGetters('auth', ['isAuthenticated']),
+
+        isEditable(){
+            return(
+                this.isAuthenticated &&
+                this.drawing.userId == this.currentUser.id
+            )
+        }
     },
     watch: {
         weight() {
@@ -191,7 +205,7 @@ export default {
          * KeyDown
          */
         keyEvent(event, boolean) {
-            if (!this.isAuthenticated) return;
+            if (!this.isEditable) return;
             let key = event.key;
             Object.keys(this.pointerSpeed).forEach((direction) => {
                 const keyIncludes = this.pointerSpeed[direction].keys.includes(key);
