@@ -76,7 +76,17 @@ $width__sidebar: 20em;
         <div class="sidebar has-text-dark" :class="{ 'is-closed': !isSidebarOpen }">
             <aside class="menu p-5">
                 <div class="level-item is-hidden-mobile has-text-weight-bold is-size-4 pr-5">
-                    title of work
+                    <div v-if="!isInputTitle" @click="openInputTitle">
+                        {{ drawing.title }}
+                        <font-awesome-icon icon="edit" class="awesome-icon ml-2" />
+                    </div>
+                    <input
+                        type="text"
+                        v-if="isInputTitle"
+                        v-model="renameTitle"
+                        @blur="closeInputTitle"
+                        class="input"
+                    />
                 </div>
                 <p class="menu-label">Color</p>
                 <ul class="menu-list is-align-content-start">
@@ -190,6 +200,8 @@ export default {
             },
             selectedColor: '',
             selectedWeight: 0,
+            renameTitle: '',
+            isInputTitle: false,
         };
     },
     computed: {
@@ -209,10 +221,27 @@ export default {
             'undo',
             'stopPointer',
             'toggleIsPublic',
+            'save',
         ]),
-        ...mapActions('drawing', ['save', 'twitterShare']),
+        ...mapActions('drawing', ['twitterShare', 'setDrawingTitle']),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
+        },
+        openInputTitle() {
+            this.renameTitle = this.drawing.title;
+            this.isInputTitle = true;
+            console.log(this.renameTitle);
+            //title変更中はkeyイベントを発火させない
+            //document.removeEventListener('keydown', this.keyDown);
+            //document.removeEventListener('keyup', this.keyUp);
+        },
+        closeInputTitle() {
+            this.isInputTitle = false;
+            //keyイベントを再発火
+
+            if (this.renameTitle == this.drawing.title) return;
+            //タイトルが変わったら
+            this.setDrawingTitle({ newTitle: this.renameTitle });
         },
     },
 };
