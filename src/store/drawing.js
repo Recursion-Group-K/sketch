@@ -1,4 +1,4 @@
-import DrawingWapper from '../api/drawingWrapper';
+import DrawingWrapper from '../api/drawingWrapper';
 import UserWrapper from '../api/userWrapper';
 import Drawing from '../models/drawing';
 import drawingEditter from './drawingEditter';
@@ -27,13 +27,32 @@ export default {
         createError: false,
     },
     actions: {
+        async toggleIsPublic({ commit }, drawing) {
+            const updateProps = {
+                isPublic: !drawing.isPublic,
+            };
+            commit(DRAWING_REQUEST_BEGIN);
+            try {
+                const response = await new DrawingWrapper().update(drawing.id, updateProps);
+                console.log(response);
+                if (response instanceof Drawing) commit(DRAWING_REQUEST_SUCCESS);
+                else commit(DRAWING_REQUEST_FAILURE, response.data);
+            } catch (error) {
+                console.log(error.response);
+                commit(DRAWING_REQUEST_FAILURE);
+            }
+        },
         async createDrawing({ commit }, payload) {
             try {
                 commit(CREATE_BEGIN);
                 const response = await new DrawingWrapper().create(payload);
                 console.log(response);
-                if (response instanceof Drawing) commit(CREATE_SUCCESS);
-                else commit(CREATE_FAILURE);
+                if (response instanceof Drawing) {
+                    commit(CREATE_SUCCESS);
+                    return response;
+                } else {
+                    commit(CREATE_FAILURE);
+                }
             } catch {
                 commit(CREATE_FAILURE);
             }
@@ -57,7 +76,6 @@ export default {
                 data: data,
                 image: dataURL,
             };
-            console.log(state.drawing);
             commit(DRAWING_REQUEST_BEGIN);
             try {
                 const response = await new DrawingWrapper().update(state.drawing.id, updateProps);
@@ -71,7 +89,7 @@ export default {
         },
         async twitterShare(_, { id }) {
             console.log('DrawingID:' + id);
-            const shareDrawing = await new DrawingWapper().getById(id);
+            const shareDrawing = await new DrawingWrapper().getById(id);
 
             //publicでないなら何もしない
             if (!shareDrawing.isPublic) return;
@@ -81,12 +99,10 @@ export default {
             console.log('auther:' + shareDrawing.userId);
             console.log('current:' + currentUser.id);
             const isAuther = currentUser.id == shareDrawing.userId;
-            let text = '';
-            if (isAuther) text = 'を描きました!';
-            else text = 'を閲覧しました!';
+            const text = isAuther ? 'を描きました!' : 'を閲覧しました!';
 
             //aタグを作成してクリック
-            const drawingUrl = process.env.VUE_APP_SERVER_URL + '/Drawing/' + id;
+            const drawingUrl = `${process.env.VUE_APP_CLIENT_URL}/drawing/${id}`;
             const href = `http://twitter.com/share?text=「${shareDrawing.title}」${text}&url=${drawingUrl}`;
             const link = document.createElement('a');
             link.addEventListener('click', function () {

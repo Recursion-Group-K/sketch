@@ -76,8 +76,7 @@ export default {
     name: 'Gallery',
 
     data() {
-        return {
-        };
+        return {};
     },
     computed: {
         ...mapState('gallery', ['isLoading', 'hasError', 'drawings']),
@@ -85,11 +84,10 @@ export default {
     },
     async mounted() {
         try {
-            if(this.isAuthenticated) {
+            if (this.isAuthenticated) {
                 const current_user = await new UserWrapper().getCurrent();
-                await this.$store.dispatch('gallery/setUserGallery', current_user)
-            }
-            else {
+                await this.$store.dispatch('gallery/setUserGallery', current_user);
+            } else {
                 await this.$store.dispatch('gallery/setPublicGallery');
             }
         } catch (error) {

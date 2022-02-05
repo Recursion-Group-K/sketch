@@ -12,13 +12,16 @@
             </figure>
         </router-link>
         <p class="title is-5 has-text-dark">{{ drawing.title }}</p>
-        <div v-if="isAuthenticated" class="column is-one-fifths is-flex is-justify-content-flex-end">
+        <div
+            v-if="isAuthenticated"
+            class="column is-one-fifths is-flex is-justify-content-flex-end"
+        >
             <font-awesome-icon
                 icon="globe-asia"
                 :class="{ 'has-text-success': drawing.isPublic }"
                 class="mx-1 awesome-icon"
                 size="lg"
-                @click="toggleIsPublic"
+                @click="toggleIsPublic(drawing)"
             />
             <font-awesome-icon
                 :icon="['fab', 'twitter']"
@@ -69,11 +72,10 @@ export default {
     },
     computed: {
         ...mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
-        ...mapGetters('auth', ['isAuthenticated'])
+        ...mapGetters('auth', ['isAuthenticated']),
     },
     methods: {
-        ...mapActions('drawing/drawingEditter', ['toggleIsPublic']),
-        ...mapActions('drawing', ['twitterShare']),
+        ...mapActions('drawing', ['twitterShare', 'toggleIsPublic']),
         handleDeleteConfirmationModal(bool) {
             this.isOpenDeleteConfirmationModal = bool;
         },

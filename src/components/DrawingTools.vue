@@ -141,11 +141,11 @@ $width__sidebar: 20em;
                             Twitter
                         </a>
                     </li>
-                    <li @click="toggleIsPublic" :class="{ disabled: !isAuthenticated }">
+                    <li @click="toggleIsPublic(drawing)" :class="{ disabled: !isAuthenticated }">
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
-                                :class="{ 'has-text-success': isPublic }"
+                                :class="{ 'has-text-success': drawing.isPublic }"
                                 class="mx-1 awesome-icon"
                                 size="lg"
                             />
@@ -205,7 +205,7 @@ export default {
         };
     },
     computed: {
-        ...mapState('drawing/drawingEditter', ['color', 'weight', 'isPublic']),
+        ...mapState('drawing/drawingEditter', ['color', 'weight']),
         ...mapState('drawing', ['drawing']),
         ...mapGetters('auth', ['isAuthenticated']),
     },
@@ -220,10 +220,9 @@ export default {
             'redo',
             'undo',
             'stopPointer',
-            'toggleIsPublic',
             'save',
         ]),
-        ...mapActions('drawing', ['twitterShare', 'setDrawingTitle']),
+        ...mapActions('drawing', ['toggleIsPublic', 'twitterShare', 'setDrawingTitle']),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
         },
