@@ -15,7 +15,7 @@
         <div class="column is-one-fifths is-flex is-justify-content-flex-end">
             <font-awesome-icon
                 icon="globe-asia"
-                :class="{ 'has-text-success': isPublic }"
+                :class="{ 'has-text-success': drawing.isPublic }"
                 class="mx-1 awesome-icon"
                 size="lg"
                 @click="toggleIsPublic"
@@ -59,20 +59,17 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 export default {
     props: ['drawing'],
     data() {
         return {
-            isPublic: false,
             isOpenDeleteConfirmationModal: false,
         };
     },
     computed: mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
     methods: {
-        toggleIsPublic() {
-            this.isPublic = !this.isPublic;
-        },
+        ...mapActions('drawing/drawingEditter',['toggleIsPublic']),
         twitterShare() {
             console.log('gggg');
         },
