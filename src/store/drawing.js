@@ -22,13 +22,6 @@ export default {
         isLoading: false,
     },
     actions: {
-        //async getAllDrawings(/* { commit, state } */) {
-        //デバッグのため更新をあえて防止している。撤去予定
-        // if (state.allDrawings.length != 0) return;
-        // const all = await drawingWrapper.getAll();
-        // commit(GET_ALL_DRAWINGS, all);
-        // console.log(state.allDrawings);
-        //},
         async setDrawingById({ commit }, id) {
             console.log(id);
             try {
@@ -97,7 +90,6 @@ export default {
         setDrawingTitle({ commit }, { newTitle }) {
             commit(SET_DRAWING_TITLE, newTitle);
         },
-        toggleIsPublic() {},
     },
     mutations: {
         [DRAWING_REQUEST_BEGIN](state) {
