@@ -88,14 +88,11 @@ export default {
     methods:{
         reloadDrawings: async function(){
             try {
-                console.log("start:"+this.isAuthenticated);
+                await this.$store.dispatch('gallery/setPublicGallery');
                 if (this.isAuthenticated) {
                     const current_user = await new UserWrapper().getCurrent();
                     await this.$store.dispatch('gallery/setUserGallery', current_user);
-                } else {
-                    await this.$store.dispatch('gallery/setPublicGallery');
                 }
-                console.log("end:"+ this.isAuthenticated);
             } catch (error) {
                 console.log(error);
             }
