@@ -118,7 +118,7 @@ $width__sidebar: 20em;
                 </ul>
                 <p class="menu-label">Share Options</p>
                 <ul class="menu-list">
-                    <li @click="twitterShare(drawing.id)" :class="{ 'disabled': !isAuthenticated }">
+                    <li @click="twitterShare({id:drawing.id})" :class="{ 'disabled': !isAuthenticated }">
                         <a>
                             <font-awesome-icon
                                 :icon="['fab', 'twitter']"

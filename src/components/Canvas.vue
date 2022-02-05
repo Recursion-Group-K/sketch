@@ -342,7 +342,6 @@ export default {
         },
         loadDB() {
             const data = JSON.stringify(this.drawing.data);
-            console.log(data);
             if (data == '{}') {
                 this.setItemList(JSON.parse('[]'));
                 return;
