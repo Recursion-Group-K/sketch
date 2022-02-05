@@ -21,15 +21,22 @@ export default {
         isLoading: false,
     },
     actions: {
-        //async getAllDrawings(/* { commit, state } */) {
-        //デバッグのため更新をあえて防止している。撤去予定
-        // if (state.allDrawings.length != 0) return;
-        // const all = await drawingWrapper.getAll();
-        // commit(GET_ALL_DRAWINGS, all);
-        // console.log(state.allDrawings);
-        //},
+        async toggleIsPublic({ commit }, drawing) {
+            const updateProps = {
+                isPublic: !drawing.isPublic,
+            };
+            commit(DRAWING_REQUEST_BEGIN);
+            try {
+                const response = await new DrawingWapper().update(drawing.id, updateProps);
+                console.log(response);
+                if (response instanceof Drawing) commit(DRAWING_REQUEST_SUCCESS);
+                else commit(DRAWING_REQUEST_FAILURE, response.data);
+            } catch (error) {
+                console.log(error.response);
+                commit(DRAWING_REQUEST_FAILURE);
+            }
+        },
         async setDrawingById({ commit }, id) {
-            console.log(id);
             try {
                 const response = await new DrawingWapper().getById(id);
                 console.log(response);
@@ -47,7 +54,6 @@ export default {
                 data: data,
                 image: dataURL,
             };
-            console.log(state.drawing);
             commit(DRAWING_REQUEST_BEGIN);
             try {
                 const response = await new DrawingWapper().update(state.drawing.id, updateProps);
@@ -71,12 +77,10 @@ export default {
             console.log('auther:' + shareDrawing.userId);
             console.log('current:' + currentUser.id);
             const isAuther = currentUser.id == shareDrawing.userId;
-            let text = '';
-            if (isAuther) text = 'を描きました!';
-            else text = 'を閲覧しました!';
+            const text = isAuther ? 'を描きました!' : 'を閲覧しました!';
 
             //aタグを作成してクリック
-            const drawingUrl = process.env.VUE_APP_SERVER_URL + '/Drawing/' + id;
+            const drawingUrl = `${process.env.VUE_APP_CLIENT_URL}/drawing/${id}`;
             const href = `http://twitter.com/share?text=「${shareDrawing.title}」${text}&url=${drawingUrl}`;
             const link = document.createElement('a');
             link.addEventListener('click', function () {
@@ -92,7 +96,6 @@ export default {
             link.click();
             document.body.removeChild(link);
         },
-        toggleIsPublic() {},
     },
     mutations: {
         [DRAWING_REQUEST_BEGIN](state) {

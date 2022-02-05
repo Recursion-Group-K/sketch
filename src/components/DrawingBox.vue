@@ -18,7 +18,7 @@
                 :class="{ 'has-text-success': drawing.isPublic }"
                 class="mx-1 awesome-icon"
                 size="lg"
-                @click="toggleIsPublic"
+                @click="toggleIsPublic(drawing)"
             />
             <font-awesome-icon
                 :icon="['fab', 'twitter']"
@@ -69,8 +69,7 @@ export default {
     },
     computed: mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
     methods: {
-        ...mapActions('drawing/drawingEditter', ['toggleIsPublic']),
-        ...mapActions('drawing', ['twitterShare']),
+        ...mapActions('drawing', ['twitterShare','toggleIsPublic']),
         handleDeleteConfirmationModal(bool) {
             this.isOpenDeleteConfirmationModal = bool;
         },

@@ -131,7 +131,7 @@ $width__sidebar: 20em;
                             Twitter
                         </a>
                     </li>
-                    <li @click="toggleIsPublic" :class="{ disabled: !isAuthenticated }">
+                    <li @click="toggleIsPublic(drawing)" :class="{ disabled: !isAuthenticated }">
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
@@ -208,9 +208,8 @@ export default {
             'redo',
             'undo',
             'stopPointer',
-            'toggleIsPublic',
         ]),
-        ...mapActions('drawing', ['save', 'twitterShare']),
+        ...mapActions('drawing', ['save', 'twitterShare','toggleIsPublic']),
         toggleSideBar() {
             this.isSidebarOpen = !this.isSidebarOpen;
         },
