@@ -68,7 +68,6 @@
 
 <script>
 import { mapState } from 'vuex';
-import UserWrapper from '../api/userWrapper';
 export default {
     name: 'DrawingForm',
     data() {
@@ -87,15 +86,11 @@ export default {
         async createDrawing() {
             try {
                 // get form data
-                const current_user = await new UserWrapper().getCurrent();
                 const params = {
                     title: this.title,
-                    isPublic: true,
-                    userId: current_user.id,
                 };
-                await this.$store.dispatch('drawing/createDrawing', params);
-
-                if (!this.createError) this.$router.push({ name: 'Drawing' });
+                const responce = await this.$store.dispatch('drawing/createDrawing', params);
+                if (!this.createError) this.$router.push({ name: 'Drawing', params: {id: responce.id}});
             } catch (error) {
                 console.log(error);
             }

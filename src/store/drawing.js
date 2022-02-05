@@ -47,8 +47,12 @@ export default {
                 commit(CREATE_BEGIN);
                 const response = await new DrawingWrapper().create(payload);
                 console.log(response);
-                if (response instanceof Drawing) commit(CREATE_SUCCESS);
-                else commit(CREATE_FAILURE);
+                if (response instanceof Drawing) {
+                    commit(CREATE_SUCCESS);
+                    return response;
+                } else {
+                    commit(CREATE_FAILURE);
+                }
             } catch {
                 commit(CREATE_FAILURE);
             }
