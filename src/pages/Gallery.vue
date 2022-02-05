@@ -77,32 +77,6 @@ export default {
             const current_user = await new UserWrapper().getCurrent();
             this.drawings = await new DrawingWapper().getBy('user', current_user.id);
         } else this.drawings = await new DrawingWapper().getBy('is_public', 'true');
-
-        //test retrieve
-        // const id2Drawing = await new DrawingWapper().getById(2);
-        // console.log(id2Drawing);
-
-        // //test userwrapper getcurrent
-        // const currentRes = new UserWrapper().getCurrent();
-        // console.log(currentRes);
-
-        //test destroy
-        // const  destroyRes = new DrawingWapper().destroy(8);
-        // console.log(destroyRes)
-
-        //test create
-        // let params = {
-        //     title: 'test',
-        //     data: '{}',
-        //     isPublic: true,
-        //     userId: 8,
-        // };
-        // const createRes = new DrawingWapper().create(params);
-        // console.log(createRes);
-
-        //test update
-        // const updateRes = new DrawingWapper().update(id2Drawing.id, {title:'id2-updated-2'});
-        // console.log(updateRes);
     },
 };
 </script>
