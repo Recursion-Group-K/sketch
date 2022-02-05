@@ -10,10 +10,11 @@ import {
     SET_LOAD_TRIGGER,
     SET_STOP_POINTER_TRIGGER,
 } from './types';
+
 export default {
     namespaced: true,
     state: {
-        mode: Config.mode.EtchASketch, //
+        mode: Config.mode.EtchASketch,
         color: '#000000',
         weight: 3,
         pointerSpeed: {
@@ -28,7 +29,16 @@ export default {
         loadTrigger: false,
         stopPointerTrigger: false,
     },
-    getters: {},
+    getters: {
+        getLastPoint({ state }) {
+            const l = state.itemList.length - 1;
+            return state.itemList[l].lastPoint;
+        },
+        getPointerClone({ state }) {
+            const { x, y } = state.pointer;
+            return { x, y };
+        },
+    },
     actions: {
         changeMode({ commit }, { mode }) {
             if (!Config.mode[mode]) return false;
