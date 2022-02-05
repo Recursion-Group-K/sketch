@@ -72,9 +72,11 @@ export default {
             dataURLTimer: undefined,
         };
     },
-    mounted: function () {
-        this.setDrawingById(this.$route.params['id']);
-        this.setItemList(this.drawing.data);
+    mounted() {
+
+        this.setDrawingById(this.$route.params['id'])
+        .then(() => this.setItemList(this.drawing.data));
+
         const parent = document.querySelector('#canvas');
         const { clientWidth, clientHeight } = parent;
 
