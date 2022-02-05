@@ -94,8 +94,8 @@ export default {
             link.click();
             document.body.removeChild(link);
         },
-        setDrawingTitle({commit},{newTitle}) {
-            commit(SET_DRAWING_TITLE,newTitle);
+        setDrawingTitle({ commit }, { newTitle }) {
+            commit(SET_DRAWING_TITLE, newTitle);
         },
         toggleIsPublic() {},
     },
@@ -114,8 +114,8 @@ export default {
         [SET_DRAWING](state, newDrawing) {
             state.drawing = newDrawing;
         },
-        [SET_DRAWING_TITLE](state,newTitle){
-            state.drawing.title=newTitle;
+        [SET_DRAWING_TITLE](state, newTitle) {
+            state.drawing.title = newTitle;
         },
         [TOGGLE_IS_PUBLIC](state) {
             state.drawing.isPublic = !state.drawing.isPublic;
