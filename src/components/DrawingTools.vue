@@ -80,7 +80,7 @@ $width__sidebar: 20em;
                         {{drawing.title}} 
                         <font-awesome-icon icon="edit" class="awesome-icon ml-2" />
                     </div>
-                    <input type="text" v-if="isInputTitle" v-model="renameTitle" @blur="closeInputTitle">
+                    <input type="text" v-if="isInputTitle" v-model="renameTitle" @blur="closeInputTitle" class="input">
                 </div>
                 <p class="menu-label">Color</p>
                 <ul class="menu-list is-align-content-start">
