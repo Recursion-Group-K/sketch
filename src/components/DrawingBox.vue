@@ -13,7 +13,7 @@
         </router-link>
         <p class="title is-5 has-text-dark">{{ drawing.title }}</p>
         <div
-            v-if="isAuthenticated"
+            v-if="isEditable"
             class="column is-one-fifths is-flex is-justify-content-flex-end"
         >
             <font-awesome-icon
@@ -76,8 +76,16 @@ export default {
         this.is_Public = this.drawing.isPublic;
     },
     computed: {
+        ...mapState('auth',['currentUser']),
         ...mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
         ...mapGetters('auth', ['isAuthenticated']),
+
+        isEditable(){
+            return(
+                this.isAuthenticated &&
+                this.drawing.userId == this.currentUser.id
+            )
+        }
     },
     methods: {
         ...mapActions('drawing', ['twitterShare', 'toggleIsPublic']),
