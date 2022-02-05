@@ -20,7 +20,7 @@ class ParamsConverter {
         return params;
     }
 
-    static toFormDataParams({ title, image, isPublic, data = '[]', userId }) {
+    static toFormDataParams({ title, image, isPublic, data , userId }) {
         const formData = new FormData();
         if (image) formData.append('image', image);
         if (title) formData.append('title', title);
