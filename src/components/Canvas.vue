@@ -47,7 +47,6 @@
 </template>
 
 <script>
-import UserWrapper from '../api/userWrapper'
 import { mapActions, mapGetters, mapState } from 'vuex';
 import { dataURItoBlob } from '../utils';
 const velocityOfPointer = 2;
@@ -83,9 +82,7 @@ export default {
         const id = this.$route.params['id']
         await this.setDrawingById(id)
         this.setItemList([...this.drawing.data])
-        const currentUser = await new UserWrapper().getCurrent();
-        const isOwner = currentUser.id == this.drawing.userId
-        if(!this.drawing.isPublic && !isOwner){
+        if(!this.drawing.isPublic && !this.isEditable){
             this.$router.push({name: 'Gallery'});
         }
     },
@@ -140,7 +137,15 @@ export default {
             'stopPointerTrigger',
             'pointerSpeed',
         ]),
+        ...mapState('auth',['currentUser']),
         ...mapGetters('auth', ['isAuthenticated']),
+
+        isEditable(){
+            return(
+                this.isAuthenticated &&
+                this.drawing.userId == this.currentUser.id
+            )
+        }
     },
     watch: {
         weight() {
@@ -199,7 +204,7 @@ export default {
          * KeyDown
          */
         keyEvent(event, boolean) {
-            if (!this.isAuthenticated) return;
+            if (!this.isEditable) return;
             let key = event.key;
             Object.keys(this.pointerSpeed).forEach((direction) => {
                 const keyIncludes = this.pointerSpeed[direction].keys.includes(key);

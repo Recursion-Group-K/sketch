@@ -130,7 +130,7 @@ $width__sidebar: 20em;
                 <ul class="menu-list">
                     <li
                         @click="twitterShare({ id: drawing.id })"
-                        :class="{ disabled: !isAuthenticated }"
+                        :class="{ disabled: !isEditable }"
                     >
                         <a>
                             <font-awesome-icon
@@ -141,7 +141,7 @@ $width__sidebar: 20em;
                             Twitter
                         </a>
                     </li>
-                    <li @click="switchIsPublic()" :class="{ disabled: !isAuthenticated }">
+                    <li @click="switchIsPublic()" :class="{ disabled: !isEditable }">
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
@@ -155,7 +155,7 @@ $width__sidebar: 20em;
                 </ul>
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
-                    <li :class="{ disabled: !isAuthenticated }">
+                    <li :class="{ disabled: !isEditable }">
                         <a @click="save">
                             <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
@@ -172,10 +172,10 @@ $width__sidebar: 20em;
             <button class="button m-1" @click="toggleSideBar">
                 <font-awesome-icon class="awesome-icon" icon="sliders-h" size="lg" />
             </button>
-            <button class="button m-1" @click="undo" :disabled="!isAuthenticated">
+            <button class="button m-1" @click="undo" :disabled="!isEditable">
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="undo" size="lg" />
             </button>
-            <button class="button m-1" @click="redo" :disabled="!isAuthenticated">
+            <button class="button m-1" @click="redo" :disabled="!isEditable">
                 <font-awesome-icon class="awesome-icon has-text-primary" icon="redo" size="lg" />
             </button>
         </div>
@@ -208,7 +208,15 @@ export default {
     computed: {
         ...mapState('drawing/drawingEditter', ['color', 'weight']),
         ...mapState('drawing', ['drawing']),
+        ...mapState('auth',['currentUser']),
         ...mapGetters('auth', ['isAuthenticated']),
+
+        isEditable(){
+            return(
+                this.isAuthenticated &&
+                this.drawing.userId == this.currentUser.id
+            )
+        }
     },
     mounted: function () {
         this.selectedColor = this.color;
