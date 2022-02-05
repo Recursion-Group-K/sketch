@@ -35,11 +35,13 @@
                 ></v-circle>
             </v-layer>
         </v-stage>
+        <button @click="save()">test</button>
     </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
+import {dataURItoBlob} from '../utils'
 const velocityOfPointer = 2;
 
 export default {
@@ -66,10 +68,13 @@ export default {
                 left: 0,
             },
             timer: undefined,
+            dataURL: undefined,
+            dataURLTimer: undefined,
         };
     },
     mounted: function () {
         this.setItemList([]);
+        this.setDrawingById(this.$route.params['id']);
         const parent = document.querySelector('#canvas');
         const { clientWidth, clientHeight } = parent;
 
@@ -86,21 +91,22 @@ export default {
         document.addEventListener('keydown', this.keyDown);
         document.addEventListener('keyup', this.keyUp);
         this.timer = setInterval(this.draw, 15);
+        this.dataURLTimer = setInterval(this.setDataURL, 5000);
 
         /**
          * resize canvas
          */
-
         window.addEventListener('resize', this.fitCanvas);
     },
     beforeDestroy: function () {
         if (this.isAllSaved) return;
-        if (window.confirm('変更をセーブしますか？')) this.save();
+        this.save();
     },
     destroyed: function () {
         document.removeEventListener('keydown', this.keyDown);
         document.removeEventListener('keyup', this.keyUp);
         clearInterval(this.timer);
+        clearInterval(this.dataURLTimer);
     },
     computed: {
         ...mapState('drawing', ['drawing']),
@@ -136,7 +142,7 @@ export default {
         },
     },
     methods: {
-        ...mapActions('drawing', ['saveDB']),
+        ...mapActions('drawing', ['saveDB', 'setDrawingById']),
         ...mapActions('drawing/drawingEditter', ['setPointerSpeed']),
 
         /**
@@ -150,6 +156,11 @@ export default {
             this.limit.down = clientHeight;
             this.limit.right = clientWidth;
             this.checkOverLimit(this.pointer);
+        },
+        setDataURL() {
+            let stage = document.getElementById('canvas');
+            let canvas = stage.querySelector('canvas');
+            this.dataURL = canvas.toDataURL();
         },
 
         /**
@@ -325,18 +336,15 @@ export default {
             console.log('loaded');
         },
         save() {
-            this.setNewLine();
-            let stage = document.getElementById('canvas');
-            let canvas = stage.querySelector('canvas');
-            let dataURL = canvas.toDataURL();
-            console.log('saving');
+            var f = dataURItoBlob(this.dataURL);
+            const file = new File([f], 'drawing.png', {
+                type: 'image/png',
+            });
             this.saveDB({
                 itemList: this.itemList,
-                dataURL: dataURL,
+                dataURL: file,
             });
             this.setIsAllSaved(true);
-            //画像download
-            this.downloadURI(dataURL, 'drawing.png');
         },
         loadDB() {
             const data = JSON.stringify(this.drawing.data);
@@ -347,10 +355,10 @@ export default {
             }
             this.setItemList(JSON.parse(data));
         },
-        downloadURI(uri, name) {
+        downloadURI(name) {
             const link = document.createElement('a');
             link.download = name;
-            link.href = uri;
+            link.href = this.data;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
