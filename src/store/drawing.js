@@ -3,6 +3,7 @@ import Drawing from '../models/drawing';
 import drawingEditter from './drawingEditter';
 import {
     SET_DRAWING,
+    SET_DRAWING_TITLE,
     DRAWING_REQUEST_BEGIN,
     DRAWING_REQUEST_SUCCESS,
     DRAWING_REQUEST_FAILURE,
@@ -43,6 +44,7 @@ export default {
         async saveDB({ state, commit }, { itemList, dataURL }) {
             const data = JSON.stringify(itemList);
             const updateProps = {
+                title: state.drawing.title,
                 data: data,
                 image: dataURL,
             };
@@ -61,6 +63,9 @@ export default {
         twitterShare() {
             console.log('gggg');
         },
+        setDrawingTitle({commit},{newTitle}) {
+            commit(SET_DRAWING_TITLE,newTitle);
+        },
         toggleIsPublic() {},
     },
     mutations: {
@@ -77,6 +82,9 @@ export default {
         },
         [SET_DRAWING](state, newDrawing) {
             state.drawing = newDrawing;
+        },
+        [SET_DRAWING_TITLE](state,newTitle){
+            state.drawing.title=newTitle;
         },
         [TOGGLE_IS_PUBLIC](state) {
             state.drawing.isPublic = !state.drawing.isPublic;
