@@ -91,7 +91,7 @@ export default {
                 await this.$store.dispatch('gallery/setPublicGallery');
             }
         } catch (error) {
-            console.log(error);
+            console.log(error.response);
         }
     },
 };

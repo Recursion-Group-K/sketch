@@ -201,7 +201,6 @@ export default {
             });
 
             if (key == 'c') {
-                console.log('reset');
                 this.reset();
             }
         },

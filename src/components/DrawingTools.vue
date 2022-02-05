@@ -229,7 +229,6 @@ export default {
         openInputTitle() {
             this.renameTitle = this.drawing.title;
             this.isInputTitle = true;
-            console.log(this.renameTitle);
             //title変更中はkeyイベントを発火させない
             //document.removeEventListener('keydown', this.keyDown);
             //document.removeEventListener('keyup', this.keyUp);

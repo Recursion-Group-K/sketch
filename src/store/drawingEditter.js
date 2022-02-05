@@ -51,7 +51,6 @@ export default {
         },
         stopPointer({ commit, state }) {
             commit(SET_STOP_POINTER_TRIGGER);
-            console.log(state.stopPointerTrigger);
         },
         save({ commit }) {
             commit(SET_SAVE_TRIGGER);

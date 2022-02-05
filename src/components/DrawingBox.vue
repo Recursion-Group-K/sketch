@@ -80,7 +80,6 @@ export default {
             this.isOpenDeleteConfirmationModal = bool;
         },
         deleteDrawing() {
-            console.log('gggg');
             this.handleDeleteConfirmationModal(false);
         },
     },
