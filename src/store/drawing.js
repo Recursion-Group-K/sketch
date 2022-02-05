@@ -58,8 +58,17 @@ export default {
                 commit(DRAWING_REQUEST_FAILURE);
             }
         },
-        twitterShare() {
-            console.log('gggg');
+        async twitterShare({state},{id}) {
+            if(!state.drawing.isPublic) return;
+            const shareDrawing = await new DrawingWapper().getById(id);
+            const drawingUrl = process.env.VUE_APP_SERVER_URL+"/Drawing"+id;
+            const href = `http://twitter.com/share?text=「${shareDrawing.title}」を描きました!&url=${drawingUrl}`
+            console.log(href);
+            const link = document.createElement('a');
+            link.href = href;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         },
         toggleIsPublic() {},
     },

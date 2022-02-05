@@ -118,7 +118,7 @@ $width__sidebar: 20em;
                 </ul>
                 <p class="menu-label">Share Options</p>
                 <ul class="menu-list">
-                    <li @click="twitterShare" :class="{ 'disabled': !isAuthenticated }">
+                    <li @click="twitterShare(drawing.id)" :class="{ 'disabled': !isAuthenticated }">
                         <a>
                             <font-awesome-icon
                                 :icon="['fab', 'twitter']"
@@ -190,7 +190,8 @@ export default {
         };
     },
     computed: {
-        ...mapState('drawing', ['color', 'weight', 'isPublic']),
+        ...mapState('drawing/drawingEditter', ['color', 'weight', 'isPublic']),
+        ...mapState('drawing',['drawing']),
         ...mapGetters('auth', ['isAuthenticated']),
     },
     mounted: function () {
