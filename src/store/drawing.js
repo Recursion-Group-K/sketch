@@ -95,7 +95,7 @@ export default {
             const text = isAuther ? 'を描きました!' : 'を閲覧しました!';
 
             //aタグを作成してクリック
-            const drawingUrl = `${process.env.VUE_APP_CLIENT_URL}/drawing/${id}`;
+            const drawingUrl = `${process.env.VUE_APP_SERVER_URL}/drawing/${id}`;
             const href = `http://twitter.com/share?text=「${shareDrawing.title}」${text}&url=${drawingUrl}`;
             const link = document.createElement('a');
             link.addEventListener('click', function () {
