@@ -118,7 +118,10 @@ $width__sidebar: 20em;
                 </ul>
                 <p class="menu-label">Share Options</p>
                 <ul class="menu-list">
-                    <li @click="twitterShare({id:drawing.id})" :class="{ 'disabled': !isAuthenticated }">
+                    <li
+                        @click="twitterShare({ id: drawing.id })"
+                        :class="{ disabled: !isAuthenticated }"
+                    >
                         <a>
                             <font-awesome-icon
                                 :icon="['fab', 'twitter']"
@@ -128,7 +131,7 @@ $width__sidebar: 20em;
                             Twitter
                         </a>
                     </li>
-                    <li @click="toggleIsPublic" :class="{ 'disabled': !isAuthenticated }">
+                    <li @click="toggleIsPublic" :class="{ disabled: !isAuthenticated }">
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
@@ -142,7 +145,7 @@ $width__sidebar: 20em;
                 </ul>
                 <p class="menu-label">Save Options</p>
                 <ul class="menu-list">
-                    <li :class="{ 'disabled': !isAuthenticated }">
+                    <li :class="{ disabled: !isAuthenticated }">
                         <a @click="save">
                             <font-awesome-icon
                                 class="mx-1 awesome-icon has-text-primary"
@@ -191,7 +194,7 @@ export default {
     },
     computed: {
         ...mapState('drawing/drawingEditter', ['color', 'weight', 'isPublic']),
-        ...mapState('drawing',['drawing']),
+        ...mapState('drawing', ['drawing']),
         ...mapGetters('auth', ['isAuthenticated']),
     },
     mounted: function () {

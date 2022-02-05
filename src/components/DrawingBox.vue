@@ -24,7 +24,7 @@
                 :icon="['fab', 'twitter']"
                 class="mx-1 awesome-icon has-text-info"
                 size="lg"
-                @click="twitterShare({id:drawing.id})"
+                @click="twitterShare({ id: drawing.id })"
             />
             <font-awesome-icon
                 icon="trash"
@@ -69,8 +69,8 @@ export default {
     },
     computed: mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
     methods: {
-        ...mapActions('drawing/drawingEditter',['toggleIsPublic']),
-        ...mapActions('drawing',['twitterShare']),
+        ...mapActions('drawing/drawingEditter', ['toggleIsPublic']),
+        ...mapActions('drawing', ['twitterShare']),
         handleDeleteConfirmationModal(bool) {
             this.isOpenDeleteConfirmationModal = bool;
         },
