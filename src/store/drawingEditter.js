@@ -49,7 +49,7 @@ export default {
         setPointerSpeed({ commit }, { direction, value }) {
             commit(SET_POINTER_SPEED, { direction: direction, value: value });
         },
-        stopPointer({ commit, state }) {
+        stopPointer({ commit }) {
             commit(SET_STOP_POINTER_TRIGGER);
         },
         save({ commit }) {
