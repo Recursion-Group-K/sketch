@@ -83,19 +83,21 @@ export default {
         ...mapGetters('auth', ['isAuthenticated']),
     },
     async mounted() {
-        this.reloadDrawings();
+        try {
+            await this.$store.dispatch('gallery/setPublicGallery');
+            if (this.isAuthenticated) {
+                const current_user = await new UserWrapper().getCurrent();
+                await this.$store.dispatch('gallery/setUserGallery', current_user);
+            }
+        } catch (error) {
+            console.log(error.response);
+        }
     },
     methods:{
-        reloadDrawings: async function(){
-            try {
-                await this.$store.dispatch('gallery/setPublicGallery');
-                if (this.isAuthenticated) {
-                    const current_user = await new UserWrapper().getCurrent();
-                    await this.$store.dispatch('gallery/setUserGallery', current_user);
-                }
-            } catch (error) {
-                console.log(error.response);
-            }
+        reloadDrawings: function(){
+            console.log("reload")
+            this.$router.go({path: this.$router.currentRoute.path, force: true})
+        },
     }
-};
+}
 </script>

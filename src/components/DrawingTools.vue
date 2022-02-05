@@ -141,11 +141,11 @@ $width__sidebar: 20em;
                             Twitter
                         </a>
                     </li>
-                    <li @click="toggleIsPublic(drawing)" :class="{ disabled: !isAuthenticated }">
+                    <li @click="switchIsPublic()" :class="{ disabled: !isAuthenticated }">
                         <a>
                             <font-awesome-icon
                                 icon="globe-asia"
-                                :class="{ 'has-text-success': drawing.isPublic }"
+                                :class="{ 'has-text-success': toggles.public }"
                                 class="mx-1 awesome-icon"
                                 size="lg"
                             />
@@ -197,6 +197,7 @@ export default {
             toggles: {
                 weight: false,
                 others: false,
+                public: false
             },
             selectedColor: '',
             selectedWeight: 0,
@@ -212,6 +213,7 @@ export default {
     mounted: function () {
         this.selectedColor = this.color;
         this.selectedWeight = this.weight;
+        this.toggles.public = this.drawing.isPublic;
     },
     methods: {
         ...mapActions('drawing/drawingEditter', [
@@ -241,6 +243,10 @@ export default {
             //タイトルが変わったら
             this.setDrawingTitle({ newTitle: this.renameTitle });
         },
+        switchIsPublic(){
+            this.toggleIsPublic(this.drawing);
+            this.toggles.public = !this.toggles.public;
+        }
     },
 };
 </script>

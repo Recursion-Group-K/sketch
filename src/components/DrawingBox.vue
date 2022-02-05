@@ -18,10 +18,10 @@
         >
             <font-awesome-icon
                 icon="globe-asia"
-                :class="{ 'has-text-success': drawing.isPublic }"
+                :class="{ 'has-text-success': is_Public }"
                 class="mx-1 awesome-icon"
                 size="lg"
-                @click="toggleIsPublic(drawing)"
+                @click="switchIsPublic()"
             />
             <font-awesome-icon
                 :icon="['fab', 'twitter']"
@@ -69,7 +69,11 @@ export default {
     data() {
         return {
             isOpenDeleteConfirmationModal: false,
+            is_Public:false,
         };
+    },
+    mounted: function(){
+        this.is_Public = this.drawing.isPublic;
     },
     computed: {
         ...mapGetters('drawing/drawingEditter', ['isEtchASketchMode']),
@@ -84,12 +88,16 @@ export default {
             const responce = await new DrawingWapper().destroy(this.drawing.id);
             console.log("deleted");
             console.log(responce);
-
             //再ロード
             this.$emit('reload');
             
             this.handleDeleteConfirmationModal(false);
         },
+        switchIsPublic(){
+            this.toggleIsPublic(this.drawing);
+            this.is_Public=!this.is_Public;
+            this.$emit('reload');
+        }
     },
 };
 </script>
