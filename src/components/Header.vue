@@ -71,8 +71,7 @@ export default {
         };
     },
     watch: {
-        isAuthenticated(to, from) {
-            console.log(to, from);
+        isAuthenticated(to) {
             if (to == false) this.$router.push({ name: 'Home' });
         },
     },

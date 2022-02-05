@@ -49,9 +49,8 @@ export default {
         setPointerSpeed({ commit }, { direction, value }) {
             commit(SET_POINTER_SPEED, { direction: direction, value: value });
         },
-        stopPointer({ commit, state }) {
+        stopPointer({ commit }) {
             commit(SET_STOP_POINTER_TRIGGER);
-            console.log(state.stopPointerTrigger);
         },
         save({ commit }) {
             commit(SET_SAVE_TRIGGER);

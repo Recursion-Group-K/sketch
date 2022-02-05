@@ -90,9 +90,10 @@ export default {
                     title: this.title,
                 };
                 const responce = await this.$store.dispatch('drawing/createDrawing', params);
-                if (!this.createError) this.$router.push({ name: 'Drawing', params: {id: responce.id}});
+                if (!this.createError)
+                    this.$router.push({ name: 'Drawing', params: { id: responce.id } });
             } catch (error) {
-                console.log(error);
+                console.log(error.responce);
             }
         },
     },

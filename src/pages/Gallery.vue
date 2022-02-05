@@ -94,9 +94,8 @@ export default {
                     await this.$store.dispatch('gallery/setUserGallery', current_user);
                 }
             } catch (error) {
-                console.log(error);
+                console.log(error.response);
             }
-        }
     }
 };
 </script>

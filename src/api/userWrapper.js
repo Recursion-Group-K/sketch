@@ -44,7 +44,6 @@ export default class UserWrapper {
                 }
             );
             const params = toParams(response.data);
-            console.log(params);
             return new User(params);
         } catch (error) {
             throw new Error(error);

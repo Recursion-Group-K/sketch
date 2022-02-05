@@ -141,14 +141,13 @@ export default {
     methods: {
         async createAccount({ username, email, password }) {
             try {
-                console.log(username, email, password);
                 await this.$store.dispatch('signup/createAccount', { username, email, password });
                 await this.$store.dispatch('auth/login', { username, password });
                 if (!this.hasRespError && this.isAuthenticated) {
                     this.$router.push({ name: 'Gallery' });
                 }
             } catch (error) {
-                console.log(error);
+                console.log(error.response);
             }
         },
     },

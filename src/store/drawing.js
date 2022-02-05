@@ -34,7 +34,6 @@ export default {
             commit(DRAWING_REQUEST_BEGIN);
             try {
                 const response = await new DrawingWrapper().update(drawing.id, updateProps);
-                console.log(response);
                 if (response instanceof Drawing) commit(DRAWING_REQUEST_SUCCESS);
                 else commit(DRAWING_REQUEST_FAILURE, response.data);
             } catch (error) {
@@ -46,7 +45,6 @@ export default {
             try {
                 commit(CREATE_BEGIN);
                 const response = await new DrawingWrapper().create(payload);
-                console.log(response);
                 if (response instanceof Drawing) {
                     commit(CREATE_SUCCESS);
                     return response;
@@ -60,7 +58,6 @@ export default {
         async setDrawingById({ commit }, id) {
             try {
                 const response = await new DrawingWrapper().getById(id);
-                console.log(response);
                 if (response instanceof Drawing) {
                     commit(DRAWING_REQUEST_SUCCESS);
                     commit(SET_DRAWING, response);
@@ -79,7 +76,6 @@ export default {
             commit(DRAWING_REQUEST_BEGIN);
             try {
                 const response = await new DrawingWrapper().update(state.drawing.id, updateProps);
-                console.log(response);
                 if (response instanceof Drawing) commit(DRAWING_REQUEST_SUCCESS);
                 else commit(DRAWING_REQUEST_FAILURE, response.data);
             } catch (error) {
@@ -88,7 +84,6 @@ export default {
             }
         },
         async twitterShare(_, { id }) {
-            console.log('DrawingID:' + id);
             const shareDrawing = await new DrawingWrapper().getById(id);
 
             //publicでないなら何もしない
@@ -96,8 +91,6 @@ export default {
 
             //閲覧しているユーザーと作品の作者が一緒かどうかで文章を変える
             const currentUser = await new UserWrapper().getCurrent();
-            console.log('auther:' + shareDrawing.userId);
-            console.log('current:' + currentUser.id);
             const isAuther = currentUser.id == shareDrawing.userId;
             const text = isAuther ? 'を描きました!' : 'を閲覧しました!';
 

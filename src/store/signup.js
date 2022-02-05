@@ -21,8 +21,6 @@ export default {
             };
             try {
                 const response = await new UserWrapper().create(userParams);
-                console.log(response);
-
                 if (response instanceof User) commit(SIGNUP_SUCCESS);
                 else commit(SIGNUP_BAD_REQUEST, response.data);
             } catch (error) {

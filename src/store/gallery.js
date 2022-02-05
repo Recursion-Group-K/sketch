@@ -23,8 +23,6 @@ export default {
             try {
                 commit(SET_USER_GALLERY_BEGIN);
                 const response = await new DrawingWrapper().getBy('user', currentUser.id);
-                console.log(response);
-
                 if (response[0] instanceof Drawing) {
                     commit(SET_USER_GALLERY_SUCCESS);
                     commit(SET_ALLDRAWINGS, response);

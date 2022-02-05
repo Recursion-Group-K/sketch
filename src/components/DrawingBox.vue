@@ -87,6 +87,7 @@ export default {
 
             //再ロード
             this.$emit('reload');
+            
             this.handleDeleteConfirmationModal(false);
         },
     },
