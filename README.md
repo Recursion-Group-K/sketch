@@ -31,7 +31,7 @@ Allows users to draw on a canvas, save their artwork, and share it on X (Twitter
 
 #### Gallery 
 
-All users can view the artworks created by authenticated users. Authenticated users have the option to choose whether to add their artwork to the gallery.
+All users can view the artworks created by other users. Authenticated users have the option to choose whether to add their artwork to the gallery.
 
 ![gallery](https://github.com/Recursion-Group-K/sketch/assets/66197642/26265d58-5d17-4017-8796-c9fb628ecbe3)
 
