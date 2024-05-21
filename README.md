@@ -16,7 +16,7 @@
 | Frontend Framework        | Vue.js   |
 | Global State management   | Vuex     |
 | 2d canvas library |         Konva.js |
-| Server-side Framework | Django       |
+| Server-side Framework | Django (Implemented in separate repo. See [sketch-backend](https://github.com/Recursion-Group-K/sketch-backend)  )     |
 | Web API      | Django REST framework |
 | Database | PostgreSQL (Heroku Addon) |
 
@@ -40,3 +40,27 @@ All users can view the artworks created by authenticated users. Authenticated us
 User’s artworks are securely saved by uploading media files from server-side code to a cloud-based image management service.
 
 ![cloudinary](https://github.com/Recursion-Group-K/sketch/assets/66197642/dbedc4a9-d662-4956-8056-1bae60253ec1)
+
+<br>
+
+## Web API Endpoint
+
+| HTTP   | URL                     | Required Information        | Authorization | Response (200)             |
+| ------ | ----------------------- | --------------------------- | ------------- | -------------------------- |
+| GET    | /api/                   | None                        | None          | None                       |
+|        |                         |                             |               |                            |
+| POST   | /api/token-auth         | username, password          | None          | Refresh_token, Access_token|
+| GET    | /api/current_user       | None                        | Token         | Authenticated user info    |
+|        |                         |                             |               |                            |
+| GET    | /api/users              | None                        | Token         | All users info             |
+| POST   | /api/users              | username, password, email?  | IsAdmin       | New user info              |
+| GET    | /api/users/:id          | None                        | Token         | User info for :id          |
+| PATCH  | /api/users/:id          | username                    | Token         | None                       |
+| DELETE | /api/users/:id          | None                        | Token         | None                       |
+|        |                         |                             |               |                            |
+| GET    | /api/drawings           | None                        | Token         | All drawings info          |
+| POST   | /api/drawings           | Registration info           | Token         | New drawing info           |
+| GET    | /api/drawings/?user=:id | ?user=:id parameter         | Token         | Drawings list by user ID   |
+| GET    | /api/drawings/:id       | None                        | Token         | Drawing info for :id       |
+| PATCH  | /api/drawings/:id       | Update info                 | Token         | None                       |
+| DELETE | /api/drawings/:id       | None                        | Token         | None                       |
