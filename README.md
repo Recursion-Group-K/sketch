@@ -7,10 +7,25 @@
 
 ![output](https://github.com/Recursion-Group-K/sketch/assets/66197642/7cf50fb7-c1bc-44d5-9295-ac27421384b7)
 
+<br>
+
+## Technology Used
+
+| Category | Techonology |
+|---------------|----------------------|
+| Frontend Framework        | Vue.js   |
+| Global State management   | Vuex     |
+| 2d canvas library |         Konva.js |
+| Server-side Framework | Django       |
+| Web API      | Django REST framework |
+| Database | PostgreSQL (Heroku Addon) |
+
+<br>
+
 ## Features
 
 #### Sharing Drawings on X (Twitter)  
-Allows users to draw on a canvas, save their artwork, adn share it on X (Twitter).
+Allows users to draw on a canvas, save their artwork, and share it on X (Twitter).
 
 ![twitter](https://github.com/Recursion-Group-K/sketch/assets/66197642/74239dc8-3540-4097-bc7c-b02a898a1f9c)
 
